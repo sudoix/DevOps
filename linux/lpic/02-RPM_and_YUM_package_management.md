@@ -1,6 +1,6 @@
 ![22](../../assets/22-Red_Hat.png)
 
-## **RPM and YUM package management**
+## **RPM, YUM and dnf package management**
 
 ## rpm
 
@@ -1308,11 +1308,174 @@ Fedora Family System:
 * **Dandified Yum (dnf)**:
   * It is the next-generation version of yum
 
-.
 
-.
+## dnf
 
-.
+`DNF`_ is the next upcoming major version of `YUM`_, a package manager for RPM-based Linux distributions. It roughly maintains CLI compatibility with YUM and defines a strict API for extensions and plugins.
+
+check if any packages are available for updates
+
+```bash
+$ sudo dnf check-update
+```
+
+How to install a new package?
+
+```bash
+$ sudo dnf install vsftpd
+```
+
+How to update a specific package?
+
+```bash
+$ sudo dnf update passwd -y
+
+$ sudo dnf update -y # all packages
+```
+
+How about installing only security updates?
+
+```bash
+$ sudo dnf updateinfo list --security
+
+$ sudo dnf upgrade --security
+
+```
+How to uninstall a specific package?
+
+```bash
+$ sudo dnf remove vsftpd
+```
+How to get the list of all the combined packages?
+
+```bash
+$ sudo dnf list all
+```
+
+How do I reinstall the package?
+
+```bash
+$ sudo dnf reinstall vsftpd
+```
+
+How do you view detailed information about a particular package?
+
+```bash
+$ sudo dnf info vsftpd
+```
+
+How to download an `.rpm` package file?
+
+```bash
+$ sudo dnf download samba
+```
+As you can see above, that we have downloaded the .rpm file for samba and now the following command will show how to download RPM files with dependencies.
+
+```bash
+$ sudo dnf download samba --resolve
+```
+
+How to install a .rpm package file using dnf?
+
+```bash
+$ sudo dnf localinstall samba-4.11.2-13.el8.x86_64.rpm
+```
+
+How to clear the cache details from the dnf cache directory?
+
+```bash
+$ sudo dnf clean all
+```
+
+How to install a package group?
+```bash
+$ sudo dnf groups summary
+
+$ sudo dnf groupinstall "Basic Web Server"
+
+$ sudo dnf groupinfo "Basic Web Server"
+
+$ sudo dnf groupinfo "Server"
+```
+How to search package names from Repository?
+
+```bash
+$ sudo dnf search samba
+```
+
+How to upgrade the system (specific, minimal or full) to the latest package versions?
+
+```bash
+$ sudo dnf upgrade unzip.x86_64
+
+$ sudo dnf upgrade "minimal-upgrade"
+
+$ sudo dnf upgrade
+```
+
+How to downgrade a specific package?
+
+```bash
+$ sudo dnf downgrade package-name [version number]
+```
+How to view the dnf repository information?
+
+```bash
+$ sudo dnf repolist
+
+$ sudo dnf repolist all
+```
+
+How do I view my DNF transaction history?
+
+```bash
+$ sudo dnf history
+
+Output:
+ID     | Command line             | Date and time    | Action(s)      | Altered
+-------------------------------------------------------------------------------
+    14 | install wget             | 2020-07-13 11:28 | Install        |    1   
+    13 | remove wget-1.19.5-8.el8 | 2020-07-13 11:27 | Removed        |    1   
+    12 | upgrade wget.x86_64      | 2020-07-13 11:18 | Upgrade        |    1   
+    11 | upgrade tcpdump          | 2020-07-13 09:11 | Upgrade        |    1   
+    10 | upgrade unzip.x86_64     | 2020-07-13 09:02 | Upgrade        |    1   
+     9 | reinstall vsftpd         | 2020-07-10 17:27 | R              |    2   
+     8 | install vsftpd           | 2020-07-10 17:10 | Install        |    1  < 7 | install vsftpd | 2020-07-10 16:11 | Install | 1 > 
+     6 | remove vsftpd            | 2020-07-10 16:05 | Removed        |    1   
+     5 | install vsftpd           | 2020-07-10 15:24 | Install        |    1   
+     4 | remove vsftpd            | 2020-07-10 15:24 | Removed        |    1   
+     3 | update sudo -y           | 2020-07-09 14:43 | Upgrade        |    1   
+     2 | install vsftpd           | 2020-07-09 14:28 | Install        |    1   
+     1 |                          | 2020-06-21 18:19 | Install        | 1348 EE
+
+```
+
+```bash
+$ sudo dnf history info 14
+```
+Transaction ID number 14 was used to install the wget package. Now, if you want, we can undo this particular transaction as it will remove the wget package from the system.
+
+```bash
+$ sudo dnf history undo 14
+
+$ sudo dnf history redo 14
+```
+
+How to get the help option for DNF in the command line?
+
+```bash
+$ man dnf
+
+$ info dnf
+
+$ dnf help
+```
+
+
+
+
+
+
 
 sources:
 
