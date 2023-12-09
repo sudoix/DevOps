@@ -1,4 +1,6 @@
-# 103.1. Work on the command line
+![24](../../assets/24-shell.png)
+
+# Work on the command line
 
 **What is The "bash"?**
 
