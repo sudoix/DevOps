@@ -1,3 +1,5 @@
+![23](../../assets/23-Vimlogo.svg)
+
 # **Perform basic file editing operations using vi**
 
 The need to learn how to use text editors in Linux is indisputable. Every system administrator and engineer deal with configuration (plain text) files on a daily basis, and most times this is done purely using one or more tools from a command-line interface (such as **nano**, **vi**, or **emacs**).
