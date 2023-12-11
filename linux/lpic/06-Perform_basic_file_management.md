@@ -410,6 +410,17 @@ root@ubuntu16-1:~/test-space# find /etc/ -iname "[y-z]*"
 
 We can specify the type of files you want to find with the “-type” parameter. It works like this:
 
+```bash
+find / -name milad
+find / -iname Milad
+find / -name "file*"
+find / -name "*.conf" -type f -atime -ctime -mintime -user -group  -maxdepth (-o|-a --> and or)
+find . -name "*.conf" -exec cp {} /tmp \;
+find . -name "*.conf" -exec rm -rf {} \;
+find / -name "*.conf" -type f -mtime +5 -user root -group root -size +10K -exec cp {} /tmp \;
+find / -name "*.conf" -type f -mtime +5 -user root -group root -size +10K -delete
+```
+
 ```
 find -type type_descriptor query
 ```
@@ -764,6 +775,38 @@ we usually use mixture of tar options to gain what we want:
 | tar -tvfW file.tar                    | Verify tar  Archive File                                   |
 | tar -rvf file.tar newfile.txt         | Add a file to .tar File                                    |
 | tar -uvf file.tar newdir              | Add a directory to an existing .tar file                   |
+
+More examples:
+
+```bash
+tar -c --> create
+tar -x --> extract
+tar -t --> list content
+tar -f file-name
+tar -v verbose
+tar -z gzip
+
+tar -cvf file.tar file1.txt file2.txt
+tar -xvf file.tar file1.txt file2.txt
+
+tar -zcvf file.tar.gz file1 file2
+tar -tf file.tar.gz
+tar -zxvf file.tar.gz --> untar
+
+
+tar -jcvf  file.tar.bz2 file1.txt
+tar -Jxvf file.tar.xz file1.txt
+
+tar -tg file.tar.gz
+tar -zxvf file.tar.gz FILENAME --> extract one file not all of them
+
+for append file to tar you should unzip file
+gunzip file.tar.gz
+tar -f file.tar.gz --append FILENSME
+tar -f file.tar.gz --delete FILENSME
+gzip file.tar
+
+```
 
 ### dd
 
