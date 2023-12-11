@@ -65,6 +65,98 @@ Options Description
 -o : Print only the matched parts of a matching line,
  with each such part on a separate output line.
 ```
+Case-Insensitive Search
+
+```
+grep -i "pattern" filename
+```
+Search in Multiple Files
+
+```
+grep "pattern" file1 file2 file3
+```
+
+Display Line Numbers
+
+```
+grep -n "pattern" filename
+```
+Count the Number of Matches
+
+```
+grep -c "pattern" filename
+```
+Show Lines that Do Not Match
+
+```
+grep -v "pattern" filename
+```
+
+Recursive Search: Searches for "pattern" recursively in all files under the specified directory.
+
+```
+grep -r "pattern" directory/
+```
+Search for Whole Words
+
+```
+grep -w "pattern" filename
+```
+Show Lines Before/After/Context of the Match
+
+```
+grep -B 1 "pattern" filename  # Show one line before the match
+grep -A 1 "pattern" filename  # Show one line after the match
+grep -C 1 "pattern" filename  # Show one line before and after the match
+```
+
+#### egrep and fgrep
+
+egrep and fgrep are variations of the grep command in Unix and Linux, each with its unique functionality.
+
+##### egrep (Extended grep)
+
+egrep is used for patterns that include extended regular expressions (ERE). It supports special characters that are not available in basic grep, like +, ?, and |. Here's an example:
+
+```
+egrep "(pattern1|pattern2)" filename
+```
+This command searches for lines in "filename" that contain either "pattern1" or "pattern2". The | is a logical OR operator in extended regular expressions.
+
+Search for Lines Starting with a Specific Word
+
+```
+egrep "^start" filename
+```
+
+Search for Lines Ending with a Specific Word
+```
+egrep "end$" filename
+```
+Search for Lines with Repeated Words
+
+```
+egrep "(word)+ " filename
+```
+
+##### fgrep (Fixed-string grep)
+fgrep is used for searching fixed strings rather than regular expressions. It's useful when your pattern includes characters that are usually interpreted as special regular expression symbols but you want them treated as literal characters. Here's an example:
+
+```
+fgrep "pattern.*" filename
+```
+Search for a string in files within a directory
+
+```
+fgrep -r "string" directory/
+```
+Search for a string and display the surrounding lines:
+
+```
+fgrep -A 2 -B 1 "search_string" file.txt
+```
+
+
 
 ### Extended Regular Expressions
 
