@@ -10,14 +10,23 @@ Regular expressions consist of literal characters and special characters called 
 . (dot): Matches any single character except a newline.
 * (asterisk): Matches zero or more occurrences of the preceding character or group.
 + (plus): Matches one or more occurrences of the preceding character or group.
+
 ? (question mark): Matches zero or one occurrence of the preceding character or group.
+
 [] (square brackets): Matches any single character within the brackets.
+
 () (parentheses): Groups characters together and creates a capture group.
+
 \ (backslash): Escapes a metacharacter or denotes a special sequence.
+
 \d: Matches any digit (0-9).
+
 \w: Matches any word character (a-z, A-Z, 0-9, and underscore).
+
 \s: Matches any whitespace character (space, tab, newline, etc.).
+
 ^: Matches the start of a string.
+
 $: Matches the end of a string.
 
 Regular expressions can be used in various programming languages, such as Python, JavaScript, Java, and many others. They allow you to perform powerful string manipulation and search operations by defining complex patterns to match against text.
