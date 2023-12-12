@@ -1,4 +1,4 @@
-![32](../../assets/30-permissions.jpg)
+![32](../../assets/32-permissions.jpg)
 
 # Manage file permissions and ownership
 
