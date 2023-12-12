@@ -1,4 +1,4 @@
-![25](../../assets/26-user_relation.jpg)
+![26](../../assets/26-user_relation.jpg)
 
 # User and Group
 
