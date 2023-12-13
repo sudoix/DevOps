@@ -163,3 +163,5 @@ TRUNCATE TABLE table_name;
 TRUNCATE TABLE city;
 ```
 
+keep learning
+
