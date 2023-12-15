@@ -18,3 +18,11 @@ Git is a widely used version control system that offers several benefits:
 
 * Code sharing: Git provides platforms like GitHub, GitLab, and Bitbucket that allow you to easily share your code with others. These platforms also provide additional collaboration features like issue tracking and code reviews.
 
+Git is a distributed VCS widely used for managing source code. It allows multiple developers to work on a project simultaneously and tracks changes to files over time. Some popular platforms that use Git include `GitHub`, `GitLab`, and `Bitbucket`.
+
+To use Git, you can use it in `command line`, `code editor` and `graphical interface`
+
+## Install git
+
+Install Git: Download and install Git on your machine. You can find the official Git installation for your operating system at [git download](https://git-scm.com/downloads)
+
