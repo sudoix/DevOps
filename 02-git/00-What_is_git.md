@@ -1,4 +1,4 @@
-![38](../../assets/36-ssh.jpeg)
+![38](../../assets/38-git.png)
 
 # Git
 
