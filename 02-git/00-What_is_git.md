@@ -50,3 +50,18 @@ Download and install Git on your machine. You can find the official Git installa
 
 Changing the default branch name from "master" to "main" in Git is a way to promote inclusive language and remove potentially offensive terms associated with slavery and oppression. The terminology used in Git, like "master" and "slave," has been considered problematic and exclusionary.
 
+### At the core of the branching model
+
+At the core, the development model is greatly inspired by existing models out there. The central repo holds two main branches with an infinite lifetime:
+
+`master`
+`develop`
+
+The master branch at origin should be familiar to every Git user. Parallel to the master branch, another branch exists called develop.
+
+We consider origin/master to be the main branch where the source code of HEAD always reflects a production-ready state.
+
+
+sources:
+https://nvie.com/posts/a-successful-git-branching-model/
+https://www.gitkraken.com/learn/git/git-flow
