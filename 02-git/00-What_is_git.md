@@ -24,5 +24,27 @@ To use Git, you can use it in `command line`, `code editor` and `graphical inter
 
 ## Install git
 
-Install Git: Download and install Git on your machine. You can find the official Git installation for your operating system at [git download](https://git-scm.com/downloads)
+**Linux (Ubuntu)**
+
+Open a terminal and run the following command to install Git on Ubuntu:
+
+```
+sudo apt update
+sudo apt-get install git
+```
+Once the installation is complete, you can run `git --version` in the terminal to verify that Git was installed successfully.
+
+**macOS**
+
+Git can be installed on macOS through various methods. One way is to use the Homebrew package manager. If you don't have Homebrew installed, you can install it by following the instructions at [brew](https://brew.sh/)
+
+```
+brew install git
+```
+
+**Windows**
+
+good luck :)
+
+Download and install Git on your machine. You can find the official Git installation for your operating system at [git download](https://git-scm.com/downloads)
 
