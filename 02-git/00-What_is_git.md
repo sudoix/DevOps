@@ -48,3 +48,5 @@ good luck :)
 
 Download and install Git on your machine. You can find the official Git installation for your operating system at [git download](https://git-scm.com/downloads)
 
+Changing the default branch name from "master" to "main" in Git is a way to promote inclusive language and remove potentially offensive terms associated with slavery and oppression. The terminology used in Git, like "master" and "slave," has been considered problematic and exclusionary.
+
