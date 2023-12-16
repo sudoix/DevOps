@@ -19,6 +19,15 @@ In Git, there are three main areas:
 git init
 ```
 
+#### git add
+
+`git add` is a command used in Git to add changes from the working directory to the staging area. It allows you to selectively choose which changes you want to include in the next commit.
+
+`git add file_name`: This command adds a specific file to the staging area. For example, `git add main.py` adds the `main.py` file to the staging area.
+
+`git add .`: This command adds all changes in the current directory and its subdirectories to the staging area. It is a convenient way to add multiple files at once.
+
+After using `git add`, the changes are staged and ready to be committed. You can then use `git commit` to create a new commit with the staged changes.
 
 ### Git branch
 
@@ -42,4 +51,3 @@ Alternatively, you can create and switch to a new branch in a single command usi
 ```bash
 git checkout -b feature-branch
 ```
-
