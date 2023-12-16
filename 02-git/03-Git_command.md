@@ -94,5 +94,18 @@ git merge source_branch
 git merge development_branch
 ```
 
+### delete branch
 
+To delete a branch in Git, you can use the `git branch` command with the `-d or -D` option followed by the name of the branch. Here's how you can do it:
 
+To delete a branch that has been fully merged into the current branch:
+
+```bash
+git branch -d branch_name
+```
+
+If the branch has not been fully merged and you still want to delete it, you can use the -D option instead:
+
+```bash
+git branch -D branch_name
+```
