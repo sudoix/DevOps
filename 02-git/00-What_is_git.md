@@ -55,6 +55,7 @@ Changing the default branch name from "master" to "main" in Git is a way to prom
 At the core, the development model is greatly inspired by existing models out there. The central repo holds two main branches with an infinite lifetime:
 
 `master`
+
 `develop`
 
 The master branch at origin should be familiar to every Git user. Parallel to the master branch, another branch exists called develop.
@@ -64,4 +65,5 @@ We consider origin/master to be the main branch where the source code of HEAD al
 
 sources:
 https://nvie.com/posts/a-successful-git-branching-model/
+
 https://www.gitkraken.com/learn/git/git-flow
