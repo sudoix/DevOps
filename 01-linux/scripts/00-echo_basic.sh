@@ -1,5 +1,15 @@
 #!/bin/bash
 
+##########################################################################################
+# Script Name: echo.sh
+# Description: This script demonstrates a simple echo in Linux using Bash scripting.
+# Author: Milad Norouzi
+# Date: January 1, 2022
+# Version: 1.0
+##########################################################################################
+
+# Print hello world
+
 echo hello world
 echo hello world!
 # Run in terminal
