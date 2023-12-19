@@ -426,6 +426,51 @@ logout
 
 Until we exit from the bash that uses associated key with that, then we would need to enter passphrase again.
 
+
+### ssh with name
+
+If you are regularly connecting to multiple remote systems over SSH, you’ll find that remembering all of the remote IP addresses, different usernames, non-standard ports, and various command-line options is difficult, if not impossible.
+
+OpenSSH client-side configuration file is named config, and it is stored in the .ssh directory under the user’s home directory.
+
+The ~/.ssh directory is automatically created when the user runs the ssh command for the first time. If the directory doesn’t exist on your system, create it using the command below:
+
+```bash
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+
+touch ~/.ssh/config
+
+chmod 600 ~/.ssh/config
+```
+
+The SSH Config File takes the following structure:
+
+```bash
+Host hostname1
+    SSH_OPTION value
+    SSH_OPTION value
+
+Host hostname2
+    SSH_OPTION value
+
+Host *
+    SSH_OPTION value
+
+
+```
+
+example of ~/.ssh/config file:
+
+```
+Host ubuntu16-1
+    HostName 192.168.52.146
+    User user1
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    UserKnownHostsFile ~/.ssh/known_hosts
+```
+
 ### ssh
 
 Like other command ssh has also some options.Lets take a look at most usefull switches:
