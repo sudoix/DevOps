@@ -1,4 +1,4 @@
-![dockerEngine](../assets/51-dockerEngine.png)
+![dockerEngine](../assets/51-docker-engine.jpg)
 
 ## Docker Engine
 
@@ -29,5 +29,5 @@ Here's a more detailed look at these components:
 
 ## Docker Architecture
 
-![Docker-Architecture](../assets/52-Docker-Architecture.gif)
+![Docker-Architecture](../assets/52-docker-architecture.webp)
 
