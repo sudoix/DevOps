@@ -57,3 +57,24 @@ Docker's architecture is designed to facilitate containerization, a method of pa
 
 This architecture promotes Docker's major goals: efficiency, portability, and ease of deployment. By isolating applications from the host system and from each other, Docker provides a lightweight form of virtualization, facilitating rapid deployment and scaling of applications, and ensuring that they run consistently across different environments.
 
+# Docker container
+
+![docker-container](../assets/53-docker-container.png)
+
+Docker container is a lightweight, standalone, executable package that includes everything needed to run a piece of software, including the code, runtime, system tools, libraries, and settings.
+
+Key features of Docker containers include:
+
+1. **Portability**: Since a Docker container includes the application and all of its dependencies, it can run seamlessly across any machine that has Docker installed, regardless of the underlying operating system.
+
+2. **Isolation**: Containers are isolated from each other and the host system. This ensures that each container has its own resources, and its performance is not affected by other containers.
+
+3. **Resource Efficiency**: Containers share the host system's kernel, but can be limited to use a certain amount of resources like CPU and memory. They are generally more lightweight than traditional virtual machines.
+
+4. **Consistency**: Docker containers ensure consistency across multiple development, testing, and production environments. This helps in reducing the “it works on my machine” problem in software development.
+
+5. **Scalability and Modularity**: Containers can be easily scaled up or down and can be used as part of microservices architecture, where each service is encapsulated in its own container.
+
+6. **Rapid Deployment**: Containers can be started, stopped, and replicated quickly, which is beneficial in continuous integration and continuous deployment (CI/CD) workflows.
+
+In summary, Docker containers offer a convenient and efficient way to package and distribute applications, ensuring that they work uniformly and reliably regardless of where they are deployed.
