@@ -21,6 +21,8 @@ In summary, Docker images are essential components in the Docker ecosystem, prov
 
 ### docker image layers
 
+![layersIndokerimage](../assets/55-layersIndokerimage.png)
+
 Docker image layers are a fundamental part of the Docker image architecture. Each layer represents a set of changes or additions to the image. Here's a detailed explanation:
 
 1. **Layered File System**: Docker uses a union file system to build up an image. Each instruction in a Dockerfile creates a new layer in the image:
