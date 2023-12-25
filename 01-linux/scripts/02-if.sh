@@ -14,6 +14,24 @@
 #     # Code to execute if the condition is false
 # fi
 
+# If condition
+
+# SRTING1 = STRING2 
+# STRING1 != STRING2
+# STRING1 < STRING2
+# STRING1 > STRING2
+# -n STRING # STRING is not empty.
+# -z STRING # STRING is empty.
+# INT1 -eq INT2 # INT1 is equal to INT2.
+# INT1 -ne INT2 # INT1 is not equal to INT2.
+# INT1 -gt INT2 # INT1 is greater than INT2.
+# INT1 -ge INT2 # INT1 is greater than or equal to INT2.
+# INT1 -lt INT2 # INT1 is less than INT2.
+# INT1 -le INT2 # INT1 is less than or equal to INT2.
+# FILE1 -ef FILE2 # FILE1 and FILE2 are the same file.
+# FILE1 -nt FILE2 # FILE1 is newer than FILE2.
+# FILE1 -ot FILE2 # FILE1 is older than FILE2.
+
 
 # Define a variable
 age=18
@@ -139,7 +157,3 @@ else
         exit 0
     fi
 fi
-
-
-
-
