@@ -26,6 +26,24 @@ $ git commit -m "Commit message"
 
 ```bash
 $ git log
+
+$ git log --oneline
+
+$ git log --graph
+
+$ git log --pretty=oneline
+
+$ git log --graph --oneline
+
+$ git log --graph --pretty=oneline
+
+$ git log --graph --pretty=oneline --abbrev-commit
+
+$ git log --graph --pretty=oneline --abbrev-commit --all
+
+$ git log --graph --pretty=oneline --abbrev-commit --all --date=relative
+
+$ git log --graph --pretty=oneline --abbrev-commit --all --date=relative --date-order
 ```
 
 ### git diff
@@ -72,6 +90,10 @@ $ git branch new-branch
 
 ```bash
 $ git checkout new-branch
+
+$ git checkout -b new-branch
+
+$ git checkout main
 ```
 
 ### git merge
