@@ -222,3 +222,7 @@ This command runs the container in detached mode (`-d`) and maps port 5000 of th
 - It's important to keep your images as lightweight as possible, which often means using minimal base images (like Alpine for Linux-based images) and avoiding unnecessary files and dependencies.
 
 By following these steps, you should be able to create a basic Docker image for your application. Docker offers a lot of flexibility and functionality, so as you get more comfortable, you can explore more advanced features and techniques.
+
+### Remove Images
+
+remove without tag remove latest version
