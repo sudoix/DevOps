@@ -99,6 +99,27 @@ To check the installed Docker version:
 
 ```bash
 docker --version
+docker version
 ```
 
 That's it! Docker should now be installed and ready to use on your Ubuntu 22.04 system. Remember that these steps require an internet connection and might take some time depending on your connection speed.
+
+### For login
+
+```bash
+docker login
+
+docker login -u USER -p PASSWORD
+```
+
+And for working with docker
+
+```bash
+docker container run == docker run
+
+docker image <>
+
+docker volume <>
+
+docker network <>
+```
