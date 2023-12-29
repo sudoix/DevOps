@@ -156,4 +156,58 @@ Here are a few more examples with different options:
 
 Remember, the `docker rm` command only removes containers, not images. If you want to remove images, you would use the `docker rmi` command instead. Also, it's always a good practice to ensure you really want to remove these containers, as this action is irreversible and any unsaved data in the containers will be lost.
 
+### Expose Port in Docker run command
 
+Exposing ports in Docker is a crucial aspect of container configuration, especially when you want to enable communication with the container from the outside world or between containers.
+
+The `-p` flag in the `docker run` command is used to map a network port from the container to your host. This is crucial for accessing applications running inside containers from outside the Docker host. Here are more examples to illustrate different uses of the `-p` flag for exposing ports:
+
+1. **Mapping a Single Port**:
+   ```bash
+   docker run -p 5000:5000 my-image
+   ```
+   This maps port 5000 inside the container to port 5000 on the Docker host. Useful for applications like web servers that listen on a single port.
+
+2. **Mapping Multiple Ports**:
+   ```bash
+   docker run -p 8000:80 -p 2222:22 my-image
+   ```
+   Here, port 80 inside the container is mapped to port 8000 on the host, and port 22 inside the container is mapped to port 2222 on the host. This setup might be used for a container running a web server and an SSH server.
+
+3. **Mapping a Range of Ports**:
+   ```bash
+   docker run -p 7000-7005:7000-7005 my-image
+   ```
+   This maps a range of ports (7000 to 7005) from the container to the same range on the Docker host. Useful for applications that use multiple consecutive ports.
+
+4. **Dynamic Host Port Mapping**:
+   ```bash
+   docker run -p 80 my-image
+   ```
+   Docker automatically assigns a free port on the host to port 80 in the container. You can check which port was assigned by running `docker ps` and looking at the "PORTS" column.
+
+5. **Bind to a Specific Host Interface**:
+   ```bash
+   docker run -p 192.168.1.100:80:80 my-image
+   ```
+   This binds port 80 in the container to port 80 on a specific interface (`192.168.1.100`) of the Docker host, rather than all interfaces.
+
+6. **Mapping UDP Ports**:
+   ```bash
+   docker run -p 12345:12345/udp my-image
+   ```
+   Maps UDP port 12345 inside the container to UDP port 12345 on the Docker host.
+
+7. **Mapping Different Internal and External Ports**:
+   ```bash
+   docker run -p 8080:80 my-image
+   ```
+   This maps port 80 inside the container to port 8080 on the Docker host. This is commonly used when the standard ports (like 80 for HTTP) are already in use on the host.
+
+8. **Bind Multiple Ports to the Same Internal Port**:
+   ```bash
+   docker run -p 8080:80 -p 8081:80 my-image
+   ```
+   Here, both port 8080 and 8081 on the Docker host are mapped to port 80 in the container. This can be useful for load balancing scenarios.
+
+Remember, when you map ports, the Docker host's firewall settings may affect accessibility. Ensure that the host's firewall allows traffic on the ports you've exposed. Also, Docker port mapping is designed for development and testing. For production deployments, consider using Docker Swarm or Kubernetes, which offer more advanced networking and orchestration features.
