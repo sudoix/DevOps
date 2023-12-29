@@ -211,3 +211,78 @@ The `-p` flag in the `docker run` command is used to map a network port from the
    Here, both port 8080 and 8081 on the Docker host are mapped to port 80 in the container. This can be useful for load balancing scenarios.
 
 Remember, when you map ports, the Docker host's firewall settings may affect accessibility. Ensure that the host's firewall allows traffic on the ports you've exposed. Also, Docker port mapping is designed for development and testing. For production deployments, consider using Docker Swarm or Kubernetes, which offer more advanced networking and orchestration features.
+
+#### Docker prune
+
+Certainly! The `docker prune` command comes in handy for efficiently cleaning up unused or dangling Docker objects. Here are examples for each type of prune command, demonstrating their usage and functionality:
+
+```bash
+yes | docker container prune
+```
+
+### 1. Container Pruning
+
+**Remove all stopped containers**:
+```bash
+docker container prune
+```
+This will remove all containers that have been stopped. Docker will ask for confirmation before deletion unless you add the `-f` or `--force` flag.
+
+### 2. Image Pruning
+
+**Remove dangling images** (those that are not tagged and not referenced by any container):
+```bash
+docker image prune
+```
+
+**Remove all unused images (both dangling and unreferenced by any container)**:
+```bash
+docker image prune -a
+```
+This is a more aggressive cleanup that will free up more space but may remove images that you intended to use later.
+
+### 3. Volume Pruning
+
+**Remove all unused volumes**:
+```bash
+docker volume prune
+```
+This command cleans up volumes not used by at least one container. Be cautious with this command as it may lead to data loss if you accidentally remove volumes containing important data.
+
+### 4. Network Pruning
+
+**Remove all unused networks**:
+```bash
+docker network prune
+```
+This will remove all networks not used by at least one container, helping to clean up potentially complex networking setups.
+
+### 5. System-wide Pruning
+
+**Remove stopped containers, dangling images, and unused networks**:
+```bash
+docker system prune
+```
+
+**Remove all unused objects (containers, images, volumes, and networks)**:
+```bash
+docker system prune -a --volumes
+```
+This is the most comprehensive cleanup. It removes stopped containers, all unused images (not just dangling ones), all unused volumes, and networks. It's very effective for freeing up space but should be used with caution to avoid unintentional data loss.
+
+### Additional Options
+
+**Force Pruning without Confirmation Prompt**:
+Add `-f` or `--force` to any of these commands to bypass the confirmation prompt. This is useful for scripting or automated cleanup tasks:
+```bash
+docker system prune -af
+```
+
+**Filtering**:
+You can use filters with prune commands to target specific objects based on criteria like until (time-based), label, etc.:
+```bash
+docker container prune --filter "until=24h"
+```
+This command will remove all containers stopped more than 24 hours ago.
+
+Using these commands periodically can help manage disk space and keep your Docker environment clean, especially in development scenarios where frequent changes are made. However, always exercise caution and ensure that you are not removing data or resources that you still need.
