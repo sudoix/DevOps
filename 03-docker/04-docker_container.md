@@ -1,0 +1,288 @@
+![docker-container](../assets/59-docker-container.png)
+
+## Docker container
+
+A Docker container is a lightweight, standalone, executable package that includes everything needed to run a piece of software, including the code, a runtime, libraries, environment variables, and configuration files. Docker containers are built from Docker images, which are templates that define the container's contents and behaviors.
+
+#### Docker Run == docker pull + create + start
+
+The `docker run` command is versatile and can be used in many different ways depending on your needs. Here are several examples to illustrate various use cases:
+
+1. **Running a Container Interactively**:
+   ```bash
+   docker run -it ubuntu /bin/bash
+   ```
+   This command runs an Ubuntu container and gives you an interactive shell (`/bin/bash`) inside it. The `-it` option makes the container start in interactive mode with a tty.
+
+2. **Running a Container with Environment Variables**:
+   ```bash
+   docker run -e MY_VAR=myvalue my-image
+   ```
+   Here, the `-e` flag is used to set an environment variable `MY_VAR` with the value `myvalue` in the container created from `my-image`.
+
+3. **Running a Container with a Volume**:
+   ```bash
+   docker run -v /my/host/folder:/my/container/folder my-image
+   ```
+   This mounts the host directory `/my/host/folder` to `/my/container/folder` in the container. Changes to this directory are reflected in both the container and the host.
+
+4. **Running a Container on a Specific Network**:
+   ```bash
+   docker run --network=my-network my-image
+   ```
+   This runs a container on a user-defined network `my-network`, allowing it to communicate with other containers on the same network.
+
+5. **Running a Container with a Specific Hostname**:
+   ```bash
+   docker run --hostname=my-container my-image
+   ```
+   Sets the hostname of the container to `my-container`.
+
+6. **Running a Container with Custom CPU and Memory Constraints**:
+   ```bash
+   docker run --cpus=1.5 --memory=512m my-image
+   ```
+   Limits the container to 1.5 CPUs and 512 megabytes of RAM.
+
+7. **Running a Container and Removing it After Exit**:
+   ```bash
+   docker run --rm my-image
+   ```
+   The `--rm` flag automatically removes the container file system upon exit.
+
+8. **Running a Container in Detached Mode with a Name**:
+   ```bash
+   docker run -d --name my-background-container my-image
+   ```
+   Runs the container in detached mode (in the background) and names it `my-background-container`.
+
+9. **Running a Container and Publishing Multiple Ports**:
+   ```bash
+   docker run -p 80:80 -p 443:443 nginx
+   ```
+   Maps both port 80 and 443 from the container to the same ports on the Docker host, useful for running a web server like Nginx.
+
+10. **Running a Container with a Read-Only File System**:
+    ```bash
+    docker run --read-only my-image
+    ```
+    Starts a container where the file system is read-only, which can improve security by preventing changes to system files.
+
+These examples demonstrate how `docker run` can be used in various scenarios. Depending on your specific use case, you might combine several of these options in a single command. Remember, each Docker image might have its specific requirements and supported options, so always refer to the documentation for the images you are using.
+
+
+### Docker rm
+
+The `docker rm` command is used to remove one or more Docker containers. It's important to note that only stopped containers can be removed. If you try to remove a running container, you will encounter an error unless you use the `-f` (force) flag, which will stop and then remove the container.
+
+Here's a basic example of the `docker rm` command:
+
+```bash
+docker rm my-container
+```
+
+In this example, `my-container` is the name or ID of the container you want to remove. You can find the name or ID of your containers by using the `docker ps -a` command, which lists all containers (running and stopped).
+
+Here are a few more examples with different options:
+
+1. **Removing Multiple Containers**:
+   ```bash
+   docker rm container1 container2 container3
+   ```
+   This command will remove containers named `container1`, `container2`, and `container3`.
+
+2. **Force Removing a Running Container**:
+   ```bash
+   docker rm -f running-container
+   ```
+   The `-f` or `--force` option will stop a running container and then remove it.
+
+3. **Remove a Container Upon Exit**:
+   You can also set a container to be automatically removed when it stops by using the `--rm` flag with `docker run`, like so:
+   ```bash
+   docker run --rm my-image
+   ```
+   In this case, the container will be removed automatically when it exits. This is useful for keeping your system clean if you frequently create and dispose of temporary containers.
+
+##### Here are more examples of using the `docker rm` command to remove Docker containers:
+
+1. **Remove a Container by ID**:
+   ```bash
+   docker rm 1c2d3e4f5g
+   ```
+   In this case, `1c2d3e4f5g` is the ID of the container. Docker IDs are unique identifiers assigned to each container.
+
+2. **Remove Containers Using a Wildcard**:
+   ```bash
+   docker rm $(docker ps -aq --filter "name=my-container*")
+   ```
+   This command removes all containers whose names start with `my-container`. The `docker ps -aq` command lists all containers (with the `-a` flag), and the `--filter` option filters them by name. The `-q` flag returns only the container IDs, which are then passed to `docker rm`.
+
+3. **Remove All Stopped Containers**:
+   ```bash
+   docker rm $(docker ps -aq -f status=exited)
+   ```
+   This command removes all containers that have a status of "exited". The `-f` flag filters the listed containers by their status.
+
+4. **Remove Containers Created Before a Certain Container**:
+   ```bash
+   docker rm $(docker ps -aq --before container_id)
+   ```
+   Here, `container_id` is the ID of a specific container. This command removes all containers that were created before the specified container.
+
+5. **Remove Containers that Exited More Than an Hour Ago**:
+   ```bash
+   docker rm $(docker ps -aq --filter "status=exited" --filter "since=1h")
+   ```
+   This command will remove all containers that have been in an exited state for more than an hour.
+
+6. **Remove Containers with a Specific Label**:
+   ```bash
+   docker rm $(docker ps -aq --filter "label=my-label")
+   ```
+   Removes all containers that have a specific label assigned to them.
+
+7. **Remove the Most Recently Created Container**:
+   ```bash
+   docker rm $(docker ps -aq --latest)
+   ```
+   The `--latest` flag will target the most recently created container.
+
+8. **Remove Containers Except One**:
+   ```bash
+   docker rm $(docker ps -aq --filter "id!=container_id")
+   ```
+   This will remove all containers except the one with the specified `container_id`.
+
+Remember, the `docker rm` command only removes containers, not images. If you want to remove images, you would use the `docker rmi` command instead. Also, it's always a good practice to ensure you really want to remove these containers, as this action is irreversible and any unsaved data in the containers will be lost.
+
+### Expose Port in Docker run command
+
+Exposing ports in Docker is a crucial aspect of container configuration, especially when you want to enable communication with the container from the outside world or between containers.
+
+The `-p` flag in the `docker run` command is used to map a network port from the container to your host. This is crucial for accessing applications running inside containers from outside the Docker host. Here are more examples to illustrate different uses of the `-p` flag for exposing ports:
+
+1. **Mapping a Single Port**:
+   ```bash
+   docker run -p 5000:5000 my-image
+   ```
+   This maps port 5000 inside the container to port 5000 on the Docker host. Useful for applications like web servers that listen on a single port.
+
+2. **Mapping Multiple Ports**:
+   ```bash
+   docker run -p 8000:80 -p 2222:22 my-image
+   ```
+   Here, port 80 inside the container is mapped to port 8000 on the host, and port 22 inside the container is mapped to port 2222 on the host. This setup might be used for a container running a web server and an SSH server.
+
+3. **Mapping a Range of Ports**:
+   ```bash
+   docker run -p 7000-7005:7000-7005 my-image
+   ```
+   This maps a range of ports (7000 to 7005) from the container to the same range on the Docker host. Useful for applications that use multiple consecutive ports.
+
+4. **Dynamic Host Port Mapping**:
+   ```bash
+   docker run -p 80 my-image
+   ```
+   Docker automatically assigns a free port on the host to port 80 in the container. You can check which port was assigned by running `docker ps` and looking at the "PORTS" column.
+
+5. **Bind to a Specific Host Interface**:
+   ```bash
+   docker run -p 192.168.1.100:80:80 my-image
+   ```
+   This binds port 80 in the container to port 80 on a specific interface (`192.168.1.100`) of the Docker host, rather than all interfaces.
+
+6. **Mapping UDP Ports**:
+   ```bash
+   docker run -p 12345:12345/udp my-image
+   ```
+   Maps UDP port 12345 inside the container to UDP port 12345 on the Docker host.
+
+7. **Mapping Different Internal and External Ports**:
+   ```bash
+   docker run -p 8080:80 my-image
+   ```
+   This maps port 80 inside the container to port 8080 on the Docker host. This is commonly used when the standard ports (like 80 for HTTP) are already in use on the host.
+
+8. **Bind Multiple Ports to the Same Internal Port**:
+   ```bash
+   docker run -p 8080:80 -p 8081:80 my-image
+   ```
+   Here, both port 8080 and 8081 on the Docker host are mapped to port 80 in the container. This can be useful for load balancing scenarios.
+
+Remember, when you map ports, the Docker host's firewall settings may affect accessibility. Ensure that the host's firewall allows traffic on the ports you've exposed. Also, Docker port mapping is designed for development and testing. For production deployments, consider using Docker Swarm or Kubernetes, which offer more advanced networking and orchestration features.
+
+#### Docker prune
+
+Certainly! The `docker prune` command comes in handy for efficiently cleaning up unused or dangling Docker objects. Here are examples for each type of prune command, demonstrating their usage and functionality:
+
+```bash
+yes | docker container prune
+```
+
+### 1. Container Pruning
+
+**Remove all stopped containers**:
+```bash
+docker container prune
+```
+This will remove all containers that have been stopped. Docker will ask for confirmation before deletion unless you add the `-f` or `--force` flag.
+
+### 2. Image Pruning
+
+**Remove dangling images** (those that are not tagged and not referenced by any container):
+```bash
+docker image prune
+```
+
+**Remove all unused images (both dangling and unreferenced by any container)**:
+```bash
+docker image prune -a
+```
+This is a more aggressive cleanup that will free up more space but may remove images that you intended to use later.
+
+### 3. Volume Pruning
+
+**Remove all unused volumes**:
+```bash
+docker volume prune
+```
+This command cleans up volumes not used by at least one container. Be cautious with this command as it may lead to data loss if you accidentally remove volumes containing important data.
+
+### 4. Network Pruning
+
+**Remove all unused networks**:
+```bash
+docker network prune
+```
+This will remove all networks not used by at least one container, helping to clean up potentially complex networking setups.
+
+### 5. System-wide Pruning
+
+**Remove stopped containers, dangling images, and unused networks**:
+```bash
+docker system prune
+```
+
+**Remove all unused objects (containers, images, volumes, and networks)**:
+```bash
+docker system prune -a --volumes
+```
+This is the most comprehensive cleanup. It removes stopped containers, all unused images (not just dangling ones), all unused volumes, and networks. It's very effective for freeing up space but should be used with caution to avoid unintentional data loss.
+
+### Additional Options
+
+**Force Pruning without Confirmation Prompt**:
+Add `-f` or `--force` to any of these commands to bypass the confirmation prompt. This is useful for scripting or automated cleanup tasks:
+```bash
+docker system prune -af
+```
+
+**Filtering**:
+You can use filters with prune commands to target specific objects based on criteria like until (time-based), label, etc.:
+```bash
+docker container prune --filter "until=24h"
+```
+This command will remove all containers stopped more than 24 hours ago.
+
+Using these commands periodically can help manage disk space and keep your Docker environment clean, especially in development scenarios where frequent changes are made. However, always exercise caution and ensure that you are not removing data or resources that you still need.
