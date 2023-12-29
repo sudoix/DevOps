@@ -1,5 +1,19 @@
 ![install-docker-engine-ubuntu-22-04-banner](../assets/56-install-docker-engine-ubuntu-22-04-banner.jpg)
 
+# Docker Version
+
+There are two main variants of Docker:
+
+1. **Docker Community Edition (CE)**: This is the free version of Docker, intended for developers and DIY enthusiasts. It's ideal for individual developers and small teams looking to get started with Docker and containerization.
+
+2. **Docker Enterprise Edition (EE)**: This is a premium version of Docker designed for enterprise needs. It offers additional features like advanced management, security features, and support options for larger organizations.
+
+Each of these variants receives regular updates. It's common to see multiple updates within a year, adding features, fixing bugs, and patching security vulnerabilities.
+
+To find the latest version of Docker as of now (December 2023), you would need to check Docker's official website or their GitHub repository. Docker also provides detailed release notes for each version, outlining new features, improvements, bug fixes, and known issues, which can be found on their website or in their documentation. 
+
+For the most current information on Docker's version, it's recommended to visit [Docker's official website](https://www.docker.com/) or refer to their [GitHub repository](https://github.com/docker).
+
 ## Install Docker Engine on Ubuntu 22.04
 
 To install Docker on Ubuntu 22.04, you can follow these steps. Remember that you need to have sudo privileges to perform these operations.
@@ -85,6 +99,27 @@ To check the installed Docker version:
 
 ```bash
 docker --version
+docker version
 ```
 
 That's it! Docker should now be installed and ready to use on your Ubuntu 22.04 system. Remember that these steps require an internet connection and might take some time depending on your connection speed.
+
+### For login
+
+```bash
+docker login
+
+docker login -u USER -p PASSWORD
+```
+
+And for working with docker
+
+```bash
+docker container run == docker run
+
+docker image <>
+
+docker volume <>
+
+docker network <>
+```

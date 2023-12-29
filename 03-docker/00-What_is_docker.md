@@ -93,3 +93,46 @@ Containers virtualize the operating system, sharing the OS kernel but packaging 
 - Containers: Easier to manage, especially in large-scale deployments, due to their lightweight nature.
 
 ###### In summary, the choice between VMs and containers depends on the specific needs of the application, security requirements, environment, and scalability needs. Containers are often preferred in modern, cloud-native applications due to their lightweight nature and efficiency, whereas VMs are chosen for applications requiring strong isolation, full operating system control, or running on different OS kernels.
+
+
+### High lever container runtime and low level container runtime
+
+Container runtimes in the context of containerization and virtualization in software development can be divided into high-level and low-level runtimes. These runtimes handle the execution, lifecycle management, and resource allocation for containers. Understanding the distinction between high-level and low-level container runtimes is important for grasping how containerized applications are managed and executed.
+
+### High-Level Container Runtimes
+
+1. **Definition**: High-level container runtimes deal with container management at a more abstract level. They are responsible for higher-order functions like managing container images, orchestrating containers, handling user requests, and setting up networking for containers.
+
+2. **Examples**:
+   - **Docker**: One of the most popular high-level runtimes, providing a comprehensive platform for building, running, and managing containers.
+   - **Podman**: An alternative to Docker, often used for managing containers and pod-like structures.
+
+3. **Features**:
+   - **Image Management**: They handle pulling container images from registries, building images from Dockerfiles, and managing image caches.
+   - **User Interface**: Provide user-friendly command-line interfaces (CLIs) and APIs for interacting with containers.
+   - **Networking**: Set up and manage network configurations for containers, enabling them to communicate with each other and the outside world.
+   - **Volume Management**: Manage data volumes and bind mounts for persistent data storage and sharing between containers and host.
+
+4. **Use in Development**: High-level runtimes are commonly used by developers for local development and testing, as they provide an easy-to-use interface for managing containers.
+
+### Low-Level Container Runtimes
+
+1. **Definition**: Low-level container runtimes are more focused on running containers according to the OS-level details. They are responsible for the actual execution of containers and directly interact with the operating system's kernel to manage the container's lifecycle.
+
+2. **Examples**:
+   - **containerd**: An industry-standard core container runtime, part of the Cloud Native Computing Foundation (CNCF).
+   - **runc**: A CLI tool for spawning and running containers according to the Open Container Initiative (OCI) specification.
+
+3. **Features**:
+   - **Execution and Lifecycle Management**: Manage the creation, execution, stopping, and deletion of containers.
+   - **Resource Isolation**: Handle CPU, memory, and I/O isolation for containers using cgroups and namespaces in Linux.
+   - **Security**: Implement security features like SELinux, AppArmor, and seccomp for container processes.
+
+4. **Use in Orchestration Systems**: Often used as components in larger container orchestration systems like Kubernetes, where they are managed by higher-level tools.
+
+### Interaction between High-Level and Low-Level Runtimes
+
+- In many container ecosystems, high-level and low-level runtimes work together. For example, Docker uses `containerd` as its low-level runtime to execute containers. 
+- High-level runtimes manage the user interface and orchestration, while low-level runtimes handle the nuts and bolts of container execution and OS-level interactions.
+
+Understanding the distinction between these two types of runtimes is crucial for anyone working with containerized environments, as it impacts how applications are deployed, scaled, and managed in production.
