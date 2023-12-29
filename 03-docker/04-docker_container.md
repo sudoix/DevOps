@@ -71,3 +71,38 @@ The `docker run` command is versatile and can be used in many different ways dep
 These examples demonstrate how `docker run` can be used in various scenarios. Depending on your specific use case, you might combine several of these options in a single command. Remember, each Docker image might have its specific requirements and supported options, so always refer to the documentation for the images you are using.
 
 
+### Docker rm
+
+The `docker rm` command is used to remove one or more Docker containers. It's important to note that only stopped containers can be removed. If you try to remove a running container, you will encounter an error unless you use the `-f` (force) flag, which will stop and then remove the container.
+
+Here's a basic example of the `docker rm` command:
+
+```bash
+docker rm my-container
+```
+
+In this example, `my-container` is the name or ID of the container you want to remove. You can find the name or ID of your containers by using the `docker ps -a` command, which lists all containers (running and stopped).
+
+Here are a few more examples with different options:
+
+1. **Removing Multiple Containers**:
+   ```bash
+   docker rm container1 container2 container3
+   ```
+   This command will remove containers named `container1`, `container2`, and `container3`.
+
+2. **Force Removing a Running Container**:
+   ```bash
+   docker rm -f running-container
+   ```
+   The `-f` or `--force` option will stop a running container and then remove it.
+
+3. **Remove a Container Upon Exit**:
+   You can also set a container to be automatically removed when it stops by using the `--rm` flag with `docker run`, like so:
+   ```bash
+   docker run --rm my-image
+   ```
+   In this case, the container will be removed automatically when it exits. This is useful for keeping your system clean if you frequently create and dispose of temporary containers.
+
+Remember to use the `docker rm` command with caution, especially with the `-f` flag, as removing containers is irreversible and any data not stored in a volume will be lost.
+
