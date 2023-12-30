@@ -611,3 +611,57 @@ The `--env` (or `-e` for short) flag with Docker commands, such as `docker run`,
 These examples demonstrate how to use the `--env` flag to set environment variables in Docker containers, which is essential for configuring container behavior and passing runtime settings.
 
 
+#### Docker container --restart
+
+The `--restart` flag in Docker is used to control the restart policy of a container. This policy determines how Docker should handle the container's restarts in cases where the container exits. The flag is primarily used with the `docker run` command to set the restart policy when creating a new container. when the docker service is restarted if your restart policy is set to `always` or `on-failure` the container will be restarted but if your restart policy is set to `no` the container will not be restarted. The default restart policy is `no`.
+
+Here are different ways to use this flag:
+
+1. **No Restart Policy**:
+   To specify that a container should not automatically restart, use the `no` policy.
+   ```bash
+   docker run --restart=no --name mycontainer myimage
+   ```
+   This command starts `mycontainer` with a policy that prevents it from restarting automatically.
+
+2. **Always Restart Policy**:
+   If you want the container to always restart regardless of the exit status, use the `always` policy.
+   ```bash
+   docker run --restart=always --name mycontainer myimage
+   ```
+   Here, `mycontainer` will always restart automatically if it stops for any reason.
+
+3. **Restart on Failure Policy**:
+   To make the container restart only when it exits with a non-zero (failure) status, use `on-failure`.
+   ```bash
+   docker run --restart=on-failure --name mycontainer myimage
+   ```
+   `mycontainer` will restart automatically only if it exits with an error. exit status `non-zero`
+   It dosn't restart automatically if it exits with a zero (success) status. like restart docker daemon.
+4. **Restart on Failure with Maximum Retry Count**:
+   You can also specify a maximum number of restart attempts with the `on-failure` policy.
+   ```bash
+   docker run --restart=on-failure:5 --name mycontainer myimage
+   ```
+   This sets up `mycontainer` to restart on failure, but it will give up after 5 failed attempts.
+
+5. **Using Restart Policies in Docker Compose**:
+   In a Docker Compose file, you can set the restart policy using the `restart` key in the service configuration.
+   ```yaml
+   version: '3'
+   services:
+     myservice:
+       image: myimage
+       restart: always
+   ```
+   This ensures that the service `myservice` will always restart automatically.
+
+6. **Changing Restart Policy of Existing Containers**:
+   For containers that are already running or have been created, you can update the restart policy using the `docker update` command.
+   ```bash
+   docker update --restart=always mycontainer
+   ```
+   This updates the restart policy of an existing container named `mycontainer` to `always`.
+
+These examples illustrate how to set and manage the restart policies of Docker containers. Restart policies are crucial for ensuring high availability and resilience of services, especially in production environments.
+
