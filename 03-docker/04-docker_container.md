@@ -829,3 +829,73 @@ The `docker events` command is a powerful tool in Docker's command-line interfac
   ```
 
 Understanding and utilizing Docker events is key for advanced Docker usage, especially in environments where real-time monitoring and automated response systems are required.
+
+
+### Excersise 1
+
+1. **Create a container**:
+
+   Install nginx on your host.
+   Create a ubuntu container and expose port 80.
+
+
+1. **docker in docker**:
+
+
+### Docker import and export
+
+
+`docker import` and `docker export` are two commands used for moving Docker containers and images between different environments. They are particularly useful for backing up containers, sharing container images without a registry, or migrating containers to different systems. Here's how they work:
+
+### Docker Export
+- **Purpose**: `docker export` is used to export a container's filesystem into a tarball (a tar archive). This command is handy for backing up a container but does not include the container's metadata or its history.
+
+- **Basic Usage**:
+  ```bash
+  docker export mycontainer > mycontainer.tar
+  ```
+  This command exports the entire filesystem of `mycontainer` into a tarball named `mycontainer.tar`.
+
+- **Considerations**:
+  - The exported tarball does not include the container's state or configuration.
+  - It's purely a snapshot of the filesystem in the container at the time of export.
+
+### Docker Import
+- **Purpose**: `docker import` is used to create a Docker image from a tarball. This is useful for restoring a container from a backup or for creating an image from a filesystem snapshot.
+
+- **Basic Usage**:
+  ```bash
+  docker import -m "my new image" mycontainer.tar mynewimage
+  ```
+
+The output should be something like this:
+
+```bash
+[node1] (local) root@192.168.0.13 ~
+$ docker run -dit --name ubuntu2 ubuntu:0.1
+docker: Error response from daemon: No command specified.
+See 'docker run --help'.
+```
+When you export the container, The export command can not expo the container's COMMAND and ENTRYPOINT. and you should use `docker inspect` to get the command and entrypoint.
+
+```bash
+[node1] (local) root@192.168.0.13 ~
+$ docker inspect ubuntu | grep -i -A2 cmd
+            "Cmd": [
+                "/bin/bash"
+            ],
+
+```
+And after you find the command you can run your container by:
+
+```bash
+$ docker run -dit --name ubuntu3 ubuntu:0.1 /bin/bash
+```
+
+- **Considerations**:
+  - The import will not restore the state of a container, but it will recreate the filesystem as an image.
+  - You can start a new container from this image, but it will be a fresh instance, not a continuation of the exported container.
+
+### Differences between Export/Import and Save/Load
+- `docker export/import` works at the container level, dealing with the filesystem of a container.
+- `docker save/load`, on the other hand, works with images, including their history and metadata. `docker save` creates an archive of an image with all its layers and history, and `docker load` restores it as an image on another Docker host.
