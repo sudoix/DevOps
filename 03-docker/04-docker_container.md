@@ -665,3 +665,10 @@ Here are different ways to use this flag:
 
 These examples illustrate how to set and manage the restart policies of Docker containers. Restart policies are crucial for ensuring high availability and resilience of services, especially in production environments.
 
+7. **unless-stopped**:
+   Similar to always, except that when the container is stopped (manually or otherwise), it isn't restarted even after Docker daemon restarts.
+   To make a container restart only when it exits, use the `unless-stopped` policy.
+   ```bash
+   docker run --restart=unless-stopped --name mycontainer myimage
+   ```
+   This command starts `mycontainer` with a policy that prevents it from restarting automatically unless it is stopped manually.
