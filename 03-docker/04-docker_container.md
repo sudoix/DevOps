@@ -443,3 +443,36 @@ Certainly! Here are more examples of how to use the `docker exec` command in var
 Each of these examples demonstrates the versatility of `docker exec` in managing and interacting with Docker containers. Remember to replace `mycontainer`, `webapp`, and other placeholders with your actual container names or commands as per your use case.
 
 
+#### Docker cp
+
+The `docker cp` command is used to copy files or directories between a Docker container and the local filesystem. This command is particularly useful for transferring data to and from containers. Here's a basic overview of how it works:
+
+- **Basic Syntax**:
+  The syntax of the `docker cp` command is either `docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH` or `docker cp [OPTIONS] SRC_PATH CONTAINER:DEST_PATH`. This means you can copy files from the local filesystem to a container or from a container to the local filesystem.
+
+- **Copying from Container to Host**:
+  To copy a file or directory from a container to the host, you specify the container name followed by a colon and the path to the file or directory inside the container, and then the path where you want to copy it on your host.
+  Example: 
+  ```bash
+  docker cp mycontainer:/path/to/file/in/container /path/on/host
+  ```
+  This command copies a file from `mycontainer` to a specified path on the host.
+
+- **Copying from Host to Container**:
+  To copy a file or directory from your host to a container, you specify the path on the host and then the container name followed by a colon and the path inside the container where you want to copy it.
+  Example:
+  ```bash
+  docker cp /path/on/host mycontainer:/path/to/destination/in/container
+  ```
+  This command copies a file from the host to a specified path inside `mycontainer`.
+
+- **Options**:
+  - `-a`, `--archive`: Archive mode (copies all file attributes).
+  - `-L`, `--follow-link`: Always follow symbol link in SRC_PATH.
+
+- **Important Considerations**:
+  - The `docker cp` command does not require the container to be running. You can copy files to and from stopped containers as well.
+  - When copying folders, Docker copies all subdirectories and files recursively.
+  - File ownership and permissions can be affected by the host system's user and group IDs.
+
+The `docker cp` command is very handy for quick file transfers, but for more complex or frequent file synchronization needs, it's usually better to use Docker volumes.
