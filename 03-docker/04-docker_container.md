@@ -300,13 +300,67 @@ This command will remove all containers stopped more than 24 hours ago.
 Using these commands periodically can help manage disk space and keep your Docker environment clean, especially in development scenarios where frequent changes are made. However, always exercise caution and ensure that you are not removing data or resources that you still need.
 
 
-For getting more info about the docker containers, you can use the following command:
+#### Docker container inspect
 
-```bash
-docker inspect CONTAINER_ID or CONTAINER_NAME
+The `docker container inspect` command is used to get detailed information about a Docker container in JSON format. It's particularly useful for retrieving low-level information about the container's configuration, state, network settings, and more. Here are some examples:
 
-docker container inspect CONTAINER_ID or CONTAINER_NAME
-```
+1. **Basic Inspect Command**:
+   To inspect a container named `mycontainer`, you would use:
+   ```bash
+   docker container inspect mycontainer
+   ```
+   This command will output a JSON object with a wealth of information about `mycontainer`.
+
+2. **Filtering for Specific Data with `--format`**:
+   If you're only interested in specific information, such as the container's IP address, you can use the `--format` option. For example:
+   ```bash
+   docker container inspect --format '{{ .NetworkSettings.IPAddress }}' mycontainer
+   ```
+   This command retrieves only the IP address of `mycontainer`.
+
+3. **Inspecting Multiple Containers**:
+   You can inspect multiple containers at once by listing their names or IDs:
+   ```bash
+   docker container inspect container1 container2 container3
+   ```
+   This will return detailed information for `container1`, `container2`, and `container3`.
+
+4. **Getting Mounted Volumes Information**:
+   To see information about mounted volumes in a container:
+   ```bash
+   docker container inspect --format '{{ json .Mounts }}' mycontainer
+   ```
+   This command displays details of all mounts in `mycontainer` in JSON format.
+
+5. **Retrieving Environment Variables**:
+   If you need to see the environment variables set in a container:
+   ```bash
+   docker container inspect --format '{{ range .Config.Env }}{{ println . }}{{ end }}' mycontainer
+   ```
+   This will list all the environment variables configured in `mycontainer`.
+
+6. **Checking Container’s Health Status**:
+   For containers with health checks, you can find out the health status:
+   ```bash
+   docker container inspect --format '{{ .State.Health.Status }}' mycontainer
+   ```
+   This returns the health status of `mycontainer`, like `healthy` or `unhealthy`.
+
+7. **Extracting Container Creation Time**:
+   To find out when a container was created:
+   ```bash
+   docker container inspect --format '{{ .Created }}' mycontainer
+   ```
+   This command shows the creation timestamp of `mycontainer`.
+
+8. **Finding Out the Restart Count**:
+   To see how many times a container has been restarted:
+   ```bash
+   docker container inspect --format '{{ .RestartCount }}' mycontainer
+   ```
+   This will give you the number of times `mycontainer` has been restarted.
+
+Each of these examples demonstrates how `docker container inspect` can be a powerful tool for getting detailed insights into your Docker containers. Remember to replace `mycontainer`, `container1`, `container2`, etc., with your actual container names or IDs as needed for your specific use cases.
 
 ```bash
 docker ps -a
