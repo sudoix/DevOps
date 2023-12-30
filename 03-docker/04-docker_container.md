@@ -476,3 +476,52 @@ The `docker cp` command is used to copy files or directories between a Docker co
   - File ownership and permissions can be affected by the host system's user and group IDs.
 
 The `docker cp` command is very handy for quick file transfers, but for more complex or frequent file synchronization needs, it's usually better to use Docker volumes.
+
+#### Docker stats
+
+The `docker stats` command displays a live stream of resource usage statistics for running containers. It provides information like CPU usage, memory usage, network I/O, and block I/O. Here are some examples of how you can use `docker stats`:
+
+1. **View Stats for All Running Containers**:
+   The simplest way to use `docker stats` is without any additional parameters. This will display the stats for all currently running containers.
+   ```bash
+   docker stats
+   ```
+   This command shows a live updating table of CPU, memory, network, and block I/O statistics for each running container.
+
+2. **View Stats for Specific Containers**:
+   You can specify the names or IDs of specific containers to view their stats only.
+   ```bash
+   docker stats container1 container2 container3
+   ```
+   Replace `container1`, `container2`, and `container3` with the actual names or IDs of the containers you want to inspect. This command will show the stats only for these specified containers.
+
+3. **View Stats Without Streaming**:
+   If you want to get the stats at a single point in time without the live stream, you can use the `--no-stream` option.
+   ```bash
+   docker stats --no-stream
+   ```
+   This command provides a snapshot of the current stats for all running containers, then exits.
+
+4. **Formatting Output**:
+   You can format the output of `docker stats` using the `--format` option. For example, to display only the container ID and memory usage:
+   ```bash
+   docker stats --format "table {{.Container}}\t{{.MemUsage}}"
+   ```
+   This will show a table with two columns, one for the container ID and the other for memory usage.
+
+5. **View Stats with Truncated IDs**:
+   By default, `docker stats` shows the full container IDs. You can truncate these IDs for a more compact view.
+   ```bash
+   docker stats --no-trunc
+   ```
+   This command will display the stats with truncated container IDs.
+
+6. **Displaying Stats for Stopped Containers**:
+   While `docker stats` typically shows information for running containers, you can view the last known stats of a stopped container by specifying its name or ID.
+   ```bash
+   docker stats stopped_container
+   ```
+   Replace `stopped_container` with the name or ID of the stopped container. Note that this will only show the last recorded statistics before the container stopped.
+
+Each of these examples demonstrates different ways to use `docker stats` to monitor the resource usage of Docker containers. This tool is particularly useful for managing system resources, troubleshooting, and performance analysis in a Dockerized environment.
+
