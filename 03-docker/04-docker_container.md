@@ -783,3 +783,49 @@ The host os is Alpine Linux and you can add package with `apk add` command.
 [node2] (local) root@192.168.0.12 ~
 $ apk add vim
 ```
+
+
+### Docker event
+
+The `docker events` command is a powerful tool in Docker's command-line interface that provides a real-time stream of events happening within the Docker daemon. These events can include various actions related to Docker objects such as containers, images, volumes, networks, and more. Here's an overview of what `docker events` is and how it can be used:
+
+- **Purpose of Docker Events**:
+  Docker events offer a live stream of what's happening at the Docker daemon level. It's useful for monitoring and reacting to various changes in the Docker environment, such as container lifecycle events (creation, start, stop, kill, die, etc.), image events (pull, push, delete), and more.
+
+- **Basic Usage**:
+  To start streaming events from the Docker daemon, simply run:
+  ```bash
+  docker events
+  ```
+  This will display a continuous stream of events as they occur.
+
+- **Filtering Events**:
+  You can filter events based on criteria like event type, container, image, volume, network, or labels. This is done using the `--filter` option. For example, to watch for events related to a specific container, you can use:
+  ```bash
+  docker events --filter 'type=container' --filter 'container=mycontainer'
+  ```
+  This will show events only for the container named `mycontainer`.
+
+- **Specifying Time Range**:
+  `docker events` can also be used to get events from a specific time range using the `--since` and `--until` options. For instance, to get events that occurred in the last 24 hours:
+  ```bash
+  docker events --since 24h
+  ```
+  Or to get events between two specific timestamps:
+  ```bash
+  docker events --since '2021-01-01T00:00:00' --until '2021-01-02T00:00:00'
+  ```
+
+- **Event Information**:
+  Each event displayed by `docker events` includes details such as the time of the event, the type of object involved (container, image, network, etc.), the action that occurred, and the ID of the object.
+
+- **Use Cases**:
+  Monitoring Docker events can be especially useful in automated systems, where you might need to trigger actions based on specific Docker events. It's also useful for auditing and logging purposes in complex Docker environments.
+
+- **Streaming to a File**:
+  You can also redirect the output of `docker events` to a file for later analysis or monitoring:
+  ```bash
+  docker events > docker_events.log
+  ```
+
+Understanding and utilizing Docker events is key for advanced Docker usage, especially in environments where real-time monitoring and automated response systems are required.
