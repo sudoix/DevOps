@@ -672,3 +672,90 @@ These examples illustrate how to set and manage the restart policies of Docker c
    docker run --restart=unless-stopped --name mycontainer myimage
    ```
    This command starts `mycontainer` with a policy that prevents it from restarting automatically unless it is stopped manually.
+
+#### Docker logs
+
+The `docker logs` command is used to fetch the logs of a running container. This command is incredibly useful for debugging and monitoring the behavior of containers by providing access to the stdout and stderr streams of the container. Here's how you can use it:
+
+1. **Basic Usage**:
+   To view the logs of a container, use the container ID or name:
+   ```bash
+   docker logs mycontainer
+   ```
+   This command will display the logs of `mycontainer`.
+
+2. **Following Log Output**:
+   To continuously follow the log output (similar to `tail -f`), use the `-f` or `--follow` flag:
+   ```bash
+   docker logs -f mycontainer
+   ```
+   This will show the log output in real-time.
+
+3. **Displaying Timestamps**:
+   If you want to include timestamps in each log entry, use the `--timestamps` or `-t` flag:
+   ```bash
+   docker logs -t mycontainer
+   ```
+   This will show the logs with timestamps for each entry.
+
+4. **Tail Logs**:
+   To show only the last `n` lines of the log, use the `--tail` flag:
+   ```bash
+   docker logs --tail 10 mycontainer
+   ```
+   This command shows the last 10 lines of logs for `mycontainer`.
+
+5. **Viewing Logs Since a Certain Time**:
+   You can display log entries since a certain timestamp using the `--since` option:
+   ```bash
+   docker logs --since 2021-01-01T00:00:00 mycontainer
+   ```
+   This will show logs starting from the specified timestamp.
+
+6. **Showing Logs before a Specific Time**:
+   Similarly, to show logs before a certain time, use the `--until` flag:
+   ```bash
+   docker logs --until 2021-01-01T00:00:00 mycontainer
+   ```
+   This will display logs up to the specified timestamp.
+
+7. **Limiting Log Output**:
+   To limit the amount of log output, you can combine `--tail` with `--since`:
+   ```bash
+   docker logs --since 1h --tail 50 mycontainer
+   ```
+   This shows the last 50 lines of logs from the past hour.
+
+These examples cover various ways to use the `docker logs` command to access and filter the log output from Docker containers. It's a crucial tool for troubleshooting issues, monitoring container behavior, and understanding the runtime behavior of applications running inside containers.
+
+```bash
+docker run -dit --name mysql mysql:latest # get error because you can't set root variable
+```
+and the output is:
+
+```bash
+docker logs mysql
+2023-12-30 11:23:52+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.2.0-1.el8 started.
+2023-12-30 11:23:53+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+2023-12-30 11:23:53+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.2.0-1.el8 started.
+2023-12-30 11:23:53+00:00 [ERROR] [Entrypoint]: Database is uninitialized and password option is not specified
+    You need to specify one of the following as an environment variable:
+    - MYSQL_ROOT_PASSWORD
+    - MYSQL_ALLOW_EMPTY_PASSWORD
+    - MYSQL_RANDOM_ROOT_PASSWORD
+```
+
+Lets try again:
+
+```bash
+docker run -dit --name mysql2 -e MYSQL_ROOT_PASSWORD=Aa1234 mysql:latest
+```
+
+```bash
+[node2] (local) root@192.168.0.12 ~
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND                  CREATED              STATUS              PORTS                 NAMES
+4e643f6b3d88   mysql:latest   "docker-entrypoint.s…"   About a minute ago   Up About a minute   3306/tcp, 33060/tcp   mysql2
+[node2] (local) root@192.168.0.12 ~
+```
+
