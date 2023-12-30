@@ -525,3 +525,89 @@ The `docker stats` command displays a live stream of resource usage statistics f
 
 Each of these examples demonstrates different ways to use `docker stats` to monitor the resource usage of Docker containers. This tool is particularly useful for managing system resources, troubleshooting, and performance analysis in a Dockerized environment.
 
+#### Docker container --dns
+
+The `docker container` command itself doesn't have a `--dns` option, but you can use the `--dns` flag with `docker run` to set custom DNS servers for a new container. This option is useful when you want to specify which DNS servers the container should use for DNS resolution. Here are some examples:
+
+1. **Running a Container with a Single Custom DNS Server**:
+   If you want to start a new container and use a specific DNS server, such as `8.8.8.8` (Google's DNS server), you can do so like this:
+   ```bash
+   docker run --dns 8.8.8.8 -d --name mycontainer myimage
+   ```
+   This command starts a new container named `mycontainer` from the image `myimage` and sets its DNS server to `8.8.8.8`.
+
+2. **Using Multiple DNS Servers**:
+   You can specify multiple DNS servers by adding multiple `--dns` flags:
+   ```bash
+   docker run --dns 8.8.8.8 --dns 8.8.4.4 -d --name mycontainer myimage
+   ```
+   This will configure the container to use both `8.8.8.8` and `8.8.4.4` as its DNS servers.
+
+3. **Setting DNS Options**:
+   In addition to setting the DNS server, you can also set DNS options with the `--dns-opt` flag. For example:
+   ```bash
+   docker run --dns 8.8.8.8 --dns-opt timeout:3 --dns-opt attempts:5 -d --name mycontainer myimage
+   ```
+   This sets custom DNS options like timeout and attempts along with the DNS server.
+
+4. **Specifying a DNS Search Domain**:
+   You can use the `--dns-search` flag to set a DNS search domain for the container:
+   ```bash
+   docker run --dns 8.8.8.8 --dns-search mydomain.com -d --name mycontainer myimage
+   ```
+   This configures the container to use `mydomain.com` as the search domain in DNS queries.
+
+#### Docker container --env
+
+The `--env` (or `-e` for short) flag with Docker commands, such as `docker run`, is used to set environment variables in a new Docker container. This is useful for passing configuration settings or other runtime variables to the container. Here's how it's typically used:
+
+1. **Setting a Single Environment Variable**:
+   To set one environment variable, use the `--env` or `-e` flag followed by the variable and its value. For example:
+   ```bash
+   docker run -e MY_VAR=myvalue --name mycontainer myimage
+   ```
+   This command will start a container named `mycontainer` from the `myimage` image, with an environment variable `MY_VAR` set to `myvalue`.
+
+2. **Setting Multiple Environment Variables**:
+   You can set multiple environment variables by using multiple `--env` flags:
+   ```bash
+   docker run -e VAR1=value1 -e VAR2=value2 --name mycontainer myimage
+   ```
+   This sets two environment variables `VAR1` and `VAR2` in the container.
+
+3. **Using Environment Variables from a File**:
+   If you have a file containing environment variables (usually referred to as an `.env` file), you can use the `--env-file` flag to import all of them into the container:
+   ```bash
+   docker run --env-file ./myenvfile.env --name mycontainer myimage
+   ```
+   This command reads environment variables from `myenvfile.env` and sets them in `mycontainer`.
+
+4. **Combining Individual and File-Based Environment Variables**:
+   You can mix both methods to set some environment variables from a file and others individually:
+   ```bash
+   docker run --env-file ./myenvfile.env -e ADDITIONAL_VAR=additionalvalue --name mycontainer myimage
+   ```
+   This command will use the environment variables in `myenvfile.env` and also set `ADDITIONAL_VAR`.
+
+5. **Overriding Default Environment Variables**:
+   If the image `myimage` has default environment variables set (in its Dockerfile), you can override them using the `--env` flag:
+   ```bash
+   docker run -e VAR_IN_IMAGE=newvalue --name mycontainer myimage
+   ```
+   Here, `VAR_IN_IMAGE` will be set to `newvalue` in the container, overriding any default value set in the image.
+
+6. **Setting Environment Variables in Docker Compose**:
+   In a `docker-compose.yml` file, you can also set environment variables using the `environment` key:
+   ```yaml
+   version: '3'
+   services:
+     myservice:
+       image: myimage
+       environment:
+         - MY_VAR=myvalue
+   ```
+   This sets `MY_VAR` for `myservice` when using Docker Compose.
+
+These examples demonstrate how to use the `--env` flag to set environment variables in Docker containers, which is essential for configuring container behavior and passing runtime settings.
+
+
