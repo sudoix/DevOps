@@ -102,6 +102,21 @@ docker --version
 docker version
 ```
 
+#### Docker information
+
+To get more information about Docker, you can use the following command:
+
+```bash
+docker info
+```
+
+the `/var/lib/docker` folder contains a lot of information about Docker. You can check this folder with the following command:
+
+```bash
+ls -la /var/lib/docker
+```
+
+
 That's it! Docker should now be installed and ready to use on your Ubuntu 22.04 system. Remember that these steps require an internet connection and might take some time depending on your connection speed.
 
 ### For login
