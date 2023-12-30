@@ -68,6 +68,18 @@ The `docker run` command is versatile and can be used in many different ways dep
     ```
     Starts a container where the file system is read-only, which can improve security by preventing changes to system files.
 
+11. **Running a Container with a name**:
+
+```bash
+docker run --name my-container my-image
+```
+
+12. **Running a Container with -d -i -t**:
+
+```bash
+docker run -dit --name nginx2 --expose 443 --expose 445 nginx:latest
+```
+
 These examples demonstrate how `docker run` can be used in various scenarios. Depending on your specific use case, you might combine several of these options in a single command. Remember, each Docker image might have its specific requirements and supported options, so always refer to the documentation for the images you are using.
 
 
@@ -286,3 +298,94 @@ docker container prune --filter "until=24h"
 This command will remove all containers stopped more than 24 hours ago.
 
 Using these commands periodically can help manage disk space and keep your Docker environment clean, especially in development scenarios where frequent changes are made. However, always exercise caution and ensure that you are not removing data or resources that you still need.
+
+
+For getting more info about the docker containers, you can use the following command:
+
+```bash
+docker inspect CONTAINER_ID or CONTAINER_NAME
+
+docker container inspect CONTAINER_ID or CONTAINER_NAME
+```
+
+```bash
+docker ps -a
+```
+
+#### Docker exec
+
+The `docker exec` command is used to run a new command in a running container. It's a powerful tool in Docker's command-line interface, allowing users to interact with or modify containers that are already running. Here's a basic overview of how it works:
+
+- **Basic Syntax**: The basic syntax of the `docker exec` command is `docker exec [OPTIONS] CONTAINER COMMAND [ARG...]`. This means that after specifying the command, you provide options (if needed), the container ID or name where you want to run the command, followed by the command you wish to execute and any arguments it requires.
+
+- **Common Use Cases**:
+  - **Running an interactive shell**: You can start an interactive shell inside a running container, like bash or sh, using a command like `docker exec -it <container_name> /bin/bash`. The `-it` flag attaches your terminal input to the shell inside the container.
+  - **Executing scripts or commands**: If you want to run a script or a specific command inside a container, you can do so without needing to enter the container's shell. For example, `docker exec <container_name> python script.py` would run a Python script inside the container.
+  - **Checking container health**: You might want to check the status of processes in a container, for which you could use something like `docker exec <container_name> ps aux` to view running processes.
+
+- **Options**:
+  - `-d`, `--detach`: Run the command in the background.
+  - `-i`, `--interactive`: Keep STDIN open even if not attached.
+  - `-t`, `--tty`: Allocate a pseudo-TTY, useful for interactive applications.
+  - `--env`: Set environment variables.
+
+Remember, any changes you make to a container using `docker exec` are not persistent if the container is deleted. To make persistent changes, you usually need to update the Dockerfile or the image from which the container is created.
+
+```bash
+docker exec -it CONTAINER_ID /bin/bash
+```
+
+Certainly! Here are more examples of how to use the `docker exec` command in various scenarios:
+
+1. **Running a Shell Command Inside a Container**: 
+   Suppose you want to list the contents of the root directory in a running container named `mycontainer`. You would use:
+   ```bash
+   docker exec mycontainer ls /
+   ```
+   This command executes `ls /` inside `mycontainer`, listing the contents of its root directory.
+
+2. **Accessing an Interactive Shell**:
+   If you need to access a bash shell inside a container named `webapp`:
+   ```bash
+   docker exec -it webapp /bin/bash
+   ```
+   This opens an interactive bash shell inside the `webapp` container.
+
+3. **Creating a New File Inside a Container**:
+   To create a new text file inside a container:
+   ```bash
+   docker exec mycontainer touch /tmp/newfile.txt
+   ```
+   This command uses `touch` to create a new file named `newfile.txt` in the `/tmp` directory of `mycontainer`.
+
+4. **Running a Python Script**:
+   If you have a Python script in your container and want to execute it:
+   ```bash
+   docker exec mycontainer python /path/to/script.py
+   ```
+   Replace `/path/to/script.py` with the actual path to your Python script inside the container.
+
+5. **Checking Memory Usage**:
+   To check the memory usage inside a container:
+   ```bash
+   docker exec mycontainer free -m
+   ```
+   This executes the `free -m` command, which shows memory usage in megabytes.
+
+6. **Setting Environment Variables in the Executed Command**:
+   You can set environment variables for the command you're running:
+   ```bash
+   docker exec -e VAR1=value1 mycontainer some-command
+   ```
+   This sets the environment variable `VAR1` to `value1` before executing `some-command` in `mycontainer`.
+
+7. **Running a Command as a Specific User**:
+   You can specify the user that the command should be run as:
+   ```bash
+   docker exec -u username mycontainer whoami
+   ```
+   This runs the `whoami` command inside `mycontainer` as `username`.
+
+Each of these examples demonstrates the versatility of `docker exec` in managing and interacting with Docker containers. Remember to replace `mycontainer`, `webapp`, and other placeholders with your actual container names or commands as per your use case.
+
+
