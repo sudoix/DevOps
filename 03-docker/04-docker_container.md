@@ -759,3 +759,27 @@ CONTAINER ID   IMAGE          COMMAND                  CREATED              STAT
 [node2] (local) root@192.168.0.12 ~
 ```
 
+## Let's use labs.play-with-docker.com to learn more
+
+Login to the `labs.play-with-docker.com` website to access all the resources for 4 hours
+
+You can copy and paste the private key from `~/.ssh/id_rsa` to your local machine(ctrl + shift + insert for copy) to access the servers. the defualt use is `root`. Remember the private key always is same for all the servers.
+
+```bash
+[node2] (local) root@192.168.0.12 ~
+$ cat .ssh/id_rsa
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACBlxyi89vBZk8iISR70zEF1KMq8S/Xe3OebPQJyMNFd0QAAAJgZ05i7GdOY
+uwAAAAtzc2gtZWQyNTUxOQAAACBlxyi89vBZk8iISR70zEF1KMq8S/Xe3OebPQJyMNFd0Q
+AAAECbQoApAGpgiRSLjGiOSmbN80A0/9vJW2T+BNjVNPkLjGXHKLz28FmTyIhJHvTMQXUo
+yrxL9d7c55s9AnIw0V3RAAAAFHJvb3RAYnVpbGRraXRzYW5kYm94AQ==
+-----END OPENSSH PRIVATE KEY-----
+```
+
+The host os is Alpine Linux and you can add package with `apk add` command. 
+
+```bash
+[node2] (local) root@192.168.0.12 ~
+$ apk add vim
+```
