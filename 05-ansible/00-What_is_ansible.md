@@ -93,3 +93,46 @@ To effectively use Ansible, there are several requirements and considerations th
 
 3. **Network Accessibility**:
    - The control node must have network access to all managed nodes. Ansible doesn’t require any agent software on the managed nodes, but these nodes must be accessible via standard network protocols (SSH/WinRM).
+
+
+## Ansible's directory structure
+
+Ansible's directory structure is designed to be simple and intuitive, allowing for efficient organization of playbooks, roles, inventory files, and other components. Here's an overview of a typical Ansible directory structure:
+
+1. **Top-Level Directory**:
+   - This is the main directory where you store all your Ansible files. It can be named anything, but it's commonly named `ansible` or something descriptive of the project.
+
+2. **Playbooks**:
+   - Playbooks are YAML files where you define what you want Ansible to do. They are typically stored in the root of the top-level directory or in a dedicated subdirectory like `playbooks`.
+
+3. **Inventory File(s)**:
+   - The inventory file (often named `inventory` or `hosts`) is where you list your managed nodes. It can be a simple INI-like file or a YAML file for more complex scenarios. You might have different inventory files for different environments like `development`, `staging`, and `production`.
+
+4. **Roles Directory**:
+   - Roles are units of organization in Ansible, encapsulating and modularizing the automation tasks. The `roles` directory contains subdirectories for each role. Each role typically includes directories like `tasks`, `handlers`, `files`, `templates`, `vars`, `defaults`, and `meta`.
+
+5. **Tasks**:
+   - Within a role, the `tasks` directory contains the main list of tasks to be executed by the role. These tasks are written in YAML.
+
+6. **Handlers**:
+   - Handlers are special tasks in the `handlers` directory that only run when notified by another task. They are commonly used to manage service status, like restarting a service when its configuration changes.
+
+7. **Files and Templates**:
+   - The `files` directory holds static files that need to be transferred to the managed nodes. 
+   - The `templates` directory contains templates, which are typically Jinja2 formatted files used for creating configuration files dynamically.
+
+8. **Vars and Defaults**:
+   - The `vars` directory is used for storing variables that are specific to the role.
+   - The `defaults` directory contains default variables for the role.
+
+9. **Meta**:
+   - The `meta` directory stores metadata for the role, like dependencies on other roles.
+
+10. **Group Vars and Host Vars**:
+    - The `group_vars` and `host_vars` directories are used for storing variables that are specific to groups or specific hosts, respectively. These directories help in organizing variables that are specific to certain parts of your inventory.
+
+11. **ansible.cfg**:
+    - The `ansible.cfg` file (if present) contains configuration settings for Ansible. This file is optional and can be placed in the Ansible top-level directory, the user’s home directory, or at a system-wide location (e.g., `/etc/ansible/ansible.cfg`).
+
+This structure is not rigid and can be modified according to the needs and scale of your project. For smaller projects, some of these components can be condensed or omitted. For larger projects, additional layers of organization may be necessary.
+
