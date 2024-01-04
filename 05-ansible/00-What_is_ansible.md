@@ -76,3 +76,20 @@ Ansible connects to managed nodes using a variety of methods, depending on the o
 
 The ability of Ansible to use standard, existing protocols and systems like SSH and WinRM means there's no need to install and maintain additional software on the nodes it manages, simplifying the process and reducing the maintenance overhead.
 
+## Requirements for Ansible
+
+To effectively use Ansible, there are several requirements and considerations that you should be aware of:
+
+1. **Control Node Requirements**:
+   - **Operating System**: Ansible can be run from any machine with Python (version 2.7 or later, but Python 3 is preferred) installed. This includes Red Hat, Debian, CentOS, macOS, any of the BSDs, and so on.
+   - **Python**: Ansible is written in Python, so a Python interpreter is a must on the control machine. Recent versions of Ansible require Python 3.
+   - **SSH Access**: The control machine should have SSH access to the managed nodes. This is typically done by setting up SSH keys.
+   - **Ansible Installation**: Ansible can be installed via package managers like `apt`, `yum`, or `pip`, or from source. You need to install Ansible on the control node only.
+
+2. **Managed Node Requirements**:
+   - **Python**: For most modules, the managed nodes require Python to be installed. Python 2 (version 2.6 or later) or Python 3 can be used. Some modules have specific Python version requirements.
+   - **SSH for Linux/Unix nodes**: For Linux or Unix nodes, SSH must be installed, and the node must be accessible via SSH from the control node. Ansible uses SSH to communicate with the managed nodes.
+   - **PowerShell for Windows nodes**: Windows nodes require PowerShell 3.0 or newer and at least .NET 4.0 to be installed. Windows Remote Management (WinRM) service should be configured for Ansible to connect and manage Windows machines.
+
+3. **Network Accessibility**:
+   - The control node must have network access to all managed nodes. Ansible doesn’t require any agent software on the managed nodes, but these nodes must be accessible via standard network protocols (SSH/WinRM).
