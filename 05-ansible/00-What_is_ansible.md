@@ -36,3 +36,43 @@ Ansible is a powerful tool used for automation in IT environments, and it offers
 
 These features make Ansible a popular choice for IT automation, configuration management, and application deployment across varied environments.
 
+## How Ansible connects to managed nodes
+
+Ansible connects to managed nodes using a variety of methods, depending on the operating system and environment of the nodes. The most common methods are:
+
+1. **SSH (Secure Shell) for Linux/Unix nodes**: 
+   - For most Unix-like systems, Ansible connects over SSH. 
+   - It uses SSH to connect to the nodes and execute the tasks. 
+   - No agent is required on the managed node. 
+   - Ansible by default manages machines over SSH. It uses native OpenSSH and needs to have an SSH key or password to authenticate to the managed nodes. 
+   - SSH keys are the recommended way for Ansible to authenticate to nodes.
+
+2. **PowerShell for Windows nodes**: 
+   - For Windows systems, Ansible uses PowerShell remoting. 
+   - Initially, you need to set up PowerShell remoting on the Windows host, and Ansible communicates over WinRM (Windows Remote Management).
+   - This is slightly different from the Linux/Unix mechanism and usually involves more setup on the Windows host.
+
+3. **Parameter Specification in Ansible Playbooks**: 
+   - When writing playbooks, you specify the connection type and credentials.
+   - This can include specifying the SSH key or user and password, the specific port to use, and other connection-related parameters.
+
+4. **Inventory File**: 
+   - Ansible keeps track of all of the servers that it manages through an inventory file. 
+   - This file contains information about the nodes including their IP addresses or hostnames, and can also include variables that define the connection type or credentials to use for each node.
+
+5. **Ansible.cfg Configuration File**: 
+   - Ansible's behavior can be modified with settings in the `ansible.cfg` file. 
+   - You can set defaults for the SSH connection, such as the private key file, user name, port, and other connection parameters.
+
+6. **Privilege Escalation**: 
+   - Ansible can use privilege escalation methods such as `sudo` or `su` to execute tasks that require higher privileges. 
+   - This is particularly useful for tasks that need administrative permissions on the managed nodes.
+
+7. **Network Devices**: 
+   - For network devices, Ansible uses various connection methods, like `network_cli`, `netconf`, or `httpapi`, depending on the device and the nature of the task.
+
+8. **Cloud Services**: 
+   - For managing instances in cloud services, Ansible can use APIs provided by the cloud provider. 
+
+The ability of Ansible to use standard, existing protocols and systems like SSH and WinRM means there's no need to install and maintain additional software on the nodes it manages, simplifying the process and reducing the maintenance overhead.
+
