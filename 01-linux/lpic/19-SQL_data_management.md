@@ -163,5 +163,81 @@ TRUNCATE TABLE table_name;
 TRUNCATE TABLE city;
 ```
 
+## Mariadb master slave
+
+![mariadb-master-slave](../../assets/65-mariadb-master-slave.jpg)
+
+Copying data from multiple databases is known as replication. The databases that are to be copied are known as master databases or servers. The replicated data might include multiple or single databases or data tables used from the desired database.
+
+The primary features of MariaDB Replication are:
+
+
+**Scalability** – When you have one or more slave servers, you can read data on them. It, thereby, reduces the load on the master server in which only accurate operations can be performed.
+**Data Analysis** – You can effortlessly analyze data on the slave server, thereby reducing the burden on the master server when MariaDB replication is updated in place.
+**Backup Assistant** – Backup Assistance allows you to replicate data, which can be used as backup data. This backup data further acts as stand-alone data in a stable state.
+**Distribution Of Data** – When you have MariaDB replication in place, you tend to work locally on this data without even connecting to the master server. By connecting subsequently, you can merge the updated data with the master data.
+
+#### Step 1 - Install MariaDB on All Nodes
+
+First, you will need to install the MariaDB server package on both Master and Slave nodes. You can install it by running the following command:
+
+```bash
+sudo apt-get update
+apt-get install mariadb-server -y
+```
+
+After installing the MariaDB server, start the MariaDB server service and enable it to start after system reboot:
+
+```bash
+systemctl start mariadb
+systemctl enable mariadb
+```
+Next, you will need to secure the MariaDB installation and set a MariaDB root password. You can do it by running the mysql_secure_installation script:
+
+```bash
+mysql_secure_installation
+```
+
+Answer all the questions as shown below:
+
+```bash
+Enter current password for root (enter for none): Enter
+Set root password? [Y/n] Y
+Remove anonymous users? [Y/n] Y
+Disallow root login remotely? [Y/n] Y
+Remove test database and access to it? [Y/n] Y
+Reload privilege tables now? [Y/n] Y
+```
+
+### MariaDB Master-Slave replication Step by Step
+Data from a Master server is replicated across several MariaDB servers using Master-Slave replication. This ensures data redundancy and prevents data loss if the Master node goes down.
+
+The replication setup is as follows:
+
+Master node: IP 172.16.0.10
+Slave node: IP 172.16.0.11
+
+Add the IP addresses of the master and slave nodes to the /etc/hosts file.
+
+```bash
+172.16.0.10 db1
+172.16.0.11 db2
+```
+
+#### Step 2 - Prepare the Master Node
+
+MariaDB server uses a binary log file to perform the replication. By default, the binary log is disabled in the MariaDB default configuration. So you will need to edit the MariaDB configuration file and enable the binary log.
+
+```bash
+vim /etc/mysql/mariadb.conf.d/50-server.cnf
+```
+First, change the bind-address from localhost to your  priveate IP:
+
+```bash
+bind-address = 172.16.0.10
+```
+
+
 keep learning
 
+https://mariadb.com/kb/en/setting-up-replication/
