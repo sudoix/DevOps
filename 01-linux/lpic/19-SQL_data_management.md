@@ -236,6 +236,91 @@ First, change the bind-address from localhost to your  priveate IP:
 ```bash
 bind-address = 172.16.0.10
 ```
+Next, add the following lines at the end of the file to enable the binary log:
+
+```bash
+server-id              = 1
+log_bin                = /var/log/mysql/mysql-bin.log
+max_binlog_size        = 100M
+relay_log = /var/log/mysql/mysql-relay-bin
+relay_log_index = /var/log/mysql/mysql-relay-bin.index
+```
+
+Save and close the file when you are finished then restart the MariaDB service to apply the changes:
+
+```bash
+systemctl restart mariadb
+```
+
+At this point, MariaDB is configured and listens on port 3306. You can check it with the following command:
+
+```bash
+ss -ntlp | grep 3306
+```
+
+You should get the following output:
+
+```bash
+LISTEN 0      80       172.16.0.10:3306      0.0.0.0:*    users:(("mariadbd",pid=3499,fd=22))
+```
+
+### Step 3 - Create a Replication User on Master Node
+
+Next, you will need to create a replication user on the Master node. The Slave node will use this user to connect to the Master server and request binary logs.
+
+To create a replication user, connect to the MariaDB with the following command:
+
+```bash
+mysql -u root -p
+```
+
+Provide your MariaDB root password and hit Enter. Once you are connected, you should get the following shell:
+
+```bash
+MariaDB [(none)]>
+```
+
+Next, create a replication user and set a password:
+
+```bash
+MariaDB [(none)]> CREATE USER 'replication'@'%' identified by 'securepassword';
+```
+
+Next, grant replication slave privilege to the user with the following command:
+
+```bash
+MariaDB [(none)]> GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%';
+```
+
+Next, flush the privileges to apply the changes:
+
+```bash
+MariaDB [(none)]> FLUSH PRIVILEGES;
+```
+
+Next, verify the Master status using the following command:
+
+```bash
+MariaDB [(none)]> SHOW MASTER STATUS;
+```
+
+You should get the binary log file name and position in the following output:
+
+```bash
++------------------+----------+--------------+------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000001 |      786 |              |                  |
++------------------+----------+--------------+------------------+
+```
+
+Finally, exit from the MariaDB console using the following command:
+
+```bash
+MariaDB [(none)]> EXIT;
+```
+`Note: Please remember File and Position value from the above output. You will need this value on the Slave server.`
+
 
 
 keep learning
