@@ -321,7 +321,159 @@ MariaDB [(none)]> EXIT;
 ```
 `Note: Please remember File and Position value from the above output. You will need this value on the Slave server.`
 
+### Step 4 - Prepare the Slave Node for Replication
 
+Next, you will need to enable the relay log and replication on the Slave node. You can do it by editing the MariaDB main configuration file:
+
+```bash
+vim /etc/mysql/mariadb.conf.d/50-server.cnf
+```
+First, change the bind-address from localhost to your  priveate IP:
+
+```bash
+bind-address = 172.16.0.11
+```
+
+Next, add the following lines at the end of the file to enable relay log and replication:
+
+```bash
+server-id              = 2
+log_bin                = /var/log/mysql/mysql-bin.log
+max_binlog_size        = 100M
+relay_log = /var/log/mysql/mysql-relay-bin
+relay_log_index = /var/log/mysql/mysql-relay-bin.index
+```
+
+Save and close the file then restart the MariaDB service to apply the changes:
+
+```bash
+systemctl restart mariadb
+```
+
+Next, you will need to set up the Slave node to replicate the Master node.
+
+First, connect to the MariaDB with the following command:
+
+```bash
+mysql -u root -p
+```
+
+Once you are connected, stop the Slave with the following command:
+
+```bash
+MariaDB [(none)]> STOP SLAVE;
+```
+
+Next, set up the slave to replicate the master with the following command:
+
+```bash
+MariaDB [(none)]> CHANGE MASTER TO MASTER_HOST = 'MASTER_IP OR NAME', MASTER_USER = 'replication', MASTER_PASSWORD = 'securepassword', MASTER_LOG_FILE = 'mysql-bin.000001', MASTER_LOG_POS = 786;
+```
+
+`MASTER_IP` is the IP address of the Master node.
+`replication` is the replication user.
+`securepassword` is the replication user password.
+`mysql-bin.000001` is the binary log file name.
+`786` is the binary log file position.
+
+Next, start the Slave with the following command:
+
+```bash
+MariaDB [(none)]> START SLAVE;
+```
+
+### Step 5 - Verify MariaDB Replication
+
+At this point, MariaDB Master and Slave node is configured. Now, you will need to test whether the replication is working or not.
+
+First, go to the Master node and connect to the MariaDB console:
+
+```bash
+mysql -u root -p
+```
+
+Once you are connected, create a database named testdb:
+
+```bash
+MariaDB [(none)]> CREATE DATABASE schooldb;
+```
+
+Next, switch the database to schooldb and create a table named students:
+
+```bash
+MariaDB [(none)]> USE schooldb;
+MariaDB [(schooldb)]> CREATE TABLE students (id INT, name VARCHAR(255));
+MariaDB [(schooldb)]> INSERT INTO students (id, name) VALUES (1, 'John'), (2, 'Jane');
+MariaDB [(schooldb)]> SELECT * FROM students;
++------+------+
+| id   | name |
++------+------+
+|    1 | John |
+|    2 | Jane |
++------+------+
+
+MariaDB [(schooldb)]>
+```
+
+`Now, go to the Slave node and connect to the MariaDB with the following command:`
+
+```bash
+mysql -u root -p
+```
+
+Once you are connected, check the Slave status with the following command:
+
+```bash
+MariaDB [(none)]> SHOW SLAVE STATUS;
+```
+
+If everything is fine, you should get the following output:
+
+```bash
+                Slave_IO_State: Waiting for master to send event
+
+```
+
+Now, list all databases using the following command:
+
+```bash
+MariaDB [(none)]> SHOW DATABASES;
+```
+
+You can see that the schooldb database is replicated from the Master node:
+
+```bash
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| schooldb           |
++--------------------+
+```
+Now, switch the database to schooldb and list all tables using the following command:
+
+```bash
+MariaDB [(none)]> USE schooldb;
+MariaDB [(schooldb)]> SHOW TABLES;
++--------------------+
+| Tables_in_schooldb |
++--------------------+
+| students           |
++--------------------+
+```
+You can also verify the tables data using the following command:
+
+```bash
+MariaDB [(schooldb)]> SELECT * FROM students;
++------+------+
+| id   | name |
++------+------+
+|    1 | John |
+|    2 | Jane |
++------+------+
+```
 
 keep learning
 
