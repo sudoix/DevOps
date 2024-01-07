@@ -30,6 +30,31 @@ sudo systemctl enable mariadb
 sudo mysql_secure_installation
 ```
 
+## login to your database
+
+```
+mysql -u root -p
+```
+
+
+## create database
+
+```sql
+create database `school`;
+```
+
+## create table
+
+```sql
+create table students(id int, name varchar(255));
+```
+
+## insert data
+
+```sql
+insert into students(id, name) values(1, 'John'), (2, 'Jane');
+```
+
 ## restore database
 
 login to your database and run the following command:
