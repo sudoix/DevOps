@@ -1,0 +1,1 @@
+![docker-full](../assets/docker-full.png)
