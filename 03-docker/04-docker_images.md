@@ -109,14 +109,14 @@ Suppose you have a running Docker container where you've installed a new package
 1. **Start a Container**: 
    First, let's start with a base image, for example, an Ubuntu container. You can start a container using the `docker run` command.
    ```bash
-   docker run -it ubuntu /bin/bash
+   docker run -dit ubuntu /bin/bash
    ```
 
 2. **Make Changes in the Container**:
    Inside the container, perform some operations. For instance, you might install a software package. Let's install `curl` as an example:
    ```bash
    apt-get update
-   apt-get install curl
+   apt-get install curl vim cmatrix
    ```
 
 3. **Exit the Container**:
@@ -144,9 +144,60 @@ After running these commands, you will have a new Docker image named `my-new-ima
 
 Remember, this is just a basic example. In real-world scenarios, you might make more substantial changes to the container before committing them into a new image.
 
+### Docker save and load
 
+`docker save` and `docker load` are Docker commands used to save images to a tar archive and then load them back into Docker on the same or a different machine. These commands are useful for distributing Docker images in environments where you can't or don't want to use a Docker registry.
 
+### `docker save`
 
+**Purpose**: The `docker save` command is used to save one or more Docker images to a tar archive. 
+
+**Usage**: 
+- **Syntax**: `docker save [OPTIONS] IMAGE [IMAGE...]`
+- **Options**: Include `-o` or `--output` to specify the output file.
+
+**Example**: Suppose you have an image named `my-image:latest`. To save it to a tar archive, you would use:
+```bash
+docker save -o my-image.tar my-image:latest
+```
+This command creates a tar file `my-image.tar` containing the `my-image:latest` image.
+
+### `docker load`
+
+**Purpose**: The `docker load` command is used to load an image from a tar archive as produced by `docker save`.
+
+**Usage**:
+- **Syntax**: `docker load [OPTIONS]`
+- **Options**: Include `-i` or `--input` to specify the input file.
+
+**Example**: To load the image you saved earlier into Docker, you would use:
+```bash
+docker load -i my-image.tar
+```
+After running this command, `my-image:latest` will be available in your Docker image list, as if you had pulled it from a registry.
+
+### Example Scenario
+
+**Saving an Image on Machine A**:
+1. You have a Docker image named `my-custom-app:1.0`.
+2. You save this image to a tar file:
+   ```bash
+   docker save -o my-custom-app.tar my-custom-app:1.0
+   ```
+3. You now have `my-custom-app.tar` which contains the Docker image.
+
+**Transferring the Tar File**:
+- Transfer `my-custom-app.tar` to a different machine (Machine B) using any file transfer method (USB, network transfer, etc.).
+
+**Loading the Image on Machine B**:
+1. On Machine B, you receive `my-custom-app.tar`.
+2. Load the image into Docker:
+   ```bash
+   docker load -i my-custom-app.tar
+   ```
+3. The `my-custom-app:1.0` image is now available on Machine B, just as it was on Machine A.
+
+This process is particularly useful in environments where you can't directly pull images from a registry due to network restrictions, or when you want to distribute images in a more controlled manner.
 
 ### Create a Dockerfile
 A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. Here's a basic example of a Dockerfile:
