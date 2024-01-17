@@ -865,7 +865,7 @@ Understanding and utilizing Docker events is key for advanced Docker usage, espe
 
 - **Basic Usage**:
   ```bash
-  docker import -m "my new image" mycontainer.tar mynewimage
+  docker import -m "my new image" mycontainer.tar mynewimage:v1
   ```
 
 The output should be something like this:
