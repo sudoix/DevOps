@@ -199,6 +199,8 @@ After running this command, `my-image:latest` will be available in your Docker i
 
 This process is particularly useful in environments where you can't directly pull images from a registry due to network restrictions, or when you want to distribute images in a more controlled manner.
 
+## Create Image from a Dockerfile
+
 ### Create a Dockerfile
 A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. Here's a basic example of a Dockerfile:
 
@@ -269,12 +271,18 @@ Now, let's create a Dockerfile to dockerize this script.
 # Use a base image with Bash (ubuntu Linux in this case)
 FROM ubuntu:latest
 
+# Add label to the image (optional)
+LABEL version="1.0.0"
+
+# Update the package manager and install Bash
+RUN apt-get update && apt-get install -y bash
+RUN apt install nginx -y
+
 # Copy the Bash script into the container
 COPY . /app
 
 # Set the working directory in the container
 WORKDIR /app
-
 
 # Make the script executable inside the container
 RUN chmod +x show_date.sh
