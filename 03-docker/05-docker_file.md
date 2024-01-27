@@ -250,3 +250,113 @@ This `jq` command filters the output to show only the layers of the image.
 - The `docker history` command is usually more user-friendly for a quick overview of the layers and their creation commands.
 - The `docker inspect` command provides more detailed information, which can be useful for deeper analysis but might require JSON parsing for readability.
 - These commands can help you understand how your Docker images are built and can aid in optimizing your Dockerfiles and build processes.
+
+## Docker file command and option
+
+Understanding the commands used in a Dockerfile is essential for creating Docker images effectively. Here's a brief overview of some of the most common Dockerfile instructions:
+
+### FROM
+
+- **Purpose**: Specifies the base image from which you are building.
+- **Example**: `FROM ubuntu:18.04`
+
+### RUN
+
+- **Purpose**: Executes commands in a new layer on top of the current image and commits the results.
+- **Example**: `RUN apt-get update && apt-get install -y python3`
+
+### CMD
+
+- **Purpose**: Provides defaults for an executing container. There can only be one CMD instruction in a Dockerfile.
+- **Example**: `CMD ["python3", "./app.py"]`
+
+### LABEL
+
+- **Purpose**: Adds metadata to an image as a key-value pair.
+- **Example**: `LABEL maintainer="name@example.com"`
+
+### EXPOSE
+
+- **Purpose**: Informs Docker that the container listens on the specified network ports at runtime.
+- **Example**: `EXPOSE 80`
+
+### ENV
+
+- **Purpose**: Sets environment variables.
+- **Example**: `ENV API_KEY="123456789"`
+
+### ADD
+
+- **Purpose**: Copies new files, directories, or remote file URLs from `<src>` and adds them to the filesystem of the image at the path `<dest>`.
+- **Example**: `ADD . /app`
+
+### COPY
+
+- **Purpose**: Copies new files or directories from `<src>` and adds them to the filesystem of the container at the path `<dest>`.
+- **Example**: `COPY . /app`
+
+### ENTRYPOINT
+
+- **Purpose**: Allows you to configure a container that will run as an executable.
+- **Example**: `ENTRYPOINT ["python3"]`
+
+### VOLUME
+
+- **Purpose**: Creates a mount point with the specified name and marks it as holding externally mounted volumes from the native host or other containers.
+- **Example**: `VOLUME /data`
+
+### WORKDIR
+
+- **Purpose**: Sets the working directory for any RUN, CMD, ENTRYPOINT, COPY, and ADD instructions that follow it in the Dockerfile.
+- **Example**: `WORKDIR /app`
+
+### USER
+
+- **Purpose**: Sets the user name or UID to use when running the image and for any RUN, CMD, and ENTRYPOINT instructions that follow it in the Dockerfile.
+- **Example**: `USER myuser`
+
+### HEALTHCHECK
+
+- **Purpose**: Tells Docker how to test a container to check that it is still working.
+- **Example**: `HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1`
+
+### ONBUILD
+
+- **Purpose**: Adds a trigger instruction to be executed at a later time, when the image is used as the base for another build.
+- **Example**: `ONBUILD ADD . /app`
+
+### SHELL
+
+- **Purpose**: Allows the default shell used for the shell form of commands to be overridden.
+- **Example**: `SHELL ["powershell", "-command"]`
+
+Remember, the order of instructions in a Dockerfile is significant. Each instruction creates a new layer in the image, and Docker caches these layers to speed up subsequent builds. Efficient ordering and use of instructions can significantly optimize your build process and the size of the image.
+
+**ADD and COPY**
+
+In Dockerfiles, both `ADD` and `COPY` are instructions used to copy files and directories from a specified source on the host into the Docker image. However, they have different functionalities and are suited for different scenarios. Here's a breakdown of their differences:
+
+### COPY
+
+- **Function**: `COPY` is a straightforward command used to copy files and directories from the host file system into a Docker image. 
+- **Usage**: It's the preferred command for simply copying local files into an image.
+- **Example**: `COPY ./app /usr/src/app`
+- **Behavior**: It only copies files and directories from a local source - it doesn't support URLs or extracting archives.
+
+### ADD
+
+- **Function**: `ADD` has more features than `COPY`. In addition to copying files from a local source, `ADD` also supports two additional functionalities:
+  1. **URL Support**: It can copy files from a remote URL into the image.
+  2. **Auto-extraction**: It can automatically unpack local tar files into the image.
+- **Usage**: `ADD` is used when you need to leverage these additional capabilities (downloading from a URL or auto-extracting tar files).
+- **Example**:
+  - Copying from a URL: `ADD https://example.com/big.tar.xz /usr/src/big`
+  - Auto-extracting a tar file: `ADD files.tar.gz /usr/src/app`
+- **Caveats**: Since `ADD` can automatically extract tar files, it's important to be explicit in your Dockerfile to ensure the clarity and predictability of your builds.
+   3. **copy hidden file or direcroy**
+### When to Use Each
+
+- **Use `COPY` when**: You need to copy local files and directories into an image. It's the safer and more transparent option for standard copying operations.
+- **Use `ADD` when**: You need to copy files from a remote URL or automatically extract a tar file into the image.
+
+In general, Docker recommends using `COPY` for copying files from the local file system, as it's more transparent than `ADD`. `ADD` should be used for its advanced capabilities when they are specifically required.
