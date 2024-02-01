@@ -360,3 +360,142 @@ In Dockerfiles, both `ADD` and `COPY` are instructions used to copy files and di
 - **Use `ADD` when**: You need to copy files from a remote URL or automatically extract a tar file into the image.
 
 In general, Docker recommends using `COPY` for copying files from the local file system, as it's more transparent than `ADD`. `ADD` should be used for its advanced capabilities when they are specifically required.
+
+### docker info
+
+The `docker info` command in Docker is a powerful tool that provides comprehensive information about the Docker installation and its current state. When you run this command, it returns a detailed report about the Docker environment
+
+
+## more about docker file
+
+Here's a Dockerfile based on your specifications, along with descriptions for each command:
+
+```Dockerfile
+# This is the base image, using Ubuntu 22.04
+FROM ubuntu:22.04
+
+# Metadata for the image with maintainer information and a description
+LABEL maintainer="Your Name <your_email>" Description="This is an example"
+
+# Update the package lists, install vim and nginx, then clean up 
+# the cache to reduce the size of the image. This installs vim and nginx 
+# and then removes unnecessary files and lists to keep the image size small.
+RUN apt-get update && apt-get install -y vim nginx \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Set the working directory to /app1. Docker creates the directory if it doesn't exist.
+WORKDIR /app1
+
+# Copy all shell script files from the current directory on the host
+# to the working directory in the image (/app1).
+COPY ./*.sh . 
+
+# Create a mount point at /home/milad and /app2/. This is a declaration that these
+# directories are intended to be mounted as volumes, possibly from the host or 
+# from other containers. Note that this doesn't actually mount anything by itself;
+# it's more documentation for users of the image.
+VOLUME ["/home/milad", "/app2/"]
+```
+
+Each line in the Dockerfile serves a specific purpose:
+
+1. `FROM`: Specifies the base image from which you are building.
+2. `LABEL`: Adds metadata to the image, useful for documentation and specifying the maintainer.
+3. `RUN`: Runs shell commands inside the container. Here, it's used for installing packages and cleaning up.
+4. `WORKDIR`: Sets the working directory for any `RUN`, `CMD`, `ENTRYPOINT`, `COPY`, and `ADD` instructions that follow it.
+5. `COPY`: Copies files from your Docker client’s current directory.
+6. `VOLUME`: Indicates that the specified directories should be treated as mount points.
+
+Remember to replace `"Your Name <your_email>"` with your actual name and email address. This Dockerfile is a basic starting point and can be extended or modified according to your specific requirements.
+
+Creating a Dockerfile with a comprehensive set of instructions involves covering various aspects such as setting up the environment, installing necessary software, configuring settings, and ensuring best practices for security and performance. Below is an example of a detailed Dockerfile for a typical web application using Nginx as a web server. This example includes comments for clarity:
+
+```Dockerfile
+# Use an official Ubuntu base image
+FROM ubuntu:22.04
+
+# Define maintainer and provide a description
+LABEL maintainer="Your Name <your_email@example.com>" \
+      Description="Web application with Nginx"
+
+# Set environment variables to non-interactive (to avoid prompts during package installation)
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Run a series of commands to update and install necessary packages
+# Install Nginx, Vim, and other utilities
+# Clean up to reduce image size
+RUN apt-get update && apt-get install -y \
+    nginx \
+    vim \
+    curl \
+    ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Set the working directory inside the container
+WORKDIR /var/www/html
+
+# Copy local files to the container's working directory
+COPY . /var/www/html
+
+# Set up volume for persistent data
+VOLUME /var/www/html
+
+# Expose port 80 for the web server
+EXPOSE 80
+
+# Set up health checks (optional)
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost/ || exit 1
+
+# Use a custom entrypoint script (optional)
+# COPY entrypoint.sh /entrypoint.sh
+# RUN chmod +x /entrypoint.sh
+# ENTRYPOINT ["/entrypoint.sh"]
+
+# Default command to execute
+# Here, start Nginx in the foreground to ensure that the Docker container stays running
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+In this Dockerfile:
+
+- `FROM` specifies the base image.
+- `LABEL` adds metadata.
+- `ENV` sets environment variables.
+- `RUN` executes commands to install necessary software.
+- `WORKDIR` sets the working directory.
+- `COPY` copies files from the local file system to the container.
+- `VOLUME` declares a volume for persistent data.
+- `EXPOSE` informs Docker that the container listens on specified network ports at runtime.
+- `HEALTHCHECK` sets up a command to check the health of the container.
+- `CMD` provides the default command to run when the container starts.
+
+You may need to adjust paths, port numbers, and other settings to match your specific application requirements. The `entrypoint.sh` is optional and can be used to execute custom startup scripts or commands. If you use it, ensure you have an `entrypoint.sh` script in your context directory and uncomment the relevant lines.
+
+In Dockerfiles, `RUN`, `CMD`, and `ENTRYPOINT` are three different instructions that each serve a unique purpose in the image building process and the behavior of the container at runtime. Understanding the difference between them is crucial for effectively utilizing Docker:
+
+1. **`RUN`**:
+   - **Purpose**: The `RUN` instruction is used to execute commands inside your Docker image at build time. It's commonly used for installing software packages, compiling code, or setting up the environment.
+   - **Behavior**: Each `RUN` instruction creates a new layer in the Docker image. Multiple `RUN` instructions can lead to many layers, which is why they are often combined using logical operators (`&&`) to reduce the number of layers in the image.
+   - **Example**: `RUN apt-get update && apt-get install -y nginx`
+
+**RUN execute when docker image builded**
+
+2. **`CMD`**:
+   - **Purpose**: The `CMD` instruction provides default commands and arguments that will be executed when the Docker container starts. It's a way to specify the default behavior of a container.
+   - **Behavior**: If a Docker container is run without specifying a command, the `CMD` instruction is used. However, if you run the container and pass a command (like `bash` or `python script.py`), the `CMD` is overridden. A Dockerfile should have only one `CMD`; if there are multiple, the last `CMD` is the one that takes effect.
+   - **Example**: `CMD ["nginx", "-g", "daemon off;"]` (This starts Nginx when the container runs)
+
+3. **`ENTRYPOINT`**:
+   - **Purpose**: The `ENTRYPOINT` instruction is similar to `CMD`, but it is meant to define the container as an executable. It allows you to set the default command and parameters and then use any additional `CMD` commands as parameters.
+   - **Behavior**: `ENTRYPOINT` configures the container to run as an executable. When used in combination with `CMD`, the `ENTRYPOINT` defines a base command, and `CMD` provides default arguments which can be overridden from the command line when the container runs.
+   - **Example**: 
+     - `ENTRYPOINT ["nginx"]`
+     - `CMD ["-g", "daemon off;"]`
+     - In this case, `nginx -g "daemon off;"` is the default command. If you run `docker run [image] -g "daemon on;"`, it replaces the `CMD` part, resulting in `nginx -g "daemon on;"`.
+
+In summary, `RUN` is for building the image, `CMD` is for defining a default command that can be overridden, and `ENTRYPOINT` is for making the container act as a specific executable.
+
+**IN ENTRYPOINT YOU CAN'T OWERWRITE COMMAND IN DOCKER RUN BUT IN CMD YOU CAN**
