@@ -446,8 +446,8 @@ VOLUME /var/www/html
 EXPOSE 80
 
 # Set up health checks (optional)
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost/ || exit 1
+# HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+#   CMD curl -f http://localhost/ || exit 1
 
 # Use a custom entrypoint script (optional)
 # COPY entrypoint.sh /entrypoint.sh
@@ -456,6 +456,10 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
 
 # Default command to execute
 # Here, start Nginx in the foreground to ensure that the Docker container stays running
+
+# `ENTRYPOINT ["nginx"]`
+# `CMD ["-g", "daemon off;"]`
+
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
