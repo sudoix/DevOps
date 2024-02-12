@@ -344,3 +344,49 @@ This command does the same as the previous example but uses the newer `--mount` 
 - **Storage**: For situations where data needs to persist or be shared between the host and one or more containers, but without the isolation from the host filesystem provided by Docker volumes.
 
 Bind mounts are a powerful feature but should be used judiciously, considering their impact on security and container portability.
+
+
+## Tmpfs mount
+
+A `tmpfs` mount in Docker allows you to mount a temporary in-memory filesystem into a container. This type of mount is useful for storing sensitive information that you don't want to persist on disk, or for improving the performance of applications that require fast, temporary file storage. Data stored in a `tmpfs` mount is stored in the host system's memory only and is deleted when the container is stopped.
+
+### Key Characteristics of tmpfs Mounts
+
+- **Data Volatility**: Data stored in a `tmpfs` mount is ephemeral and only exists while the container is running. Once the container stops, the data is removed.
+- **Performance**: Since `tmpfs` mounts are backed by the host's memory, they offer high-speed access to stored data, faster than persistent volumes or bind mounts.
+- **Security**: `tmpfs` mounts can be used to handle sensitive information that should not be written to disk, reducing the risk of data leakage.
+
+### How to Use tmpfs Mounts
+
+To use a `tmpfs` mount with a Docker container, you can use the `--tmpfs` flag with the `docker run` command, specifying the path where the `tmpfs` mount will be located inside the container.
+
+#### Syntax:
+
+```sh
+docker run -dit --name my_container --tmpfs /path/in/container my_image
+
+docker run -dit --name nginx1 --tmpfs /app nginx:latest
+```
+
+This command runs a container named `my_container` from the image `my_image`, with a `tmpfs` mount at `/path/in/container`. Any data written to `/path/in/container` will be stored in memory and will not be persisted on disk.
+
+### Considerations for Using tmpfs Mounts
+
+- **Memory Usage**: Data stored in `tmpfs` mounts consumes the host's memory. Be mindful of the memory usage and limits to avoid impacting the host system's performance.
+- **Size Limits**: You can specify size limits for `tmpfs` mounts to prevent a container from using an excessive amount of memory. This is done by appending options to the `--tmpfs` flag, like so:
+
+    ```sh
+    docker run -d --name my_container --tmpfs /path/in/container:size=100M my_image
+    ```
+
+    This limits the `tmpfs` mount to 100 megabytes.
+
+- **Compatibility**: `tmpfs` mounts are supported on Linux containers. If you're using Docker on Windows or macOS, the behavior of `tmpfs` mounts may vary due to the underlying virtualization layer.
+
+### Use Cases for tmpfs Mounts
+
+- **Temporary Data Processing**: For applications that process temporary data, which doesn't need to be persisted after the container stops.
+- **Sensitive Information**: To store sensitive configuration files or secrets that should not be left on disk.
+- **High-Performance I/O**: For workloads requiring fast read/write access to temporary files, reducing I/O latency compared to disk-based storage.
+
+`tmpfs` mounts offer a flexible, secure way to manage temporary data in Docker containers, making them suitable for a variety of use cases where data persistence is unnecessary or undesirable.
