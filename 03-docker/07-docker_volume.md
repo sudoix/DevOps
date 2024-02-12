@@ -209,9 +209,93 @@ This command will prompt you for confirmation before removing all unused volumes
 When you run a container, you can attach a volume to it using the `-v` or `--volume` flag followed by the volume name and the path where it should be mounted inside the container.
 
 ```sh
-docker run -d -v my_volume:/data my_image
+docker run -d  --name test1 -v my_volume:/data my_image
 ```
 
 This command runs a container from `my_image`, attaching `my_volume` to it. Inside the container, the volume will be accessible at `/data`.
+
+some example
+
+OR
+
+```sh
+docker run -d  --name test1 --mount source=my_volume,target=/app my_image
+```
+
+After that
+
+```sh
+docker inspect test1
+```
+
+```sh
+docker run -dit --name nginx1 --volume vol1:/app1 -v vol2:/app2 -v vol3:/app3 -e NAME="MILAD" nginx:latase
+```
+**If you don't create volume in docker run the volume will be created**
+
+```sh
+docker inspect nginx1 | grep -A 5 mount
+```
+
+#### For test 
+
+crate a file in `/var/lib/docker/volume/vol1/_data` and exec to container and see the mount path for example `/app1`
+
+## Mount a volume to more container
+
+You can mount a Docker volume to multiple containers simultaneously. This feature is particularly useful for sharing data between containers, such as configuration files, persistent storage, or to allow multiple services to access the same set of data.
+
+Here's how you can mount the same volume to multiple containers:
+
+### Step 1: Create a Volume
+
+First, create a Docker volume. If you haven't already created one, you can do so with the following command:
+
+```sh
+docker volume create my_shared_volume
+```
+
+This command creates a volume named `my_shared_volume`.
+
+### Step 2: Mount the Volume to Containers
+
+When you run your containers, use the `-v` or `--volume` flag to specify the volume to be mounted and its mount point inside each container. For example, to mount `my_shared_volume` to two containers, you can use commands like these:
+
+```sh
+docker run -dit --name container1 -v my_shared_volume:/app/data my_image
+docker run -dit --name container2 -v my_shared_volume:/app/data my_image
+
+docker run -dit --name nginx2 -v vol1:/app
+```
+
+These commands run two containers (`container1` and `container2`) from the same image (`my_image`). Both containers have the `my_shared_volume` volume mounted to `/app/data` inside the containers. Any changes made to the data within `/app/data` will be reflected in both containers because they share the same volume.
+
+### Considerations for Sharing Volumes
+
+- **Concurrent Access**: When multiple containers have access to the same volume, ensure that your application can handle concurrent read/write operations without data corruption. Some applications might require exclusive access to certain files, so coordination is necessary.
+  
+- **Permissions and Ownership**: The files and directories within the volume have their own permissions and ownership settings. Make sure that these settings are compatible with the needs of all containers that share the volume.
+
+- **Data Persistence**: Data written to the volume persists independently of the container lifecycles. Even if all containers using the volume are stopped or removed, the data remains accessible and can be attached to new containers.
+
+### Example Use Cases
+
+- **Sharing Static Assets**: Serving the same static assets (e.g., images, stylesheets) through multiple web server containers.
+- **Inter-Container Communication**: Using a shared volume for inter-container communication through files, such as using a shared configuration file or writing logs to a common location that another container processes.
+- **Database Storage**: Attaching a database container and a backup service container to the same volume to facilitate data backups.
+
+Mounting a volume to multiple containers offers flexibility in managing data and enables patterns like shared configurations, centralized logging, and data persistence across container deployments.
+
+```sh
+docker run -dit --name nginx1 -v vol1:/usr/share/nginx/html nginx:latest
+docker run -dit --name nginx2 -v vol1:/usr/share/nginx/html nginx:latest
+docker run -dit --name nginx3 -v vol1:/usr/share/nginx/html nginx:latest
+```
+
+**When you mount vol in a container all of data in Host os overwrite to gues**
+
+in the nginx, the directory of `/usr/share/nginx/html` overwrite and after that nginx create a html file.
+
+and you can update all of your container data with change the volume data.
 
 
