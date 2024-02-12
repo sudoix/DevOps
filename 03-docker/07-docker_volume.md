@@ -299,3 +299,48 @@ in the nginx, the directory of `/usr/share/nginx/html` overwrite and after that 
 and you can update all of your container data with change the volume data.
 
 
+# Bind mounts
+
+Bind mounts are a type of volume that allows you to map a host file or directory to a container's file or directory, essentially "binding" a host location to a container location. This feature enables you to store data on the host system outside of the Docker-managed volumes system. Bind mounts have been available since the early versions of Docker and offer more control over the filesystem and file sharing between the host and container.
+
+### Key Characteristics of Bind Mounts
+
+- **Direct Access**: Bind mounts provide direct access to the host's filesystem to the container, allowing containers to use host files and directories.
+- **Performance**: Generally, bind mounts have better performance for certain types of I/O operations compared to volumes managed by Docker, as they bypass some layers of abstraction.
+- **Path Dependency**: They depend on the host machine's filesystem structure, which can affect portability between different hosts.
+
+### How to Use Bind Mounts
+
+When you run a container, you can create a bind mount by using the `-v` or `--mount` flag with the `docker run` command, specifying the host path and the container path. The syntax differs slightly between the two options.
+
+#### Using `-v` or `--volume`:
+
+```sh
+docker run -d --name my_container -v /host/path:/container/path my_image
+
+docker run -dit --name nginx1 -v vol1:/app1 -v /home/milad:/app2 -v /etc:/app3:ro nginx:latest #/etc is readonly, touch or create file in /app3 :)
+```
+
+This command mounts the host directory `/host/path` to `/container/path` inside the container named `my_container`.
+
+#### Using `--mount`:
+
+```sh
+docker run -d --name my_container --mount type=bind,source=/host/path,target=/container/path my_image
+```
+
+This command does the same as the previous example but uses the newer `--mount` syntax, which is more verbose but also clearer.
+
+### Considerations for Using Bind Mounts
+
+- **Filesystem Access**: Bind mounts allow the container to access sensitive parts of the host's filesystem. It's essential to be careful with what you mount to avoid security issues.
+- **Path Existence**: The host path must exist before you create the bind mount. Docker will not automatically create the host path for you, which is different from the behavior when using named volumes.
+- **Permissions**: The container's processes use the host's filesystem permissions. Ensure that the container runs with the appropriate permissions to access the bind-mounted files or directories.
+
+### Use Cases for Bind Mounts
+
+- **Development**: For development environments, where you want to quickly test changes without rebuilding the container. You can bind mount the source code directory from the host into the container.
+- **Configuration**: To provide configuration files to a container from the host, allowing you to use the same image with different configurations without rebuilding it.
+- **Storage**: For situations where data needs to persist or be shared between the host and one or more containers, but without the isolation from the host filesystem provided by Docker volumes.
+
+Bind mounts are a powerful feature but should be used judiciously, considering their impact on security and container portability.
