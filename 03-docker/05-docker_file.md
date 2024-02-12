@@ -503,3 +503,10 @@ In Dockerfiles, `RUN`, `CMD`, and `ENTRYPOINT` are three different instructions 
 In summary, `RUN` is for building the image, `CMD` is for defining a default command that can be overridden, and `ENTRYPOINT` is for making the container act as a specific executable.
 
 **IN ENTRYPOINT YOU CAN'T OWERWRITE COMMAND IN DOCKER RUN BUT IN CMD YOU CAN**
+
+
+### Docker file is in another location
+
+```bash
+docker build -t test:latest -f Dockerfile-prod /tmp
+```
