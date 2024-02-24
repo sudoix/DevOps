@@ -6,8 +6,8 @@ services:
     image: mariadb:10.2
     environment:
       MYSQL_ROOT_PASSWORD: changeme
-      MYSQL_DATABASE: mybb
-      MYSQL_USER: mybb
+      MYSQL_DATABASE: my_db
+      MYSQL_USER: my_user
       MYSQL_PASSWORD: changeme
     networks:
       - backend
