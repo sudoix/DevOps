@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: postgres-1
+    restart: always
+    image: postgres:14.11-bookworm
+    ports:
+      - 5432:5432
+    volumes:
+      - /data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: my_db
+
+
+### for up and use 
+
+# docker-compose -f postgresql.yml up -d
+
+### exec to container
+
+# docker exec -it postgres-1 bash
+
+### psql
+# psql --username=postgres --password
+
+### create database
+# CREATE DATABASE test_db;
+
+### connect to database
+# \l --> list databases
+# \c my_db --> connect to database
+# \dt --> list tables
+# \d my_table --> describe table
+
+### create table
+# CREATE TABLE my_table (id serial primary key, name varchar(255));
+
+### insert
+# INSERT INTO my_table (name) VALUES ('John');
+
+### query
+# SELECT * FROM my_table;
+
+### exit
+
+# \q
