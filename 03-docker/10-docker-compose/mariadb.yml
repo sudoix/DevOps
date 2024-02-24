@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  mariadb:
+    container_name: mariadb-1
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_DATABASE: mybb
+      MYSQL_USER: mybb
+      MYSQL_PASSWORD: changeme
+    networks:
+      - backend
+    restart: unless-stopped # Changed from on-failure to unless-stopped for broader restart policy
+    volumes:
+      - /data/mariadb:/var/lib/mysql
+    ports:
+      - 3306:3306
+#  Optional healthcheck
+    healthcheck: # Adding healthcheck to ensure the service is running as expected
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    logging: # Configuring logging
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW # Setting transaction isolation level and binlog format for better performance and consistency
+    security_opt: # Enhance security
+      - no-new-privileges:true
+    mem_limit: 256m # Limiting memory usage to prevent resource overconsumption
+    cpus: 0.5 # Limit CPU usage
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.238.0/24
