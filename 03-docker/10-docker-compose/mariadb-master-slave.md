@@ -51,6 +51,8 @@ volumes:
 
 #### Create master and slave configuration file
 
+vim master.cnf
+
 ```bash
 [mysqld]
 default_authentication_plugin=mysql_native_password
@@ -70,6 +72,8 @@ socket=/var/run/mysqld/mysqld.sock
 ```
 
 and slave file
+
+vim slave.cnf
 
 ```bash
 [mysqld]
@@ -161,3 +165,6 @@ use my_db;
 show tables;
 
 ```
+
+reference:
+https://pierreabreu.medium.com/how-to-create-master-slave-mysql-8-with-docker-compose-yml-c137f45e28c7
