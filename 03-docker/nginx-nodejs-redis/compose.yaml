@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  redis:
+    container_name: redis1
+    hostname: redis-1
+    restart: on-failure
+    image: 'redislabs/redismod'
+    ports:
+      - '127.0.0.1:6379:6379'
+  web1:
+    container_name: web1
+    restart: on-failure
+    build: ./web
+    hostname: web1
+    # ports:
+    #   - '81:5000'
+  web2:
+    container_name: web2
+    restart: on-failure
+    build: ./web
+    hostname: web2
+    # ports:
+    #   - '82:5000'
+  nginx:
+    container_name: nginx1
+    build: ./nginx
+    ports:
+    - '80:80'
+    depends_on:
+    - web1
+    - web2
+
+
