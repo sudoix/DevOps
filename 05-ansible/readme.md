@@ -1,1 +1,0 @@
-![ansible-full](../assets/ansible-full.webp)
