@@ -58,3 +58,107 @@ scale service
 ```sh
 docker service scale nginx1=2
 ```
+
+Inspect service
+
+```sh
+docker service inspect nginx1
+```
+
+## More example
+
+Certainly! Below are examples of Docker service commands with various options (switches) that demonstrate different capabilities and configurations for deploying and managing services in a Docker Swarm environment. These examples expand on the basic `docker service create` command by introducing additional functionality such as environment variables, mounting volumes, and specifying network options.
+
+### 1. Deploy a Service with Environment Variables
+
+Deploy a Redis service and set an environment variable (`REDIS_PASSWORD`) for the Redis instance:
+
+```sh
+docker service create \
+  --name my-redis \
+  --replicas 2 \
+  --env REDIS_PASSWORD=strongpassword123 \
+  redis:latest
+```
+
+- `--env`: Sets environment variables for the containers.
+
+### 2. Deploy a Service with a Mounted Volume
+
+Deploy a PostgreSQL database service with a volume for persistent data storage:
+
+```sh
+docker service create \
+  --name my-postgres \
+  --replicas 1 \
+  --mount type=volume,source=my-postgres-data,target=/var/lib/postgresql/data \
+  --env POSTGRES_PASSWORD=strongpassword123 \
+  postgres:latest
+```
+
+- `--mount`: Specifies the mount configuration for the service. This example creates a volume named `my-postgres-data` that persists data stored in `/var/lib/postgresql/data` inside the container.
+
+### 3. Deploy a Service on a Specific Overlay Network
+
+Deploy an Apache web server service and attach it to a custom overlay network named `my-web-net`:
+
+```sh
+docker service create \
+  --name my-apache \
+  --replicas 3 \
+  --network my-web-net \
+  --publish published=8080,target=80 \
+  httpd:latest
+```
+
+- `--network`: Connects the service to a specified network. In this case, `my-web-net` is an overlay network that allows inter-service communication in a distributed manner.
+
+### 4. Deploy a Service with Resource Constraints
+
+Deploy a Node.js application with specific CPU and memory constraints:
+
+```sh
+docker service create \
+  --name my-node-app \
+  --replicas 2 \
+  --limit-cpu 0.5 \
+  --limit-memory 256M \
+  --publish published=3000,target=3000 \
+  my-node-app:latest
+```
+
+- `--limit-cpu` and `--limit-memory`: Restrict the amount of CPU and memory resources available to each service instance. This example limits each instance to 0.5 CPUs and 256MB of memory.
+
+### 5. Deploy a Service with a Rolling Update Policy
+
+Deploy a service with a specific update policy, which controls how updates to the service are rolled out:
+
+```sh
+docker service create \
+  --name my-web-service \
+  --replicas 4 \
+  --publish published=80,target=80 \
+  --update-parallelism 2 \
+  --update-delay 10s \
+  nginx:latest
+```
+
+- `--update-parallelism`: Specifies the number of service tasks that can be updated simultaneously.
+- `--update-delay`: Sets the delay between updates to different tasks (e.g., waiting 10 seconds between updating each set of tasks).
+
+### 6. Deploy a Service with Placement Constraints
+
+Deploy a service that should only run on nodes with a specific label (e.g., `ssd=true`):
+
+```sh
+docker service create \
+  --name my-fast-storage-service \
+  --replicas 2 \
+  --constraint 'node.labels.ssd == true' \
+  alpine:latest \
+  ping docker.com
+```
+
+- `--constraint`: Ensures that service tasks are scheduled on nodes that meet the specified constraints. This command only schedules tasks on nodes labeled with `ssd=true`.
+
+These examples showcase the flexibility and power of Docker Swarm services, demonstrating how you can customize deployments to fit your specific requirements for environment configuration, persistence, networking, resource usage, update strategies, and node placement.
