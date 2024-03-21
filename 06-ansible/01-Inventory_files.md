@@ -108,3 +108,107 @@ In this YAML example:
 
 Both these examples demonstrate how to organize hosts into groups and define both host-specific and group-specific variables. These formats give you flexibility in how you manage and categorize the hosts in your Ansible inventory.
 
+### Inventory Parameters
+
+Ansible inventory parameters are used to define the hosts and groups of hosts upon which commands, modules, and tasks in a playbook operate. The inventory file can be in one of many formats, including INI and YAML. It's not just about specifying hosts; inventory parameters can include variables that provide additional details about the hosts, which can be used in playbooks for more dynamic and flexible automation scripts.
+
+Here's an overview of some key inventory parameters and how they're used:
+
+### Basic Structure
+
+- **Hosts**: Individual machines identified by their addresses (IP or domain).
+- **Groups**: Collections of hosts that share common attributes and can be targeted together.
+
+### Standard Parameters
+
+- **ansible_host**: Specifies the IP address of the host.
+- **ansible_port**: Specifies the port on which to connect to the host.
+- **ansible_user**: The user to log in as.
+- **ansible_password**: SSH password (although key-based authentication is recommended).
+- **ansible_connection**: Type of connection to use (e.g., ssh, localhost, winrm).
+- **ansible_ssh_private_key_file**: Path to the SSH private key file.
+- **ansible_python_interpreter**: Specifies the path to the Python interpreter on the remote host.
+
+
+For example
+
+```ini
+[webservers]
+webserver1.example.com ansible_host=237.84.2.178 ansible_user=ubuntu ansible_ssh_password=changeme ansible_connection=ssh ansible_port=2222
+```
+
+For listing all hosts
+
+```ansible
+ansible --list-hosts all -i /etc/ansible/hosts
+```
+
+For use ansible module
+
+```ansible
+ansible -m ping -i /etc/ansible/hosts all
+```
+
+The output is
+
+```
+ansible -m ping -i ansible/inventory/hosts.ini all
+The authenticity of host '172.16.0.11 (172.16.0.11)' can't be established.
+ED25519 key fingerprint is SHA256:if5fYKjbSlSFbe+ZQS5/PEfUcvpxx+zgBKhdxv6c3J0.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+server2 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+```
+
+#### command module
+
+```ansible
+ansible -m command -a "uptime" -i /etc/ansible/hosts all
+```
+The output is:
+
+```
+server2 | CHANGED | rc=0 >>
+ 09:17:55 up 5 min,  1 user,  load average: 0.18, 0.10, 0.03
+```
+
+Another example
+
+```ansible
+ansible -m command -a "iptables -nvL" -i ansible/inventory/hosts.ini all
+```
+
+The output is: (need root permission)
+
+```
+server2 | FAILED | rc=4 >>
+iptables v1.8.7 (nf_tables): Could not fetch rule set generation id: Permission denied (you must be root)non-zero return code
+```
+
+For fixing permission error
+
+```ansible
+ansible -m command -a "sudo iptables -nvL" -i ansible/inventory/hosts.ini all
+
+
+[WARNING]: Consider using 'become', 'become_method', and 'become_user' rather than running sudo
+server2 | CHANGED | rc=0 >>
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination 
+
+```
+
+
