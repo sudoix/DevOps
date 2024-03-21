@@ -28,27 +28,37 @@ An Ansible playbook is a blueprint of automation tasks – it is a file where yo
 
 Here is a basic example of an Ansible playbook:
 
+vim file.yaml
+
 ```yaml
 ---
-- name: Update web servers
-  hosts: webservers
+- name: Install nginx on web servers
+  hosts: web
   become: yes
   tasks:
-    - name: Ensure Apache is at the latest version
+    - name: Update apt cache
       apt:
-        name: apache2
+        update_cache: yes
+
+    - name: Ensure nginx is at the latest version
+      apt:
+        name: nginx
         state: latest
 
-    - name: Write the Apache config file
-      template:
-        src: /srv/httpd.j2
-        dest: /etc/apache2/apache2.conf
+    - name: Write the nginx config file
+      copy:
+        src: /srv/nginx/nginx.conf
+        dest: /etc/nginx/nginx1.conf
 
-    - name: Ensure Apache is running (and enable it at boot)
+    - name: Ensure nginx is running (and enable it at boot)
       service:
-        name: apache2
+        name: nginx
         state: started
         enabled: yes
+```
+
+```bash
+ansible-playbook file.yaml -i ansible/inventory/hosts.ini
 ```
 
 In this example:
@@ -56,6 +66,32 @@ In this example:
 - It contains three tasks: updating Apache to the latest version, writing a configuration file using a template, and ensuring that the Apache service is running.
 
 Playbooks are the foundation of Ansible’s configuration management and multi-machine deployment system, enabling the execution of complex tasks and workflows with simple, human-readable syntax.
+
+Another example
+
+vim file2.yaml 
+
+```bash
+---
+- name: Copy example.txt to remote hosts
+  hosts: all
+  tasks:
+    - name: Copy file to /tmp directory on remote hosts
+      ansible.builtin.copy:
+        src: /path/to/local/example.txt
+        dest: /tmp/example.txt
+        owner: root
+        group: root
+        mode: '0644'
+```
+
+try with `--become` and without `--become` :)
+
+```bash
+ansible-playbook file2.yaml -i ansible/inventory/hosts.ini --become
+```
+
+**all ansible main module are in https://github.com/ansible/ansible/tree/devel/lib/ansible/modules**
 
 ## Import playbook 
 
