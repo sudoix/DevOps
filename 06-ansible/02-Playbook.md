@@ -93,6 +93,156 @@ ansible-playbook file2.yaml -i ansible/inventory/hosts.ini --become
 
 **all ansible main module are in https://github.com/ansible/ansible/tree/devel/lib/ansible/modules**
 
+
+#### use debug modules
+
+vim file5.yaml
+
+```shell
+- name: Display a simple debug message
+  hosts: web
+  tasks:
+    - name: Print a message
+      debug:
+        msg: "Hello, Ansible!"
+```
+
+Let's print some variable
+
+```
+ansible all -m setup  -i ansible/inventory/hosts.ini
+```
+
+The output is:
+
+```
+server2 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_all_ipv4_addresses": [
+            "10.0.2.15",
+            "172.16.0.11"
+        ],
+        "ansible_all_ipv6_addresses": [
+            "fe80::a00:27ff:feed:e087",
+            "fe80::a00:27ff:fe26:914c"
+        ],
+        "ansible_apparmor": {
+            "status": "enabled"
+.
+.
+.
+.
+```
+
+Now let's create new file and use this variable:
+
+vim file5.yaml 
+
+```shell
+- name: Display a simple debug message
+  hosts: web
+  tasks:
+    - name: Print a message
+      debug:
+        var: "ansible_all_ipv4_addresses" 
+    - name: Print a message
+      debug:
+        var: "ansible_cmdline.BOOT_IMAGE"
+
+```
+
+## Register in ansible 
+
+In Ansible, the `register` keyword is used to capture and store the output of a task. This allows you to save the results of a task's execution, including any returned data, into a variable that you can use later in the playbook. The registered variable can then be used for conditionals, loops, debugging, or displaying its content with the `debug` module.
+
+Registering variables becomes incredibly useful when you need to make decisions based on the outcome of a task, manipulate data returned by a module, or simply display information about the execution for logging or debugging purposes.
+
+Here's a basic example to illustrate how `register` works in an Ansible playbook:
+
+```yaml
+---
+- name: Register Example Playbook
+  hosts: web
+  gather_facts: no
+
+  tasks:
+    - name: Execute a shell command
+      shell: echo "Hello, Ansible!"
+      register: shell_output
+
+    - name: Display the registered variable
+      debug:
+        msg: "The command output was: {{ shell_output.stdout }}"
+```
+
+```shell
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+In this example, the playbook does the following:
+- Executes a shell command (`echo "Hello, Ansible!"`) on `localhost`.
+- Registers the output of the shell command into the variable `shell_output`.
+- Uses the `debug` module to display the standard output (`stdout`) of the shell command, accessed through the registered variable `shell_output.stdout`.
+
+The `register` keyword is a powerful feature in Ansible that enhances the flexibility and decision-making capabilities of your playbooks by allowing you to use the results of tasks dynamically.
+
+
+More example
+
+```shell
+
+---
+- name: Conditional Execution Example
+  hosts: web
+  gather_facts: no
+
+  tasks:
+    - name: Check if a file exists
+      command: ls /tmp/file
+      register: file_check
+      ignore_errors: yes
+
+    - name: Print file exists message
+      debug:
+        msg: "File exists."
+      when: file_check.rc == 0
+
+    - name: Print file does not exist message
+      debug:
+        msg: "File does not exist."
+      when: file_check.rc != 0
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+Getting server time
+
+```shell
+---
+- name: Setting Facts from Registered Variables Example
+  hosts: web
+  gather_facts: no
+
+  tasks:
+    - name: Get current date
+      command: date "+%Y-%m-%d"
+      register: current_date
+
+    - name: Set a fact with the current date
+      set_fact:
+        today: "{{ current_date.stdout }}"
+
+    - name: Display the date
+      debug:
+        msg: "Today's date is: {{ today }}"
+
+```
+
+```bash
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
 ## Import playbook 
 
 In Ansible, the `import_playbook` directive is used to include or incorporate one playbook within another. This feature allows you to organize your automation into separate, reusable components, which can enhance readability, maintainability, and scalability of your Ansible projects.
