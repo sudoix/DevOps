@@ -243,6 +243,83 @@ Getting server time
 ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
 ```
 
+## condition
+
+```bash
+---
+- name: Conditional Example Playbook
+  hosts: web
+  become: yes
+  tasks:
+    - name: Check if a specific file exists
+      stat:
+        path: /etc/sample.conf
+      register: file_status
+
+    - name: Print message if file exists
+      debug:
+        msg: "The file /etc/sample.conf exists."
+      when: file_status.stat.exists
+
+    - name: Print message if file does not exist
+      debug:
+        msg: "The file /etc/sample.conf does not exist."
+      when: not file_status.stat.exists
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+```bash
+---
+- name: Conditional Execution Based on Ansible Facts
+  hosts: all
+  tasks:
+    - name: Install package on Debian-based systems
+      apt:
+        name: vim
+        state: present
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Install package on Red Hat-based systems
+      yum:
+        name: vim
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+Check `user` exist
+
+```bash
+---
+- name: Conditional User Creation
+  hosts: all
+  become: yes
+  tasks:
+    - name: Check if user exists
+      command: id milad
+      register: user_check
+      ignore_errors: true
+
+    - name: Create user if not exists
+      user:
+        name: username
+        state: present
+      when: user_check.rc != 0
+```
+
+```sh
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+
+
+
 ## Import playbook 
 
 In Ansible, the `import_playbook` directive is used to include or incorporate one playbook within another. This feature allows you to organize your automation into separate, reusable components, which can enhance readability, maintainability, and scalability of your Ansible projects.
