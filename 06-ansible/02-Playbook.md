@@ -424,6 +424,23 @@ Here is a simple example that demonstrates the basic use of loop in an Ansible p
 ansible-playbook file5.yaml -i ansible/inventory/hosts.ini -b
 ```
 
+**Another loop format**
+
+```shell
+- name: Install multiple packages
+  hosts: all
+  become: yes
+  tasks:
+    - name: install packages
+      apt:
+        name: ["vim", "nano", "nginx"]
+        state: present
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
 Create user
 
 ```yaml
