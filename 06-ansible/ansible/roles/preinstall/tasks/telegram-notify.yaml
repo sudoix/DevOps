@@ -1,0 +1,17 @@
+# tasks file for telegram-notify
+
+- name: Copy telegram-send
+  copy:
+    src: files/telegram-send
+    dest: /usr/bin/telegram-send
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Copy login-notify
+  copy:
+    src: files/login-notify.sh
+    dest: /etc/profile.d/login-notify.sh
+    owner: root
+    group: root
+    mode: "0755"
