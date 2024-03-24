@@ -1,18 +1,9 @@
 ## First run 
 
-```
-ansible -i inventory/hosts.ini all -m ping
-```
+
+```shell
+ansible-playbook -i inventory/k8s-servers.ini kubernetes.yml  --become --become-method=sudo
 
 ```
-ansible -i inventory/hosts.ini all -a "df -h"
-```
 
-```
-ansible -i inventory/hosts.ini all -a "uptime"
-```
-
-```
-ansible -i inventory/hosts.ini all -m shell -a "cat /etc/os-release"
-```
 

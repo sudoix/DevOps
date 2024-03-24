@@ -1,4 +1,51 @@
+# General
+install_ansible_modules: "true"
+disable_transparent_huge_pages: "true"
+setup_interface: "false"
+
+#SSH
+ssh_port: 2222
+
+# Network Calico
+
+calico_operator_url: "https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml"
+calico_crd_url: "https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml"
+pod_network_cidr: "192.168.0.0/16"
+
+# DNS
+
+resolv_nameservers: [178.22.122.100, 185.51.200.2] # 403.online
+
+# Sanction shekan
+
+use_iran: "true" # change it to "false" if you are outside of iran
+
 # Docker
+
 docker_gpg_key_url: "https://download.docker.com/linux/ubuntu/gpg"
 docker_gpg_key_path: "/etc/apt/keyrings/docker.gpg"
 docker_apt_repo: "https://download.docker.com/linux/ubuntu"
+
+# Kubernetes
+
+kubernetes_gpg_keyring_path: "/etc/apt/keyrings/kubernetes-apt-keyring.gpg"
+kubernetes_gpg_key_url: "https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key"
+kubernetes_apt_repo: "https://pkgs.k8s.io/core:/stable:/v1.28/deb/"
+k8s_version: "1.28.5"
+
+# CRI
+
+cri_socket: unix:///var/run/containerd/containerd.sock
+
+# lb
+
+virtual_ip: "172.16.100.100"
+
+
+# Disk
+# disk: "/dev/sdb"
+# partition: "/dev/sdb1"
+# volume_group: "data_vg"
+# logical_volume: "data_lv"
+# filesystem_type: "xfs"
+# mount_point: "/data"

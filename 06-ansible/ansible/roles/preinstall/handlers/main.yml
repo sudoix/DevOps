@@ -1,0 +1,7 @@
+---
+# handlers file for preinstall
+
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted

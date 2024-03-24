@@ -93,6 +93,376 @@ ansible-playbook file2.yaml -i ansible/inventory/hosts.ini --become
 
 **all ansible main module are in https://github.com/ansible/ansible/tree/devel/lib/ansible/modules**
 
+
+#### use debug modules
+
+vim file5.yaml
+
+```shell
+- name: Display a simple debug message
+  hosts: web
+  tasks:
+    - name: Print a message
+      debug:
+        msg: "Hello, Ansible!"
+```
+
+Let's print some variable
+
+```
+ansible all -m setup  -i ansible/inventory/hosts.ini
+```
+
+The output is:
+
+```
+server2 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_all_ipv4_addresses": [
+            "10.0.2.15",
+            "172.16.0.11"
+        ],
+        "ansible_all_ipv6_addresses": [
+            "fe80::a00:27ff:feed:e087",
+            "fe80::a00:27ff:fe26:914c"
+        ],
+        "ansible_apparmor": {
+            "status": "enabled"
+.
+.
+.
+.
+```
+
+Now let's create new file and use this variable:
+
+vim file5.yaml 
+
+```shell
+- name: Display a simple debug message
+  hosts: web
+  tasks:
+    - name: Print a message
+      debug:
+        var: "ansible_all_ipv4_addresses" 
+    - name: Print a message
+      debug:
+        var: "ansible_cmdline.BOOT_IMAGE"
+
+```
+
+## Register in ansible 
+
+In Ansible, the `register` keyword is used to capture and store the output of a task. This allows you to save the results of a task's execution, including any returned data, into a variable that you can use later in the playbook. The registered variable can then be used for conditionals, loops, debugging, or displaying its content with the `debug` module.
+
+Registering variables becomes incredibly useful when you need to make decisions based on the outcome of a task, manipulate data returned by a module, or simply display information about the execution for logging or debugging purposes.
+
+Here's a basic example to illustrate how `register` works in an Ansible playbook:
+
+```yaml
+---
+- name: Register Example Playbook
+  hosts: web
+  gather_facts: no
+
+  tasks:
+    - name: Execute a shell command
+      shell: echo "Hello, Ansible!"
+      register: shell_output
+
+    - name: Display the registered variable
+      debug:
+        msg: "The command output was: {{ shell_output.stdout }}"
+```
+
+```shell
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+In this example, the playbook does the following:
+- Executes a shell command (`echo "Hello, Ansible!"`) on `localhost`.
+- Registers the output of the shell command into the variable `shell_output`.
+- Uses the `debug` module to display the standard output (`stdout`) of the shell command, accessed through the registered variable `shell_output.stdout`.
+
+The `register` keyword is a powerful feature in Ansible that enhances the flexibility and decision-making capabilities of your playbooks by allowing you to use the results of tasks dynamically.
+
+
+More example
+
+```shell
+
+---
+- name: Conditional Execution Example
+  hosts: web
+  gather_facts: no
+
+  tasks:
+    - name: Check if a file exists
+      command: ls /tmp/file
+      register: file_check
+      ignore_errors: yes
+
+    - name: Print file exists message
+      debug:
+        msg: "File exists."
+      when: file_check.rc == 0
+
+    - name: Print file does not exist message
+      debug:
+        msg: "File does not exist."
+      when: file_check.rc != 0
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+Getting server time
+
+```shell
+---
+- name: Setting Facts from Registered Variables Example
+  hosts: web
+  gather_facts: no
+
+  tasks:
+    - name: Get current date
+      command: date "+%Y-%m-%d"
+      register: current_date
+
+    - name: Set a fact with the current date
+      set_fact:
+        today: "{{ current_date.stdout }}"
+
+    - name: Display the date
+      debug:
+        msg: "Today's date is: {{ today }}"
+
+```
+
+```bash
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+## condition
+
+```bash
+---
+- name: Conditional Example Playbook
+  hosts: web
+  become: yes
+  tasks:
+    - name: Check if a specific file exists
+      stat:
+        path: /etc/sample.conf
+      register: file_status
+
+    - name: Print message if file exists
+      debug:
+        msg: "The file /etc/sample.conf exists."
+      when: file_status.stat.exists
+
+    - name: Print message if file does not exist
+      debug:
+        msg: "The file /etc/sample.conf does not exist."
+      when: not file_status.stat.exists
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+```bash
+---
+- name: Conditional Execution Based on Ansible Facts
+  hosts: all
+  tasks:
+    - name: Install package on Debian-based systems
+      apt:
+        name: vim
+        state: present
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Install package on Red Hat-based systems
+      yum:
+        name: vim
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+Check `user` exist
+
+```bash
+---
+- name: Conditional User Creation
+  hosts: all
+  become: yes
+  tasks:
+    - name: Check if user exists
+      command: id milad
+      register: user_check
+      ignore_errors: true
+
+    - name: Create user if not exists
+      user:
+        name: username
+        state: present
+      when: user_check.rc != 0
+```
+
+```sh
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+## Handlers
+
+In Ansible, a "handler" is a special kind of task that runs when it is notified by another task. Handlers are used to perform tasks that only need to be run when certain conditions are met or when specific changes occur. They are typically used to manage services, for example, restarting a service when its configuration file changes.
+
+Handlers are defined in the same way as tasks, but they are placed under a `handlers` section in a playbook or in a separate handlers file. A handler will only be executed if it receives a notification from another task. This notification is triggered by a task that has the `notify` directive, where the value of `notify` matches the name of the handler. Importantly, even if a handler is notified multiple times in a playbook run, it will only be executed once at the end of the playbook run, ensuring that resources are managed efficiently.
+
+Here's a simple example to illustrate how handlers are used:
+
+```yaml
+---
+- name: Example playbook with a handler
+  hosts: all
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: latest
+      notify: restart nginx
+
+    - name: Update nginx configuration
+      copy:
+        src: /home/milad/nginx.conf
+        dest: /etc/nginx/nginx.conf
+      notify: restart nginx
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+In this example:
+- There are two tasks that can notify the handler: "Install nginx" and "Update nginx configuration".
+- If either of these tasks results in a change (e.g., nginx is installed or the configuration file is changed), the "restart nginx" handler will be triggered.
+- The "restart nginx" handler, defined under the `handlers` section, will restart the nginx service.
+- The handler will only run once at the end of the playbook execution, regardless of how many times it was notified, ensuring that the nginx service is only restarted once.
+
+Handlers are a powerful feature in Ansible for managing service states and responding to configuration changes efficiently.
+
+
+Another example
+
+```shell
+---
+- name: Secure SSHD Configuration
+  hosts: all
+  become: yes  # This playbook requires superuser privileges to edit SSH configuration and restart the service.
+  tasks:
+    - name: Update sshd_config file for security enhancements
+      ansible.builtin.copy:
+        src: /home/milad/sshd_config
+        dest: /etc/ssh/sshd_config
+        owner: root
+        group: root
+        mode: '0600'
+      notify: restart sshd  # Notify the handler if the file was changed.
+
+    - name: Ensure SSHD is running (idempotent check)
+      ansible.builtin.service:
+        name: sshd
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: restart sshd
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+        enabled: yes
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+## loop
+
+In Ansible, loops provide a way to repeat a task multiple times, potentially with variations. This feature is particularly useful when you want to perform the same action on a list of items, such as installing multiple packages, creating several users, or managing a set of files. Ansible supports several ways to use loops, with the loop keyword being the most commonly used.
+
+#### Basic Syntax of loop
+Here is a simple example that demonstrates the basic use of loop in an Ansible playbook. This task uses loop to install multiple packages:
+
+```shell
+- name: Install multiple packages
+  hosts: all
+  become: yes
+  tasks:
+    - name: install packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - vim
+        - nginx
+        - git
+
+```
+
+```
+ansible-playbook file5.yaml -i ansible/inventory/hosts.ini -b
+```
+
+**Another loop format**
+
+```shell
+- name: Install multiple packages
+  hosts: all
+  become: yes
+  tasks:
+    - name: install packages
+      apt:
+        name: ["vim", "nano", "nginx"]
+        state: present
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
+Create user
+
+```yaml
+- name: Install multiple packages
+  hosts: all
+  become: yes
+  tasks:
+    - name: Add several users
+      user:
+        name: "{{ item.name }}"
+        state: "{{ item.state }}"
+        group: "{{ item.group }}"
+      loop:
+        - { name: 'alice', state: 'present', group: 'sudo' }
+        - { name: 'bob', state: 'present', group: 'staff' }
+
+```
+
+```
+ansible-playbook file4.yaml -i ansible/inventory/hosts.ini -b
+```
+
 ## Import playbook 
 
 In Ansible, the `import_playbook` directive is used to include or incorporate one playbook within another. This feature allows you to organize your automation into separate, reusable components, which can enhance readability, maintainability, and scalability of your Ansible projects.
@@ -111,10 +481,14 @@ Here’s a simple example of how `import_playbook` might be used:
 
 ```yaml
 # main.yml
-- import_playbook: setup.yml
-- import_playbook: deploy.yml
-- import_playbook: cleanup.yml
+- name: update
+  import_playbook: file4.yaml
+
+- name: install
+  import_playbook: file5.yaml
 ```
+
+ansible-playbook main.yaml -i ansible/inventory/hosts.ini -b
 
 In this example, `main.yml` is a master playbook that imports three other playbooks: `setup.yml`, `deploy.yml`, and `cleanup.yml`. Each of these playbooks can contain its own set of plays, tasks, and roles relevant to their specific part of the overall process.
 
@@ -127,4 +501,6 @@ In this example, `main.yml` is a master playbook that imports three other playbo
 - **No Looping or Conditional Imports**: You cannot use loops or conditionals on `import_playbook`. For dynamic inclusion, you would use `include_playbook`.
 
 Using `import_playbook` is particularly advantageous in large projects where breaking down complex processes into smaller chunks makes the overall automation easier to understand and manage.
+
+
 
