@@ -152,7 +152,7 @@ You can then include this encrypted string directly in your playbook or a variab
 ```yaml
 ---
 - name: Use encrypted API key
-  hosts: localhost
+  hosts: web
   vars:
     api_key: !vault |
             $ANSIBLE_VAULT;1.1;AES256
