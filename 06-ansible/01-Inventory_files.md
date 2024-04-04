@@ -34,31 +34,50 @@ In this INI format example, we have three groups: `webservers`, `dbservers`, and
 ```ini
 # Sample Ansible Inventory file in INI format
 
-[firewall:children]
-webserver
-dbservers
+[all]
+# the first node is the first master node (k8s-test-master1)
 
-# Web Servers
-[webservers]
-webserver1.example.com ansible_port=2222
-webserver2.example.com
+k8s-test-master1 ansible_host=37.152.178.226 private_ip=172.16.100.11
+k8s-test-master2 ansible_host=185.97.118.58 private_ip=172.16.100.21
+k8s-test-master3 ansible_host=37.152.182.216 private_ip=172.16.100.31
 
-# Database Servers
-[dbservers]
-db1.example.com db_user=admin db_password=secret
-db2.example.com db_user=admin db_password=secret
+k8s-test-worker1 ansible_host=37.32.21.250 private_ip=172.16.100.41
+; k8s-test-worker2 ansible_host=172.24.96.6 private_ip=172.16.100.22
+; k8s-test-worker3 ansible_host=172.24.96.7 private_ip=172.16.100.23
 
-# Load Balancers
-[loadbalancers]
-lb.example.com
+lb1-test ansible_host=185.206.92.135 private_ip=172.16.100.81
+lb2-test ansible_host=185.206.92.220 private_ip=172.16.100.91
 
-# Group Variables
-[webservers:vars]
-http_port=80
-maxRequestsPerChild=808
+[k8s]
+k8s-test-master1
+k8s-test-master2
+k8s-test-master3
+k8s-test-worker1
+; k8s-test-worker2
+; k8s-test-worker3
 
-[dbservers:vars]
-ansible_user=mydatabaseadmin
+[k8s_masters]
+k8s-test-master1
+k8s-test-master2
+k8s-test-master3
+
+[k8s_workers]
+k8s-test-worker1
+# k8s-test-worker2
+# k8s-test-worker3
+
+
+[lb]
+lb1-test
+lb2-test
+
+
+[all:vars]
+ansible_user=milad
+ansible_port=22
+ansible_python_interpreter = "/usr/bin/python3"
+domain="sudoix.com"
+apiserver_url="espenu.sudoix.com"
 ```
 
 In this example:
@@ -78,7 +97,7 @@ all:
   children:
     webservers:
       hosts:
-        webserver1.example.com:
+        1921.168.1.100:
           ansible_port: 2222
         webserver2.example.com:
       vars:
