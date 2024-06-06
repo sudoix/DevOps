@@ -62,10 +62,6 @@ This command disables swap immediately. However, to make this change permanent, 
 swapoff -a
 
 sed -i '/swap/s/^\//\#\//g' /etc/fstab
-
-OR
-
-sed -i '|swap|s|^/|#/|g' /etc/fstab
 ```
 
 3. Save the file and exit the editor.
