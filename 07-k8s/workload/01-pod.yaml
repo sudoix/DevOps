@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-ns
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: my-ns
+  name: nginx-pod
+  labels:
+    app: app1
+    zone: staging
+    version: v1.0.1
+spec:
+  containers:
+    - name: naginx-container
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: my-ns
+  name: testpod1
+spec:
+  containers:
+    - name: c00
+      image: ubuntu
+      command: ["/bin/bash", "-c",
+        "while true; do echo Hello-Coder; sleep 5 ; done"]
+    - name: c01
+      image: ubuntu
+      command: ["/bin/bash", "-c",
+        "while true; do echo Hello-Programmer; sleep 5 ; done"]
+---
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: my-ns
+  name: testpod1
+spec:
+  containers:
+    - name: c00
+      image: ubuntu
+      command:
+        - /bin/bash
+        - -c
+        - while true; do echo Hello-Coder; sleep 5 ; done
+    - name: c01
+      image: ubuntu
+      command:
+        - /bin/bash
+        - -c
+        - while true; do echo Hello-Programmer; sleep 5 ; done
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+  labels:
+    name: myapp
+spec:
+  containers:
+  - name: myapp
+    image: <Image>
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: <Port>
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  labels:
+    app: MyApp
+spec:
+  containers:
+  - name: my-container
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+
