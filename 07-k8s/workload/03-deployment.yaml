@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: my-ns
+  labels:
+    app.kubernetes.io/name: myapp
+    app.kubernetes.io/env: development
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: myapp
+      app.kubernetes.io/env: development
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: myapp
+        app.kubernetes.io/env: development
+    spec:
+      containers:
+      - name: nginx
+        image: nginx # change image and apply again
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 80
+---
+
+## For scale in command line
+
+```bash
+kubectl -n my-ns scale deployment myapp --replicas 6
+```
+
+
+```bash
+kubectl get deployment,rs,po myapp -n my-ns
+
+kubectl delete deployment myapp -n my-ns
+
+kubectl ger rs -n my-ns
+```
+
+## for rolout
+
+```bash
+kubectl rollout undo deployment -n my-ns myapp
+```
+
+```bash
+kubectl rollout history deployment -n my-ns 
+deployment.apps/myapp 
+REVISION  CHANGE-CAUSE
+2         <none>
+4         <none>
+5         <none>
+
+kubectl rollout history deployment -n my-ns --revision 2
+deployment.apps/myapp with revision #2
+Pod Template:
+  Labels:	app.kubernetes.io/env=development
+	app.kubernetes.io/name=myapp
+	pod-template-hash=6c79fdcdcd
+  Containers:
+   nginx:
+    Image:	nginx:1.25
+    Port:	80/TCP
+    Host Port:	0/TCP
+    Limits:
+      cpu:	500m
+      memory:	128Mi
+    Environment:	<none>
+    Mounts:	<none>
+  Volumes:	<none>
+  Node-Selectors:	<none>
+  Tolerations:	<none>
+
+kubectl rollout undo deployment -n my-ns myapp --to-revision 2
+```
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  my-name
+  labels:
+    name:  my-name
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name:  my-name
+    spec:
+      containers:
+      - image:  ipedrazas/docmock
+        name:  my-name
+        resources:
+          requests:
+            cpu: "20m"
+            memory: "55M"
+        livenessProbe:
+          httpGet:
+            path: /_status/healthz
+            port: 5000
+          initialDelaySeconds: 90
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /_status/healthz
+            port: 5000
+          initialDelaySeconds: 30
+          timeoutSeconds: 10
+        env:
+        - name:  ENVVARNAME
+          value:  ENVVARVALUE       
+        ports:
+        - containerPort:  5000
+          name:  my-name
+        volumeMounts:
+        - mountPath: /data
+          name: data
+      volumes:
+        - name: data
+          emptyDir: {}
+      restartPolicy: Always
+      imagePullPolicy: Always
