@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: my-ns
+  labels:
+    app: example
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: node-exporter
+      app.kubernetes.io/env: development
+      app.kubernetes.io/part-of: monitoring
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: node-exporter
+        app.kubernetes.io/env: development
+        app.kubernetes.io/part-of: monitoring
+    spec:
+      containers:
+      - name: node-exporter
+        image: prom/node-exporter
+
+---
+apiVersion: apps/v1
+kind: daemonSet
+metadata:
+  name: example-daemonset
+  labels:
+    app: example
+spec:
+  selector:
+    matchLabels:
+      app: example
+  template:
+    metadata:
+      labels:
+        app: example
+    spec:
+      containers:
+      - name: example-container
+        image: nginx
