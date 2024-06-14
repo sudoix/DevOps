@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-app
+  namespace: my-ns
+  labels:
+    app.kubernetes.io/name: my-app
+    app.kubernetes.io/env: development
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: my-app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: my-app
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+---
+
+```bash
+kubectl get rs -n my-ns
+
+kubectl delete pod --all -n my-ns # delete all pods in the namespace
+# change replica count to 5
+
+kubectl scale rs my-app --replicas=5 -n my-ns
+
+or
+
+edit your manifest and change replicas to 5
+```
+
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-app
+  namespace: my-ns
+  labels:
+    app.kubernetes.io/name: my-app
+    app.kubernetes.io/env: development
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: my-app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: my-app
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.25 # apply it and then change the version
