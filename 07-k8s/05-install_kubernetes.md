@@ -504,7 +504,14 @@ Managing tokens ensures that your cluster remains secure by controlling which no
    ```bash
    kubectl api-resources
    ```
-
+5. **Explain API resources**:
+   If you need to know more about the API resources available in your cluster, you can use `kubectl explain <resource>` to get a detailed description of the resource.
+   ```bash
+   kubectl explain pod
+   kubectl explain pod.metadata
+   kubectl explain pod.spec
+   kubectl explain pod.spec.containers
+   ```
 
 For those who are following the Kubernetes installation and setup steps or looking to extend their understanding of Kubernetes cluster administration, here are some valuable resources directly from the official Kubernetes documentation:
 
