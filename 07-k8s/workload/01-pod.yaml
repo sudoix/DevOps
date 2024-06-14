@@ -12,6 +12,7 @@ metadata:
     app: app1
     zone: staging
     version: v1.0.1
+    app.kubernetes.io/product: nginx-pod
 spec:
   containers:
     - name: naginx-container
@@ -28,13 +29,15 @@ spec:
   containers:
     - name: c00
       image: ubuntu
-      command: ["/bin/bash", "-c",
-        "while true; do echo Hello-Coder; sleep 5 ; done"]
+      command: ["/bin/bash", "-c", "while true; do echo Hello-Coder; sleep 5 ; done"]
     - name: c01
       image: ubuntu
-      command: ["/bin/bash", "-c",
-        "while true; do echo Hello-Programmer; sleep 5 ; done"]
+      command: ["/bin/bash", "-c", "while true; do echo Hello-Programmer; sleep 5 ; done"]
 ---
+
+```bash
+kubectl get pod -n my-ns testpod1 -o yaml
+```
 ---
 apiVersion: v1
 kind: Pod
@@ -56,6 +59,85 @@ spec:
         - -c
         - while true; do echo Hello-Programmer; sleep 5 ; done
 ---
+
+```bash
+kubectl get pod -n my-ns testpod1 -o yaml
+```
+
+## Pod with Resources template
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: my-ns
+  name: testpod1 # delete pod or change pod name befor applying
+spec:
+  containers:
+    - name: c00
+      image: ubuntu
+      command:
+        - /bin/bash
+        - -c
+        - while true; do echo Hello-Coder; sleep 5 ; done
+    - name: c01
+      image: ubuntu
+      command:
+        - /bin/bash
+        - -c
+        - while true; do echo Hello-Programmer; sleep 5 ; done
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+
+---
+# pod with nodeselector
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: my-ns
+  name: testpod3 # delete pod or change pod name befor applying
+spec:
+  containers:
+    - name: c00
+      image: ubuntu
+      command:
+        - /bin/bash
+        - -c
+        - while true; do echo Hello-Coder; sleep 5 ; done
+    - name: c01
+      image: ubuntu
+      command:
+        - /bin/bash
+        - -c
+        - while true; do echo Hello-Programmer; sleep 5 ; done
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+  nodeSelector:
+    kubernetes.io/hostname: k8s2 # you can add more lables and all of them will be applied AND
+    kubernetes.io/disk: ssd
+### add label to pod
+
+```bash
+kubectl edit node k8s2
+
+or
+
+kubectl label node k8s2 kubernetes.io/disk=ssd
+
+kubectl get nodes --show-labels
+```
+####################################################################
+
 apiVersion: v1
 kind: Pod
 metadata:
