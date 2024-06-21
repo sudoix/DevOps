@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: my-ns
+  labels:
+    app: nginx
+spec:
+  type: ClusterIP # NodePort, LoadBalancer, ExternalName
+  selector:
+    app: nginx
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: my-ns
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: nginx-log
+            mountPath: /var/log/nginx
+          - name: nginx-conf
+            mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: nginx-log
+          hostPath:
+            path: /root/nginx/logs
+        - name: nginx-conf
+          hostPath:
+            path: /root/nginx/conf
+
+
+# https://kubernetes.io/docs/concepts/storage/volumes/#example-pod-fileorcreate
+---
+# Access mode in pvc and pv : ReadWriteOnce, ReadOnlyMany, ReadWriteMany, ReadWriteOncePod
+
+### pv with nfs
+```bash
+apt install nfs-kernel-server
+
+root@k8s1:~# cat /proc/fs/nfsd/versions 
+-2 +3 +4 +4.1 +4.2
+
+mkdir /srv/nfs4/data
+
+vim /etc/exports
+/srv/nfs4 172.16.0.10/24(rw,sync,no_subtree_check,crossmnt,fsid=0)
+/srv/nfs4/data 172.16.0.10/24(rw,sync,no_subtree_check)
+
+exportfs -ar
+exportfs -v
+```
+# install nfs-common on client
+
+```bash
+apt install nfs-common
+```
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0001
+  
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany # ReadWriteOnce, ReadOnlyMany, ReadWriteMany, ReadWriteOncePod
+  persistentVolumeReclaimPolicy: Recycle # Retain, Recycle, Delete
+  storageClassName: slow
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+  nfs:
+    path: /data
+    server: 172.16.0.10
+---
+
+# write deployment with pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: my-ns
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: html-codes
+            mountPath: /usr/share/nginx/html
+      volumes:
+        - name: html-codes
+          persistentVolumeClaim:
+            claimName: pvc0001
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc0001
+  namespace: my-ns
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: slow

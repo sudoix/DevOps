@@ -21,6 +21,7 @@ spec:
       containers:
       - name: node-exporter
         image: prom/node-exporter
+---
 
 ---
 apiVersion: apps/v1

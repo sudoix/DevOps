@@ -67,6 +67,9 @@ then kubectl assumes it is running in your cluster. The kubectl tool looks up th
 
 kubectl config set-context --current --namespace=<namespace-name>
 
+For workload example look at:
+https://k8s-examples.container-solutions.com
+
 
 https://kubernetes.io/docs/reference/kubectl/
 https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
