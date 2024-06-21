@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myjob
+  namespace: my-ns
+spec:
+  template:
+    spec:
+      containers:
+      - name: myjob
+        image: alpine
+        command:
+        - echo
+        - "hello world"
+      restartPolicy: Never
+---
+# job with error -- 6 times try 
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myjob
+  namespace: my-ns
+spec:
+  template:
+    spec:
+      containers:
+      - name: myjob
+        image: alpine
+        command:
+        - ls
+        - "/chert"
+      restartPolicy: Never

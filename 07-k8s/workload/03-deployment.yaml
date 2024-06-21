@@ -84,6 +84,22 @@ Pod Template:
 kubectl rollout undo deployment -n my-ns myapp --to-revision 2
 ```
 
+## add change-cause
+
+```bash
+kubectl annotate deployment/myapp -n my-ns myapp "kubectl.kubernetes.io/change-cause=v14 released"
+```
+
+## for autoscale
+
+# autoscale - horizontalpodautoscalers.autoscaling
+# avg cpu usage is 50% in 5 minutes
+
+```bash
+kubectl -n my-ns autoscale deployment nginx --cpu-percent=50 --min=4 --max=10
+```
+
+
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment

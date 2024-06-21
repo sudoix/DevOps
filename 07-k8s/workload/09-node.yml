@@ -1,0 +1,7 @@
+kubectl cordon k8s2
+
+kubectl uncordon k8s2
+
+kubectl drain k8s2 --force --ignore-daemonsets
+
+kubectl uncordon k8s2
