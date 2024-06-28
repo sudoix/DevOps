@@ -139,4 +139,6 @@ spec:
   resources:
     requests:
       storage: 1Gi
+    #limits:
+    #  storage: 5Gi
   storageClassName: slow
