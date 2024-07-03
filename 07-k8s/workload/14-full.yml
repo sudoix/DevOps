@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-ns
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: sematec-website
+  namespace: test-ns
+  labels:
+    name: sematec-website
+    instance: sematec-website
+data:
+  API_URL: https://sematec.ir
+  APP_URL: https://sematec.ir
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sematec-website
+  namespace: test-ns
+  labels:
+    name: sematec-website
+    instance: sematec-website
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    name: sematec-website
+    instance: sematec-website
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sematec-website
+  namespace: test-ns
+  labels:
+    name: sematec-website
+    instance: sematec-website
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: sematec-website
+      instance: sematec-website
+  template:
+    metadata:
+      labels:
+        name: sematec-website
+        instance: sematec-website
+    spec:
+      containers:
+        - name: sematec-website
+          image: 'nginx:1.25'
+          envFrom:
+            - configMapRef:
+                name: sematec-website
+          env:
+            - name: CLIENT_API_URL
+              value: 'https://sematec.ir'
+            - name: SERVER_API_URL
+              value: 'http://sematec-api/api/'
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sematec-website
+  namespace: test-ns
+  labels:
+    name: sematec-website
+    instance: sematec-website
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    #nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    #nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE ,PATCH
+    #nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    #nginx.ingress.kubernetes.io/enable-cors: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "sematec.ir"
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: sematec-website
+                port:
+                  number: 80
