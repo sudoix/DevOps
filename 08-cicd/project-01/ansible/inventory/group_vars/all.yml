@@ -1,0 +1,20 @@
+# General
+install_ansible_modules: "true"
+disable_transparent_huge_pages: "true"
+setup_interface: "false"
+
+
+# Development
+
+dev_src_dir: "/data/dev/sdm/oss-api-gateway"
+# dev_src_dir_owner: "apache"
+dev_runner_src_dir: "/builds/sdm/oss-api-gateway/"
+build_srv_name: "server-1"
+java_file_path: "/opt/oss-api-gateway"
+java_process_name: "sleep"
+
+# Production
+
+# prod_src_dir: "/data/prod/sdm/oss-api-gateway"
+# prod_src_dir_owner: "apache"
+# prod_runner_src_dir: "/builds/pegah/icell-test/"

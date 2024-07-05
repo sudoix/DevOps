@@ -1,0 +1,14 @@
+---
+- hosts: all
+  roles:
+  - role: deploy-dev
+  gather_facts: yes
+  any_errors_fatal: true
+  tags: [dev]
+
+- hosts: all
+  roles:
+  - role: deploy-prod
+  gather_facts: yes
+  any_errors_fatal: true
+  tags: [prod]
