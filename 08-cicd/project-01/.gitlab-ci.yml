@@ -1,0 +1,44 @@
+image: docker:latest
+
+stages:
+  - deploy-dev
+  - deploy-prod
+
+deploy-dev:
+  stage: deploy-dev
+  image: 9350733512/ansible:0.0.2
+  variables:
+    ANSIBLE_HOST_KEY_CHECKING: 'false'
+    ANSIBLE_FORCE_COLOR: 'true'
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOYER_PRIVATE_KEY" >> ~/.ssh/id_rsa
+    - chmod 600  ~/.ssh/id_rsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - ls
+    - pwd
+  script:
+    - cd ansible && ansible-playbook -i inventory/servers-dev.ini deploy.yml --become --become-method=sudo -t dev #-vvv
+  only:
+    - development
+
+deploy-prod:
+  stage: deploy-prod
+  image: 9350733512/ansible:0.0.2
+  variables:
+    ANSIBLE_HOST_KEY_CHECKING: 'false'
+    ANSIBLE_FORCE_COLOR: 'true'
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOYER_PRIVATE_KEY" >> ~/.ssh/id_rsa
+    - chmod 600  ~/.ssh/id_rsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - ls
+    - pwd
+  script:
+    - cd ansible && ansible-playbook -i inventory/servers-dev.ini deploy.yml --become --become-method=sudo -t prod #-vvv
+  only:
+    - tags
+  when: manual
+
+

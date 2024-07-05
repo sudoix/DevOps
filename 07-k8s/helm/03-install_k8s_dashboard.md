@@ -39,3 +39,27 @@ helm pull ingress-nginx/ingress-nginx
 tar -xzvf ingress-nginx-4.10.1.tgz
 ```
 
+Change the valuse:
+
+```
+type: ClusterIP
+
+  hostNetwork: true
+  ## Use host ports 80 and 443
+  ## Disabled by default
+  hostPort:
+    # -- Enable 'hostPort' or not
+    enabled: true
+    ports:
+      # -- 'hostPort' http port
+      http: 80
+      # -- 'hostPort' https port
+      https: 443
+```
+
+And then deploy your ingress:
+
+```
+helm upgrade --install -n ingress-nginx ingress-nginx ./ingress-nginx -f ./ingress-nginx/values.yaml --timeout 100m --create-namespace
+```
+
