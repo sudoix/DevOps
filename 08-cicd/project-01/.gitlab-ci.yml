@@ -18,7 +18,7 @@ deploy-dev:
     - ls
     - pwd
   script:
-    - cd ansible && ansible-playbook -i inventory/servers-dev.ini deploy.yml --become --become-method=sudo #-vvv
+    - cd ansible && ansible-playbook -i inventory/servers-dev.ini deploy.yml --become --become-method=sudo -t dev #-vvv
   only:
     - development
 
@@ -36,7 +36,7 @@ deploy-prod:
     - ls
     - pwd
   script:
-    - cd ansible && ansible-playbook -i inventory/servers-dev.ini deploy.yml --become --become-method=sudo #-vvv
+    - cd ansible && ansible-playbook -i inventory/servers-dev.ini deploy.yml --become --become-method=sudo -t prod #-vvv
   only:
     - tags
   when: manual
