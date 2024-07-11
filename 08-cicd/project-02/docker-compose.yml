@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  project2:
+    image: 9350733512/project2:latest
+    container_name: hello-loop-container
+    restart: always
