@@ -1,86 +1,105 @@
----
-- block:
-    - name: Create Directory
-      file:
-        path: "{{ dev_src_dir }}"
-        state: directory
+- name: Create Directory
+  file:
+    path: /opt/project1
+    state: directory
 
-    - name: Print "{{ playbook_dir }}"
-      debug:
-        msg: The directory is "{{ playbook_dir }}"
+- name: Print "{{ playbook_dir }}"
+  debug:
+    msg: The directory is "{{ playbook_dir }}"
 
-    - name: Synchronize entire repository to remote
-      ansible.posix.synchronize:
-        src: "{{ dev_runner_src_dir }}"
-        dest: "{{ dev_src_dir }}"
-        delete: true
+- name: Synchronize entire repository to remote
+  ansible.posix.synchronize:
+    src: /builds/milad/test3
+    dest: /opt/project1
 
-    - name: Run build_script on server
-      shell:
-        cmd: cd "{{ dev_src_dir }}" && bash build_script.sh
+- name: Run build_script on server
+  shell:
+    cmd: cd "/opt/project1/test3" && bash build_script.sh
 
-    - name: Find all jar file in sorce directory
-      find:
-        path: "{{ dev_src_dir }}/target"
-        patterns: "*.jar"
-      register: jar_files
 
-    - name: Display all jar files found
-      debug:
-        msg: "{{ item.path }}"
-      loop: "{{ jar_files.files }}"
-      when: jar_files.files is defined and jar_files.files | length > 0
+# ---
+# - block:
+#     - name: Create Directory
+#       file:
+#         path: "{{ dev_src_dir }}"
+#         state: directory
 
-    - name: Fetch jar files to the local machine for redistribution
-      fetch:
-        src: "{{ item.path }}"
-        dest: "/tmp/{{ item.path | basename }}"
-        flat: yes
-      loop: "{{ jar_files.files }}"
-      when: jar_files.files is defined and jar_files.files | length > 0
+#     - name: Print "{{ playbook_dir }}"
+#       debug:
+#         msg: The directory is "{{ playbook_dir }}"
 
-  when: inventory_hostname == "{{ build_srv_name }}"
+#     - name: Synchronize entire repository to remote
+#       ansible.posix.synchronize:
+#         src: "{{ dev_runner_src_dir }}"
+#         dest: "{{ dev_src_dir }}"
+#         delete: true
 
-- block:
-    - name: Delete Directory
-      file:
-        path: "{{ java_file_path }}"
-        state: absent
+#     - name: Run build_script on server
+#       shell:
+#         cmd: cd "{{ dev_src_dir }}" && bash build_script.sh
 
-    - name: Create Directory
-      file:
-        path: "{{ java_file_path }}"
-        state: directory
+#     - name: Find all jar file in sorce directory
+#       find:
+#         path: "{{ dev_src_dir }}/target"
+#         patterns: "*.jar"
+#       register: jar_files
 
-    - name: Copy jar files to other hosts
-      copy:
-        src: "/tmp/{{ item.path | basename }}"
-        dest: "{{ java_file_path }}/{{ item.path | basename }}"
-      loop: "{{ hostvars[build_srv_name].jar_files.files }}"
-      when: hostvars[build_srv_name].jar_files.files is defined and hostvars[build_srv_name].jar_files.files | length > 0
+#     - name: Display all jar files found
+#       debug:
+#         msg: "{{ item.path }}"
+#       loop: "{{ jar_files.files }}"
+#       when: jar_files.files is defined and jar_files.files | length > 0
 
-    - name: Get running processes
-      shell: "ps -ef | grep -v grep | grep -w {{ java_process_name }} | awk '{print $2}'"
-      register: running_processes
+#     - name: Fetch jar files to the local machine for redistribution
+#       fetch:
+#         src: "{{ item.path }}"
+#         dest: "/tmp/{{ item.path | basename }}"
+#         flat: yes
+#       loop: "{{ jar_files.files }}"
+#       when: jar_files.files is defined and jar_files.files | length > 0
 
-    - name: Kill running processes
-      shell: "kill {{ item }}"
-      with_items: "{{ running_processes.stdout_lines }}"
-      ignore_errors: yes
+#   when: inventory_hostname == "{{ build_srv_name }}"
 
-    - wait_for:
-        path: "/proc/{{ item }}/status"
-        state: absent
-      with_items: "{{ running_processes.stdout_lines }}"
-      ignore_errors: yes
-      register: killed_processes
+# - block:
+#     - name: Delete Directory
+#       file:
+#         path: "{{ java_file_path }}"
+#         state: absent
 
-    - name: Force kill stuck processes
-      shell: "kill -9 {{ item }}"
-      with_items: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"
+#     - name: Create Directory
+#       file:
+#         path: "{{ java_file_path }}"
+#         state: directory
 
-    - name: Run new verison of application
-      shell:
-        cmd: "cd {{ java_file_path }} && touch milad && sleep 28000 &"
+#     - name: Copy jar files to other hosts
+#       copy:
+#         src: "/tmp/{{ item.path | basename }}"
+#         dest: "{{ java_file_path }}/{{ item.path | basename }}"
+#       loop: "{{ hostvars[build_srv_name].jar_files.files }}"
+#       when: hostvars[build_srv_name].jar_files.files is defined and hostvars[build_srv_name].jar_files.files | length > 0
 
-  when: inventory_hostname != "{{ build_srv_name }}"
+#     - name: Get running processes
+#       shell: "ps -ef | grep -v grep | grep -w {{ java_process_name }} | awk '{print $2}'"
+#       register: running_processes
+
+#     - name: Kill running processes
+#       shell: "kill {{ item }}"
+#       with_items: "{{ running_processes.stdout_lines }}"
+#       ignore_errors: yes
+
+#     - wait_for:
+#         path: "/proc/{{ item }}/status"
+#         state: absent
+#       with_items: "{{ running_processes.stdout_lines }}"
+#       ignore_errors: yes
+#       register: killed_processes
+
+#     - name: Force kill stuck processes
+#       shell: "kill -9 {{ item }}"
+#       with_items: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"
+
+#     - name: Run new verison of application
+#       shell:
+#         cmd: "cd {{ java_file_path }} && touch milad && sleep 28000 &"
+
+#   when: inventory_hostname != "{{ build_srv_name }}"
