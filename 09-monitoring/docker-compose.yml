@@ -51,8 +51,6 @@ services:
       - '--path.rootfs=/host'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    network_mode: host
-    pid: host
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
