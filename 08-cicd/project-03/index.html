@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Service</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        nav {
+            background-color: #ff6f61;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        header {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 3.5em;
+            margin: 0;
+        }
+        header p {
+            font-size: 1.5em;
+            margin: 10px 0 20px;
+        }
+        .content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .content h2 {
+            color: #ff6f61;
+            margin-top: 0;
+        }
+        .content p {
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+        .content section {
+            margin-bottom: 40px;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #ff6f61;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .cta-button:hover {
+            background: #e55d50;
+        }
+        .services-list {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .service-item {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .service-item h3 {
+            color: #6a11cb;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: relative;
+            width: 100%;
+        }
+        footer p {
+            margin: 0;
+        }
+        @media (max-width: 768px) {
+            .services-list {
+                flex-direction: column;
+                align-items: center;
+            }
+            .service-item {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#course">Course</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <header>
+        <h1>DevOps Mastery Course</h1>
+        <p>Transform Your Skills and Become a DevOps Expert</p>
+        <a href="#course" class="cta-button">Get Started</a>
+    </header>
+    <div class="content">
+        <section id="home">
+            <h2>Home</h2>
+            <p>Welcome to the DevOps Mastery Course! Our comprehensive program is designed to equip you with the skills and knowledge needed to excel in the field of DevOps. Explore our website to learn more about what we offer.</p>
+        </section>
+        <section id="about">
+            <h2>About Us</h2>
+            <p>We are dedicated to providing the best DevOps education through our expertly designed course. Our team consists of industry professionals with extensive experience in DevOps practices and tools.</p>
+        </section>
+        <section id="course">
+            <h2>Course Overview</h2>
+            <div class="services-list">
+                <div class="service-item">
+                    <h3>Module 1: Introduction to DevOps</h3>
+                    <p>Learn the basics of DevOps, its principles, and how it can revolutionize the way you work.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Module 2: Continuous Integration</h3>
+                    <p>Master the practices and tools for continuous integration to streamline your development process.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Module 3: Continuous Delivery</h3>
+                    <p>Understand the concepts of continuous delivery and how to implement them for faster, more reliable releases.</p>
+                </div>
+            </div>
+        </section>
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or need further information, feel free to contact us. We are here to assist you on your DevOps journey.</p>
+        </section>
+    </div>
+    <footer>
+        <p>&copy; 2024 DevOps Mastery Course. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+

@@ -1,0 +1,36 @@
+variables:
+  IMAGE_NAME: project2
+
+stages:
+  - Build
+  - Deploy
+
+build:
+  stage: Build
+  image: docker
+  script:
+    - docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD" #"https://hub.docker.com/"
+    - docker build -t 9350733512/$IMAGE_NAME:$CI_PIPELINE_ID .
+    - docker push 9350733512/$IMAGE_NAME:$CI_PIPELINE_ID
+
+deploy:
+  stage: Deploy
+  # variables:
+  #   DOCKER_HOST: "ssh://ubuntu@188.121.96.85"
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOYER_PRIVATE_KEY" >> ~/.ssh/id_rsa
+    - chmod 600  ~/.ssh/id_rsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    - unset DOCKER_HOST
+    - docker context create my-swarm --docker "host=ssh://ubuntu@188.121.96.85"
+    - docker context use my-swarm
+    - docker node ls
+    - docker stack rm $IMAGE_NAME
+    - sed -i "s/latest/$CI_PIPELINE_ID/g" docker-compose.yml
+    - cat docker-compose.yml
+    - docker stack deploy -c docker-compose.yml $IMAGE_NAME
+  needs:
+    - job: build
+  retry: 2
