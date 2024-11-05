@@ -20,6 +20,7 @@ You can detach from your tmux session by pressing Ctrl+B then D
 Ctrl+B D — Detach from the current session.
 Ctrl+B % — Split the window into two panes horizontally.
 Ctrl+B " — Split the window into two panes vertically.
+Ctrl+B o — Switch to next pane
 Ctrl+B Arrow Key (Left, Right, Up, Down) — Move between panes.
 Ctrl+B X — Close pane.
 Ctrl+B C — Create a new window.
