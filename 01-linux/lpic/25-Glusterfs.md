@@ -2,6 +2,16 @@
 
 # Setup GlusterFS
 
+## Configuration lvm
+
+Create a new volume group, create a logical volume and mount it on the external hard disk.
+
+```bash
+pvcreate /dev/sdb
+vgcreate glustervg /dev/sdb
+lvcreate -l 100%VG -n glusterlv glustervg
+```
+
 ## Install GlusterFS
 
 For this task you will need 3 ubuntu servers.
@@ -11,7 +21,7 @@ Run these commands on all three servers:
 ```bash
 apt-get update
 apt-get install -y software-properties-common
-add-apt-repository ppa:gluster/glusterfs-9
+add-apt-repository ppa:gluster/glusterfs-7 # Don't need to add because it's default repository
 apt-get update
 apt install glusterfs-server
 ```
@@ -43,9 +53,9 @@ We need to update `host` file because we're using private IPs.
 ```bash
 vim /etc/hosts
 
-192.168.211.101 node1
-192.168.211.102 node2
-192.168.211.103 node3
+192.168.211.101 gl1
+192.168.211.102 gl2
+192.168.211.103 gl3
 ```
 
 ![etc-hosts](../../assets/73-etc-hosts.jpg)
@@ -56,13 +66,12 @@ To create a GlusterFS storage, you will need an external hard disk on each serve
 You will also need to create a partition on an external hard disk(/dev/sdb) on each server.
 
 ```bash
-fdisk /dev/sdb # remember to set type as LVM
-mkfs.ext4 /dev/sdb1
+mkfs.ext4 /dev/glustervg/glusterlv
 mkdir /glustervolume
-mount /dev/sdb1 /glustervolume
+mount /dev/glustervg/glusterlv /glustervolume
 vim /etc/fstab
 
-/dev/sdb1 /glustervolume ext4 defaults 0 0
+/dev/glustervg/glusterlv /glustervolume ext4 defaults 0 0
 /dev/disk/by-uuid/938da461-1842-4928-94f7-f098f0e87e1d /glustervolume ext4 defaults 0 0
 
 mount -a
@@ -76,8 +85,8 @@ df -h
 Now it's time to connect our servers. Run these command on your first node.
 
 ```bash
-gluster peer probe node1
-gluster peer probe node2
+gluster peer probe gl2
+gluster peer probe gl3
 gluster peer status
 ```
 
@@ -101,7 +110,7 @@ mkdir /glustervolume/vol1
 Then create a volume named vol1 with three replicas by these commands on your primary server:
 
 ```bash
-gluster volume create vol1 replica 3 node1:/glustervolume/vol1 node2:/glustervolume/vol1 node3:/glustervolume/vol1
+gluster volume create vol1 replica 3 gl1:/glustervolume/vol1 gl2:/glustervolume/vol1 gl3:/glustervolume/vol1
 gluster volume start vol1
 gluster volume status
 ```
@@ -110,11 +119,22 @@ gluster volume status
 
 ## Mounting GlusterFS on Clients
 
+Install package glusterfs-client on all client machines.
+
+```bash
+apt-get update
+apt-get install -y software-properties-common
+add-apt-repository ppa:gluster/glusterfs-7
+apt-get update
+apt install glusterfs-client
+```
+
 Create a directory where you want to mount the GlusterFS volume on your client machine:
 
 ```bash
 mkdir /mnt/vol1
-mount -t glusterfs node3:/vol1 /mnt/vol1
+echo "gl3:/vol1 /mnt/vol1 glusterfs defaults 0 0" >> /etc/fstab
+mount -a
 ```
 
 ## Time to test
