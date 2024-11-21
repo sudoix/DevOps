@@ -12,6 +12,24 @@ vgcreate glustervg /dev/sdb
 lvcreate -l 100%VG -n glusterlv glustervg
 ```
 
+## Create GlusterFS Storage
+
+To create a GlusterFS storage, you will need an external hard disk on each server.<br>
+You will also need to create a partition on an external hard disk(/dev/sdb) on each server.
+
+```bash
+mkfs.ext4 /dev/glustervg/glusterlv
+mkdir /glustervolume
+mount /dev/glustervg/glusterlv /glustervolume
+vim /etc/fstab
+
+/dev/glustervg/glusterlv /glustervolume ext4 defaults 0 0
+/dev/disk/by-uuid/938da461-1842-4928-94f7-f098f0e87e1d /glustervolume ext4 defaults 0 0
+
+mount -a
+df -h
+```
+
 ## Install GlusterFS
 
 For this task you will need 3 ubuntu servers.
@@ -53,32 +71,11 @@ We need to update `host` file because we're using private IPs.
 ```bash
 vim /etc/hosts
 
-192.168.211.101 gl1
-192.168.211.102 gl2
-192.168.211.103 gl3
+192.168.178.11 gl1
+192.168.178.12 gl2
+192.168.178.13 gl3
 ```
-
 ![etc-hosts](../../assets/73-etc-hosts.jpg)
-
-## Create GlusterFS Storage
-
-To create a GlusterFS storage, you will need an external hard disk on each server.<br>
-You will also need to create a partition on an external hard disk(/dev/sdb) on each server.
-
-```bash
-mkfs.ext4 /dev/glustervg/glusterlv
-mkdir /glustervolume
-mount /dev/glustervg/glusterlv /glustervolume
-vim /etc/fstab
-
-/dev/glustervg/glusterlv /glustervolume ext4 defaults 0 0
-/dev/disk/by-uuid/938da461-1842-4928-94f7-f098f0e87e1d /glustervolume ext4 defaults 0 0
-
-mount -a
-df -h
-```
-
-![mounted-lvms](../../assets/79-mounted-lvms.jpg)
 
 ## Configure GlusterFS Volume
 
@@ -118,6 +115,18 @@ gluster volume status
 ![gluster-volume](../../assets/77-gluster-volume.jpg)
 
 ## Mounting GlusterFS on Clients
+
+## Update /etc/hosts
+
+We need to update `host` file because we're using private IPs.
+
+```bash
+vim /etc/hosts
+
+192.168.178.11 gl1
+192.168.178.12 gl2
+192.168.178.13 gl3
+```
 
 Install package glusterfs-client on all client machines.
 
