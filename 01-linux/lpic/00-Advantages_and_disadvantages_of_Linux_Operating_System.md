@@ -1,4 +1,4 @@
-![20.0](../../assets/20.0-linux.jpg)
+![20.0](../../.gitbook/assets/20.0-linux.jpg)
 
 # Advantages of Linux Operating System
 

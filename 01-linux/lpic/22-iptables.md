@@ -1,4 +1,4 @@
-![37](../../assets/37-iptables.png)
+![37](../../.gitbook/assets/37-iptables.png)
 
 # iptables
 

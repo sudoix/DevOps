@@ -1,4 +1,4 @@
-![21](../../assets/21-debian.png)
+![21](../../.gitbook/assets/21-debian.png)
 
 ## **Debian package management**
 

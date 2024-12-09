@@ -1,4 +1,4 @@
-![36](../../assets/36-ssh.jpeg)
+![36](../../.gitbook/assets/36-ssh.jpeg)
 
 # Securing data with encryption
 

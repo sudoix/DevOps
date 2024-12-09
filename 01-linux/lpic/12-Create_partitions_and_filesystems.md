@@ -1,4 +1,4 @@
-![27](../../assets/27-partition.jpeg)
+![27](../../.gitbook/assets/27-partition.jpeg)
 
 # Create partitions and filesystem
 

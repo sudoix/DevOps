@@ -1,4 +1,4 @@
-![Pod](../../assets/84-pod.png)
+![Pod](../../.gitbook/assets/84-pod.png)
 
 # Pod
 

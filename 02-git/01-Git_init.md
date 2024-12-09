@@ -1,4 +1,4 @@
-![39](../assets/39-gitflow.png)
+![39](../.gitbook/assets/39-gitflow.png)
 
 
 ### Git area

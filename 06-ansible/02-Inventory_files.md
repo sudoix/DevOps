@@ -1,4 +1,4 @@
-![inventory_files](../assets/61-inventory.png)
+![inventory_files](../.gitbook/assets/61-inventory.png)
 
 ## Inventory Files
 

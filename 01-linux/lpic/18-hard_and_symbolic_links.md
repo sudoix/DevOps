@@ -1,4 +1,4 @@
-![33-hard-links-vs-soft-links](../../assets/33-hard-links-vs-soft-links.png)
+![33-hard-links-vs-soft-links](../../.gitbook/assets/33-hard-links-vs-soft-links.png)
 
 # Create and change hard and symbolic links
 

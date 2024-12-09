@@ -1,4 +1,4 @@
-![29](../../assets/29-subdirectorymount.png)
+![29](../../.gitbook/assets/29-subdirectorymount.png)
 
 # Control mounting and unmounting of filesystems
 

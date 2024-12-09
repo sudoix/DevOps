@@ -1,4 +1,4 @@
-![playbook](../assets/62-playbook.png)
+![playbook](../.gitbook/assets/62-playbook.png)
 
 ### ansible-playbook
 

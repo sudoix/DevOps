@@ -1,4 +1,4 @@
-![41](../assets/41-gitflow.webp)
+![41](../.gitbook/assets/41-gitflow.webp)
 
 ### git status
 

@@ -1,4 +1,4 @@
-![kubernetes_architecture](../assets/82-Kubernetes-architecture.png)
+![kubernetes_architecture](../.gitbook/assets/82-Kubernetes-architecture.png)
 
 ## Kubernetes Architecture
 

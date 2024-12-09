@@ -1,4 +1,4 @@
-![dockerEngine](../assets/51-docker-engine.jpg)
+![dockerEngine](../.gitbook/assets/51-docker-engine.jpg)
 
 ## Docker Engine
 
@@ -29,7 +29,7 @@ Here's a more detailed look at these components:
 
 ## Docker Architecture
 
-![Docker-Architecture](../assets/52-docker-architecture.png)
+![Docker-Architecture](../.gitbook/assets/52-docker-architecture.png)
 
 Docker's architecture is designed to facilitate containerization, a method of packaging an application and its dependencies together in a container. This architecture is composed of several key components:
 
@@ -59,7 +59,7 @@ This architecture promotes Docker's major goals: efficiency, portability, and ea
 
 # Docker container
 
-![docker-container](../assets/53-docker-container.png)
+![docker-container](../.gitbook/assets/53-docker-container.png)
 
 Docker container is a lightweight, standalone, executable package that includes everything needed to run a piece of software, including the code, runtime, system tools, libraries, and settings.
 

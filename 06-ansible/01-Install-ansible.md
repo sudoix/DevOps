@@ -1,4 +1,4 @@
-![Steps-to-install-Ansible](../assets/64-Steps-to-install-Ansible-on-Ubuntu-22.04-LTS.png)
+![Steps-to-install-Ansible](../.gitbook/assets/64-Steps-to-install-Ansible-on-Ubuntu-22.04-LTS.png)
 
 ## Install ansible
 

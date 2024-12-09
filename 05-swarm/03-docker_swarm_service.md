@@ -1,4 +1,4 @@
-![swarm_service](../assets/72-swarm_service.jpg)
+![swarm_service](../.gitbook/assets/72-swarm_service.jpg)
 
 Docker Swarm Services are a key concept in Docker Swarm mode, enabling you to deploy, scale, and manage a set of containers across a cluster of Docker hosts. A service in Docker Swarm allows you to define the desired state of your application or a component of your application that runs on the Swarm cluster. Here’s an overview of how services work in Docker Swarm and how you can use them:
 

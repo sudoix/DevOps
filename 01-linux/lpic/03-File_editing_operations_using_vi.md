@@ -1,4 +1,4 @@
-![23](../../assets/23-Vimlogo.svg)
+![23](../../.gitbook/assets/23-Vimlogo.svg)
 
 # **Perform basic file editing operations using vi**
 

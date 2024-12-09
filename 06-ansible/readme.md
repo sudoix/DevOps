@@ -1,1 +1,1 @@
-![ansible-full](../assets/ansible-full.webp)
+![ansible-full](../.gitbook/assets/ansible-full.webp)

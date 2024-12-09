@@ -1,4 +1,4 @@
-![32](../../assets/32-permissions.jpg)
+![32](../../.gitbook/assets/32-permissions.jpg)
 
 # Manage file permissions and ownership
 
@@ -69,7 +69,7 @@ drwxrwxr-x 2 user1 user1 4096 Jan 27 21:49 dir1
 
 The first character of a long listing describes the type of object. "-" for a regular file, "d" for a directory, "l" for a symbolic link(we will see them).
 
-![](.gitbook/assets/permis-filepermis.jpg)
+![](.gitbook/.gitbook/assets/permis-filepermis.jpg)
 
 Permissions are specified separately for the file’s owner, members of the file’s group, and everyone else. 
 
@@ -86,7 +86,7 @@ As you can see fsck can be read, written and executed by its owner (root) and al
 
 #### Directories ownership and permissions <a href="directories" id="directories"></a>
 
-![](.gitbook/assets/permis-dirpermis.jpg)
+![](.gitbook/.gitbook/assets/permis-dirpermis.jpg)
 
 Directories use the same permissions flags as regular files, but they are interpreted differently.
 
@@ -116,7 +116,7 @@ The command you use to change the  permissions on files is called chmod , which 
 
 **1- using short codes:**  That is easier way. 
 
-![](.gitbook/assets/permis-chmodshortcodes.jpg)
+![](.gitbook/.gitbook/assets/permis-chmodshortcodes.jpg)
 
 ```
 chmod [reference][operator][mode] file... 
@@ -180,7 +180,7 @@ user1@ubuntu16-1:~/sandbox$ ls -l | grep file1
 
 **2- using ocatl codes : **So far we have used symbols (ugoa and rxw) to specify permissions. we can also set permissions using octal numbers instead of symbols.
 
-![](.gitbook/assets/permis-chmodoctalcodes.jpg)
+![](.gitbook/.gitbook/assets/permis-chmodoctalcodes.jpg)
 
 For using octal codes with chmod we have to create an octal string, and that's is nothing more than a simple sum of numbers:
 
@@ -257,7 +257,7 @@ Okey lets wrap up what we have learned:
 
 As there is no more room for setting Access modes, execution character is used. "s" letter is used for both suid and guid but "t" letter is for stickybit. Again we use `+/-` for adding and removing permissions.
 
-![](.gitbook/assets/permis-accessmodes.jpg)
+![](.gitbook/.gitbook/assets/permis-accessmodes.jpg)
 
 > As you have probably noticed, if the file or directory is already executable  **s** and **t ** would be displayed  after setting access modes. 
 >
@@ -369,7 +369,7 @@ root@ubuntu16-1:~# umask
 
 #### How umask work?
 
-![](.gitbook/assets/permis-umask.jpg)
+![](.gitbook/.gitbook/assets/permis-umask.jpg)
 
  When a new file is created, the creation process specifies the permissions that the new file should have. Often, the mode requested is 0666, which makes the file readable and writable by anyone (but not executable). Directories usually default to 0777. However, this permissive creation is affected by a _umask_ value, which specifies what permissions a user does **not** want to grant automatically to newly created files or directories. The system uses the umask value to reduce the originally requested permissions.
 

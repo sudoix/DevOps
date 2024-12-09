@@ -1,4 +1,4 @@
-![42-git_remote](../assets/42-git_remote.png)
+![42-git_remote](../.gitbook/assets/42-git_remote.png)
 
 
 ### Git remote

@@ -1,4 +1,4 @@
-![ansible](../assets/60-create-an-ansible-playbook.png)
+![ansible](../.gitbook/assets/60-create-an-ansible-playbook.png)
 
 ## What is Ansible?
 
