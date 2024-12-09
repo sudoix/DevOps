@@ -1,4 +1,4 @@
-![24](../../assets/24-shell.png)
+![24](../../.gitbook/assets/24-shell.png)
 
 # Search text files using regular expressions
 

@@ -2,7 +2,7 @@
 
 # Understanding Docker Storage
 
-![docker-volume](../assets/66-docker-volume.png)
+![docker-volume](../.gitbook/assets/66-docker-volume.png)
 
 ### Docker can store container data on Host Hard Disk or memory
 
@@ -280,7 +280,7 @@ These commands run two containers (`container1` and `container2`) from the same 
 
 ### Example Use Cases
 
-- **Sharing Static Assets**: Serving the same static assets (e.g., images, stylesheets) through multiple web server containers.
+- **Sharing Static .gitbook/assets**: Serving the same static .gitbook/assets (e.g., images, stylesheets) through multiple web server containers.
 - **Inter-Container Communication**: Using a shared volume for inter-container communication through files, such as using a shared configuration file or writing logs to a common location that another container processes.
 - **Database Storage**: Attaching a database container and a backup service container to the same volume to facilitate data backups.
 

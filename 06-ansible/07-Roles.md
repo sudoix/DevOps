@@ -1,4 +1,4 @@
-![roles](../assets/63-roles.png)
+![roles](../.gitbook/assets/63-roles.png)
 
 ## Ansible Roles
 

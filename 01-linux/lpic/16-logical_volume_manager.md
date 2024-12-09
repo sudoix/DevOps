@@ -1,4 +1,4 @@
-![31](../../assets/31-lvm-diagram-linux-training-academy.png)
+![31](../../.gitbook/assets/31-lvm-diagram-linux-training-academy.png)
 
 # logical volume manager (LVM)
 
@@ -483,7 +483,7 @@ A daily system backup should include the contents of the /etc/lvm directory in t
 
 ## /dev/mapper
 
-The Device mapper is a generic interface to the linux kernel that can be used by different storage solutions.![](.gitbook/assets/DeviceMapper.jpg)
+The Device mapper is a generic interface to the linux kernel that can be used by different storage solutions.![](.gitbook/.gitbook/assets/DeviceMapper.jpg)
 
 Lets Take a look:
 

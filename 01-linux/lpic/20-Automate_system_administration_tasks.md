@@ -1,4 +1,4 @@
-![35](../../assets/35-CroncheatsheetforLinux.jpg)
+![35](../../.gitbook/assets/35-CroncheatsheetforLinux.jpg)
 
 # Automate system administration tasks by scheduling jobs
 

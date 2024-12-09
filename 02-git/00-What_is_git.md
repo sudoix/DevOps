@@ -1,4 +1,4 @@
-![38](../assets/38-git.png)
+![38](../.gitbook/assets/38-git.png)
 
 # Git
 

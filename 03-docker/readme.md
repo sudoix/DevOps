@@ -1,1 +1,1 @@
-![docker-full](../assets/docker-full.png)
+![docker-full](../.gitbook/assets/docker-full.png)

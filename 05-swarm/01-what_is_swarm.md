@@ -1,4 +1,4 @@
-![68-swarm](../assets/68-swarm.png)
+![68-swarm](../.gitbook/assets/68-swarm.png)
 
 # What is docker swarm
 
@@ -12,7 +12,7 @@ Docker Swarm is a container orchestration platform provided by Docker. It allows
 
 ## Docker Swarm architecture
 
-![swarm-architecture](../assets/69-swarm-diagram.webp)
+![swarm-architecture](../.gitbook/assets/69-swarm-diagram.webp)
 
 Docker Swarm is a container orchestration tool, which means it allows you to manage multiple Docker hosts as a single virtual system. It's designed to work around four key components, which together provide a streamlined way to deploy, scale, and manage containerized applications. Here's a breakdown of Docker Swarm's architecture and its main components:
 
@@ -45,7 +45,7 @@ In summary, Docker Swarm's architecture simplifies the process of deploying and 
 
 # Task and scheduling
 
-![task-scheduling](../assets/70-service-lifecycle.webp)
+![task-scheduling](../.gitbook/assets/70-service-lifecycle.webp)
 
 In Docker Swarm, the process of managing and scheduling tasks involves several key components that work together to ensure the efficient deployment and operation of containerized applications across the cluster. Let's break down these components and understand their roles in task management and scheduling within Docker Swarm:
 

@@ -1,4 +1,4 @@
-![24](../../assets/24-shell.png)
+![24](../../.gitbook/assets/24-shell.png)
 
 # Process text streams using filters
 
@@ -472,7 +472,7 @@ user `-r `to reverse the result of comparisons. Other options of sort command:
 
 
 ```
-[root@centos7-1 ~]# cat assets.txt
+[root@centos7-1 ~]# cat .gitbook/assets.txt
 motherboard
 motherboard
 cpu
@@ -488,7 +488,7 @@ ssd
 mouse
 keyboard
 keyboard
-[root@centos7-1 ~]# uniq assets.txt
+[root@centos7-1 ~]# uniq .gitbook/assets.txt
 motherboard
 cpu
 ram
@@ -502,7 +502,7 @@ keyboard
 use -c to display number of repetitions for each line:
 
 ```
-[root@centos7-1 ~]# uniq -c assets.txt
+[root@centos7-1 ~]# uniq -c .gitbook/assets.txt
       2 motherboard
       2 cpu
       4 ram
@@ -516,13 +516,13 @@ use -c to display number of repetitions for each line:
 \-d displays only the repeated lines and visa versa -u just shows uniq ones:
 
 ```
-[root@centos7-1 ~]# uniq -d assets.txt
+[root@centos7-1 ~]# uniq -d .gitbook/assets.txt
 motherboard
 cpu
 ram
 monitor
 keyboard
-[root@centos7-1 ~]# uniq -u assets.txt
+[root@centos7-1 ~]# uniq -u .gitbook/assets.txt
 hdd
 ssd
 mouse

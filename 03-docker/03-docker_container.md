@@ -1,4 +1,4 @@
-![docker-container](../assets/59-docker-container.png)
+![docker-container](../.gitbook/assets/59-docker-container.png)
 
 ## Docker container
 

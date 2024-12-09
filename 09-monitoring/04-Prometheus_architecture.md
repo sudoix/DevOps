@@ -1,4 +1,4 @@
-![Prometheus Architecture](../assets/85-prometheus-architecture.webp)
+![Prometheus Architecture](../.gitbook/assets/85-prometheus-architecture.webp)
 
 Prometheus is a powerful and flexible monitoring and alerting system, designed with a modular architecture that allows it to be highly scalable and reliable. Its architecture consists of several components that work together to collect, store, query, and visualize metrics. Here's an overview of the key components of Prometheus architecture:
 

@@ -1,4 +1,4 @@
-![22](../../assets/22-Red_Hat.png)
+![22](../../.gitbook/assets/22-Red_Hat.png)
 
 ## **RPM, YUM and dnf package management**
 

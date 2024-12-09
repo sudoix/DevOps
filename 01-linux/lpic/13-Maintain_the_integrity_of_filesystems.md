@@ -1,4 +1,4 @@
-![28](../../assets/28-Disk-Usage-Analyzer.webp)
+![28](../../.gitbook/assets/28-Disk-Usage-Analyzer.webp)
 
 # Maintain the integrity of filesystems
 

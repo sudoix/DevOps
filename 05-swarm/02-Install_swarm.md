@@ -1,4 +1,4 @@
-![docker_swarm](../assets/71-docker-to-swarm-1.png)
+![docker_swarm](../.gitbook/assets/71-docker-to-swarm-1.png)
 
 # Install Docker Swarm
 

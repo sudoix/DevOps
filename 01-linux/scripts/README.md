@@ -1,3 +1,3 @@
-![40](../../assets/47-bash-script.webp)
+![40](../../.gitbook/assets/47-bash-script.webp)
 
 #

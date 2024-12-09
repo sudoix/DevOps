@@ -1,4 +1,4 @@
-![docker network](../assets/67-docker-network.png)
+![docker network](../.gitbook/assets/67-docker-network.png)
 
 ## Docker Network
 

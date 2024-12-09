@@ -1,4 +1,4 @@
-![kubernetes](../assets/72-Kubernetes_New.png)
+![kubernetes](../.gitbook/assets/72-Kubernetes_New.png)
 
 Kubernetes, often abbreviated as K8s, is an open-source platform designed to automate deploying, scaling, and operating application containers. Here's a bit more about what Kubernetes does and why it's so popular:
 

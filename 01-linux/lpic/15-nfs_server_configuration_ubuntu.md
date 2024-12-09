@@ -1,4 +1,4 @@
-![30](../../assets/30-NFS.jpg)
+![30](../../.gitbook/assets/30-NFS.jpg)
 
 # nfs-server-configuration-ubuntu.md
 

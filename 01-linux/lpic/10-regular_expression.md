@@ -1,5 +1,5 @@
 
-![25](../../assets/25-regex-example.png)
+![25](../../.gitbook/assets/25-regex-example.png)
 
 # regular expression
 

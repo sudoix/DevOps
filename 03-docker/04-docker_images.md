@@ -1,4 +1,4 @@
-![WhatAreDockerImageLayers](../assets/54-WhatAreDockerImageLayers.png)
+![WhatAreDockerImageLayers](../.gitbook/assets/54-WhatAreDockerImageLayers.png)
 
 ### Docker Images
 
@@ -43,7 +43,7 @@ Using official Docker images can greatly facilitate the process of setting up an
 
 ### docker image layers
 
-![layersIndokerimage](../assets/55-layersIndokerimage.png)
+![layersIndokerimage](../.gitbook/assets/55-layersIndokerimage.png)
 
 Docker image layers are a fundamental part of the Docker image architecture. Each layer represents a set of changes or additions to the image. Here's a detailed explanation:
 

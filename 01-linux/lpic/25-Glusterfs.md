@@ -1,4 +1,4 @@
-![80](../../assets/80-orange-ant-glusterfs.jpg)
+![80](../../.gitbook/assets/80-orange-ant-glusterfs.jpg)
 
 # Setup GlusterFS
 
@@ -61,7 +61,7 @@ systemctl enable glusterd
 systemctl status glusterd
 ```
 
-![GlusterFS-status](../../assets/78-GlusterFS-status.jpg)
+![GlusterFS-status](../../.gitbook/assets/78-GlusterFS-status.jpg)
 
 
 ## Update 
@@ -75,7 +75,7 @@ vim /etc/hosts
 192.168.178.12 gl2
 192.168.178.13 gl3
 ```
-![etc-hosts](../../assets/73-etc-hosts.jpg)
+![etc-hosts](../../.gitbook/assets/73-etc-hosts.jpg)
 
 ## Configure GlusterFS Volume
 
@@ -87,14 +87,14 @@ gluster peer probe gl3
 gluster peer status
 ```
 
-![gluster-peer-status](../../assets/74-gluster-peer-status.jpg)
+![gluster-peer-status](../../.gitbook/assets/74-gluster-peer-status.jpg)
 
 To verify the added storage pool with the following command:
 
 ```bash
 gluster pool list
 ```
-![gluster-pool-list](../../assets/75-gluster-pool-list.jpg)
+![gluster-pool-list](../../.gitbook/assets/75-gluster-pool-list.jpg)
 
 ## Setup volumes
 
@@ -112,7 +112,7 @@ gluster volume start vol1
 gluster volume status
 ```
 
-![gluster-volume](../../assets/77-gluster-volume.jpg)
+![gluster-volume](../../.gitbook/assets/77-gluster-volume.jpg)
 
 ## Mounting GlusterFS on Clients
 
@@ -158,7 +158,7 @@ vim /mnt/vol1/file1.txt
 Hello World!
 ```
 
-![gluster-test](../../assets/76-gluster-test.jpg)
+![gluster-test](../../.gitbook/assets/76-gluster-test.jpg)
 
 ## Author
 

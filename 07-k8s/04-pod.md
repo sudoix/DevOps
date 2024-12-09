@@ -14,7 +14,7 @@ Pods are designed to run multiple containers that need to work together (like an
 
 # Pod life cycle
 
-![83-pod](../assets/83-pod.webp)
+![83-pod](../.gitbook/assets/83-pod.webp)
 
 In Kubernetes, the life cycle of a pod is defined by various states it passes through from creation to termination. Understanding these states helps manage applications effectively. Here’s a detailed overview of the pod lifecycle:
 

@@ -1,4 +1,4 @@
-![34-mariadb](../../assets/34-mariadb.png)
+![34-mariadb](../../.gitbook/assets/34-mariadb.png)
 
 # SQL data management
 
@@ -190,7 +190,7 @@ TRUNCATE TABLE city;
 
 ## Mariadb master slave
 
-![mariadb-master-slave](../../assets/65-mariadb-master-slave.jpg)
+![mariadb-master-slave](../../.gitbook/assets/65-mariadb-master-slave.jpg)
 
 Copying data from multiple databases is known as replication. The databases that are to be copied are known as master databases or servers. The replicated data might include multiple or single databases or data tables used from the desired database.
 

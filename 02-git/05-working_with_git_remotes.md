@@ -1,4 +1,4 @@
-![43](../assets/43-gitremote.jpg)
+![43](../.gitbook/assets/43-gitremote.jpg)
 
 
 ### Git clone

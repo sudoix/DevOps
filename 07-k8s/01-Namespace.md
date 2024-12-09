@@ -1,4 +1,4 @@
-![namespace](../assets/81-linux-namespace1.png)
+![namespace](../.gitbook/assets/81-linux-namespace1.png)
 
 In Linux, a **namespace** is a feature that partitions kernel resources so that one set of processes sees one set of resources while another set of processes sees a different set of resources. The resources being partitioned include, among others, the process IDs, hostnames, user IDs, file names, and network access. This allows for creating isolated environments within the same Linux instance, akin to lightweight virtualization.
 

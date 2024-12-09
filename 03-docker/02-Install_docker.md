@@ -1,4 +1,4 @@
-![install-docker-engine-ubuntu-22-04-banner](../assets/56-install-docker-engine-ubuntu-22-04-banner.jpg)
+![install-docker-engine-ubuntu-22-04-banner](../.gitbook/assets/56-install-docker-engine-ubuntu-22-04-banner.jpg)
 
 # Docker Version
 

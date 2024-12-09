@@ -1,4 +1,4 @@
-![what-is-docker](../assets/49-what-is-docker.png)
+![what-is-docker](../.gitbook/assets/49-what-is-docker.png)
 
 
 # Docker
@@ -43,7 +43,7 @@ Docker has become a key component in modern software development, particularly i
 ## Virtual Machines vs Containers
 
 
-![containers-vs-virtual-machines](../assets/50-containers-vs-virtual-machines.jpg)
+![containers-vs-virtual-machines](../.gitbook/assets/50-containers-vs-virtual-machines.jpg)
 
 Comparing Virtual Machines (VMs) and Containers helps to understand their differences, advantages, and use cases. Here are the key points of comparison:
 
