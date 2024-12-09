@@ -433,15 +433,15 @@ To start your Kubernetes cluster, you need to run the `kubeadm init` command on 
 
    Flannel (a network add-on) typically uses the range `10.244.0.0/16` for its pod network.
 
-   ```bash
-   kubeadm init --control-plane-endpoint 192.168.178.11 --apiserver-advertise-address=192.168.178.11 --pod-network-cidr 10.244.0.0/16
-   ```
+```bash
+kubeadm init --control-plane-endpoint 192.168.178.11 --apiserver-advertise-address=192.168.178.11 --pod-network-cidr 10.244.0.0/16
+```
 
    Calico (a network add-on) typically uses the range `192.168.0.0/16` for its pod network.
 
-   ```bash
-   kubeadm init --control-plane-endpoint 192.168.178.11 --apiserver-advertise-address=192.168.178.11 --pod-network-cidr=192.168.0.0/16
-   ```
+```bash
+kubeadm init --control-plane-endpoint 192.168.178.11 --apiserver-advertise-address=192.168.178.11 --pod-network-cidr=192.168.0.0/16
+```
 
    - `--apiserver-advertise-address 172.16.0.10`: Specifies the IP address the API server uses to advertise to members of the cluster.
    - `--pod-network-cidr 10.244.0.0/16`: Specifies the range of IP addresses for the pod network. The example uses the range that Flannel (a network add-on) typically uses.
