@@ -152,6 +152,7 @@ Now that you can open a file in vi, move around it and get out, it’s time to l
 | key(for cutting and pasting)  | function                                                                       |
 | ----------------------------- | ------------------------------------------------------------------------------ |
 | yy                            | copy (yank, cut) the current line into the buffer                              |
+| v + l then y                      | copy and select word(s) and copy into the buffer                              |
 | Nyy or yNy                    | copy (yank, cut) the next N lines, including the current line, into the buffer |
 | p                             | put (paste) the line(s) in the buffer into the text after the current line     |
 | P                             | put (paste) the line(s) in the buffer into the text before the current line    |
@@ -161,6 +162,10 @@ Now that you can open a file in vi, move around it and get out, it’s time to l
 | key      | function                                                       |
 | -------- | -------------------------------------------------------------- |
 | /string  | search forward for occurrence of string in text                |
+| :set ic  | ignore case when searching                                   |
+| :set noic  | don’t ignore case when searching                                  |
+| :set hls  | highlight search matches                                     |
+| :set noh | remove highlighting of search matches                                 |
 | ? string | search backward for occurrence of string in text               |
 | n        | move to next occurrence of search string                       |
 | N        | move to next occurrence of search string in opposite direction |
@@ -221,6 +226,7 @@ Press ESC to return back to the normal command mode!
 | --- | -------------------------------------------------- |
 | :e  |  (short for `:edit`) reload the file from the disk |
 | :e! | it will discard local changes and reload.          |
+| :! | run a shell command, shows you the output and prompts you before returning to your current buffer.         |
 
 {% hint style="success" %}
 ### VIM Tip : running external commands in a shell
