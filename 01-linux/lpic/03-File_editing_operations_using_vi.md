@@ -244,8 +244,19 @@ It usuaslly happens that we need to run a command in shell to see the result of 
 
 Need help? you can use `:help` or` :help keyword`  and vim will open help for keyword.
 
-.
+## .vimrc
+You can put all your configuration in `.vimrc` file. This file is loaded when you start vim.
+The language of vimrc is vim.el
+### .vimrc example
 
+```
+:set number
+:set ic
+:set autoindent
+:set tabstop=4
+:set shiftwidth=4
+:set expandtab
+```
 .
 
 .
