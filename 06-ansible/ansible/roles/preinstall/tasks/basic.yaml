@@ -16,7 +16,7 @@
     src: "resolv.conf.j2"
     dest: "/etc/resolv.conf"
     mode: "0644"
-  when: use_iran == "true"
+  # when: use_iran == "true"
 
 - name: Add hostname
   lineinfile:
@@ -36,17 +36,15 @@
     group: root
     mode: 0644
 
-- name: Install necessary tools
-  apt:
-    update_cache: true
-    name:
-      - vim
-      - sudo
-      - wget
-      - curl
-    state: latest
-    update_cache: true
-
+# - name: Install necessary tools
+#   apt:
+#     name:
+#       - vim
+#       - sudo
+#       - wget
+#       - curl
+#     state: latest
+#     update_cache: true
 
 - name: Copy issue.net to remote servers
   copy:
@@ -58,9 +56,14 @@
     path: /etc/ssh/sshd_config
     regexp: '^Banner'
     line: 'Banner /etc/issue.net'
-  notify: restart sshd
+  # notify: restart sshd # You don't need this line in ubuntu 24.04
 
 - name: Copy MOTD to remote servers
   copy:
     src: motd
-    dest: /etc/motd
+    dest: "{{ motd_path }}"
+
+- name: Copy sample config file
+  template:
+    src: sample.conf.j2
+    dest: "{{ config_path }}"

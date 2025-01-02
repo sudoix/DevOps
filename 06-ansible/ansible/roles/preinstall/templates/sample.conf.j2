@@ -1,0 +1,52 @@
+http {
+    server {
+        listen 80;
+        server_name {{ server_name }};
+
+    {% if ssl %}
+    ssl_certificate /etc/nginx/ssl/{{ server_name }}.crt;
+        ssl_certificate_key /etc/nginx/ssl/{{ server_name }}.key;
+    {% endif %}
+
+
+    ########################### if and elif
+    {% if infra_env == 'production' %}
+    root /var/www/html;
+        access_log /var/log/nginx/production_access.log;
+        error_log /var/log/nginx/production_error.log;
+    {% elif infra_env == 'staging' %}
+        root /var/www/staging;
+        access_log /var/log/nginx/staging_access.log;
+        error_log /var/log/nginx/staging_error.log;
+    {% elif infra_env == 'development' %}
+        root /var/www/dev;
+        access_log /var/log/nginx/dev_access.log;
+        error_log /var/log/nginx/dev_error.log;
+    {% else %}
+        root /var/www/default;
+        access_log /var/log/nginx/default_access.log;
+        error_log /var/log/nginx/default_error.log;
+    {% endif %}
+
+        location / {
+            index index.html;
+        }
+    }
+}
+
+############ for example
+
+{% for item in my_value %}
+  {{ item }}
+{% endfor %}
+
+{% for item in my_variable %}
+  Name: {{ item.name }}
+  Age: {{ item.age }}
+{% endfor %}
+
+{% for env_item in sample_config %}
+{% for key, value in env_item.items() %}
+  - {{ key }}={{ value }}
+{% endfor %}
+{% endfor %}
