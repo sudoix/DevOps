@@ -2,7 +2,7 @@
 
 
 ```shell
-ansible-playbook -i inventory/k8s-servers.ini main.yml  --become --become-method=sudo
+ansible-playbook -i inventory/hosts.ini main.yaml  --become --become-method=sudo
 
 ```
 

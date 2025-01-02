@@ -86,3 +86,88 @@ ansible-playbook file4.yaml  -i ansible/inventory/hosts.ini -b
 
 This setup dynamically generates `/etc/hosts` with IP addresses and hostnames specified in the `hosts` variable.
 
+In Jinja, the templating engine used by Ansible, you can write if statements using the following syntax:
+
+```
+{% if condition %}
+  # code to execute if condition is true
+{% endif %}
+```
+
+Here's an example:
+
+```
+{% if my_variable == 'foo' %}
+  The variable is foo
+{% endif %}
+```
+
+You can also use the `elif` and `else` statements:
+
+```
+{% if my_variable == 'foo' %}
+  The variable is foo
+{% elif my_variable == 'bar' %}
+  The variable is bar
+{% else %}
+  The variable is not foo or bar
+{% endif %}
+```
+
+You can use the following operators in if statements:
+
+* `==` (equals)
+* `!=` (not equals)
+* `>` (greater than)
+* `<` (less than)
+* `>=` (greater than or equal to)
+* `<=` (less than or equal to)
+* `in` (contains)
+* `not in` (does not contain)
+* `is` (identity)
+* `is not` (non-identity)
+
+Here are some examples:
+
+```
+{% if my_variable > 10 %}
+  The variable is greater than 10
+{% endif %}
+
+{% if 'foo' in my_variable %}
+  The variable contains foo
+{% endif %}
+
+{% if my_variable is defined %}
+  The variable is defined
+{% endif %}
+```
+
+You can also use the `and` and `or` operators to combine conditions:
+
+```
+{% if my_variable > 10 and my_variable < 20 %}
+  The variable is between 10 and 20
+{% endif %}
+
+{% if my_variable == 'foo' or my_variable == 'bar' %}
+  The variable is foo or bar
+{% endif %}
+```
+
+In Ansible, you can also use the `when` clause to execute a task only if a certain condition is met:
+
+```
+- name: Execute task only if condition is met
+  debug:
+    msg: "Condition is met"
+  when: my_variable == 'foo'
+```
+
+This is equivalent to the following Jinja code:
+
+```
+{% if my_variable == 'foo' %}
+  {{ "Condition is met" }}
+{% endif %}
+```
