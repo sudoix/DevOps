@@ -499,6 +499,23 @@ In Dockerfiles, `RUN`, `CMD`, and `ENTRYPOINT` are three different instructions 
      - `ENTRYPOINT ["nginx"]`
      - `CMD ["-g", "daemon off;"]`
      - In this case, `nginx -g "daemon off;"` is the default command. If you run `docker run [image] -g "daemon on;"`, it replaces the `CMD` part, resulting in `nginx -g "daemon on;"`.
+```
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y \
+    nginx \
+    vim \
+    curl \
+    iputils-ping \
+    ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# CMD ["ping", "8.8.8.8"]
+
+ENTRYPOINT ["ping"]
+CMD ["8.8.8.8"]
+```
 
 In summary, `RUN` is for building the image, `CMD` is for defining a default command that can be overridden, and `ENTRYPOINT` is for making the container act as a specific executable.
 
