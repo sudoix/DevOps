@@ -499,7 +499,7 @@ In Dockerfiles, `RUN`, `CMD`, and `ENTRYPOINT` are three different instructions 
      - `ENTRYPOINT ["nginx"]`
      - `CMD ["-g", "daemon off;"]`
      - In this case, `nginx -g "daemon off;"` is the default command. If you run `docker run [image] -g "daemon on;"`, it replaces the `CMD` part, resulting in `nginx -g "daemon on;"`.
-```
+```Dockerfile
 FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y \
