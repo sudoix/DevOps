@@ -275,8 +275,14 @@ FROM ubuntu:latest
 LABEL version="1.0.0"
 
 # Update the package manager and install Bash
-RUN apt-get update && apt-get install -y bash
-RUN apt install nginx -y
+RUN apt-get update && apt-get install -y \
+    nginx \
+    vim \
+    curl \
+    ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 
 # Copy the Bash script into the container
 COPY . /app
