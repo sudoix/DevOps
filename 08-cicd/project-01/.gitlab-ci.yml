@@ -4,7 +4,7 @@ stages:
 
 deploy-dev:
   stage: deploy-dev
-  image: 9350733512/ansible:0.0.2
+  image: 9350733512/ansible:0.0.3
   variables:
     ANSIBLE_HOST_KEY_CHECKING: 'false'
     ANSIBLE_FORCE_COLOR: 'true'

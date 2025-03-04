@@ -1,4 +1,4 @@
-# Install kubernetes 1.30 on ubuntu 22.04
+# Install kubernetes 1.31 on ubuntu 24.04
 
 ## Set ip address and VPN :)
 
@@ -361,7 +361,7 @@ Before installing Kubernetes components, it is critical to verify the authentici
    Use `curl` to download the signing key from Kubernetes' official package source and add it to your system's trusted keys using `gpg`:
 
    ```bash
-   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
    ```
 
 This command fetches the GPG key and saves it in a dearmored format in the appropriate directory, preparing your system to securely install verified Kubernetes packages.
@@ -380,7 +380,7 @@ To install Kubernetes components like `kubelet`, `kubeadm`, and `kubectl`, you m
 
    ```bash
    # This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
-   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
    ```
 
 2. **Update the apt Package Index**:
@@ -434,13 +434,13 @@ To start your Kubernetes cluster, you need to run the `kubeadm init` command on 
    Flannel (a network add-on) typically uses the range `10.244.0.0/16` for its pod network.
 
 ```bash
-kubeadm init --control-plane-endpoint 192.168.178.11 --apiserver-advertise-address=192.168.178.11 --pod-network-cidr 10.244.0.0/16
+kubeadm init --control-plane-endpoint 192.168.178.11 --apiserver-advertise-address=192.168.178.11 --pod-network-cidr 10.244.0.0/16 -v5
 ```
 
    Calico (a network add-on) typically uses the range `192.168.0.0/16` for its pod network.
 
 ```bash
-kubeadm init --control-plane-endpoint 192.168.178.11 --apiserver-advertise-address=192.168.178.11 --pod-network-cidr=192.168.0.0/16
+kubeadm init --control-plane-endpoint 192.168.178.11 --apiserver-advertise-address=192.168.178.11 --pod-network-cidr=192.168.0.0/16 -v5
 ```
 
    - `--apiserver-advertise-address 172.16.0.10`: Specifies the IP address the API server uses to advertise to members of the cluster.
@@ -448,7 +448,10 @@ kubeadm init --control-plane-endpoint 192.168.178.11 --apiserver-advertise-addre
    - `--pod-network-cidr=192.168.0.0/16` : Specifies the range of IP addresses for the pod network. The example uses the range that Calico (a network add-on) typically uses.
 
 2. **Save the Output**:
-   The output of the `kubeadm init` command includes a `kubeadm join` command, which you will use to connect your worker nodes to the cluster. It is crucial to save this output for future reference.
+   The output of the `kubeadm init` command includes a `kubeadm join` command, which you will use to connect your worker nodes to the cluster. It is crucial to save this output for future reference. If you get an error for pulling images maybe you need to retag the images:
+    ```
+    ctr -n=k8s.io image tag <existing_tag> registry.k8s.io/kube-apiserver:v1.31.4-1.1
+    ```
 
 ```bash
 Your Kubernetes control-plane has initialized successfully!
@@ -488,8 +491,8 @@ Once your Kubernetes cluster is initialized, the next step is to install a netwo
    Run the following command on your master node to deploy Calico to your cluster:
 
    ```bash
-   kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.0/manifests/tigera-operator.yaml
-   kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.0/manifests/custom-resources.yaml
+   kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml
+   kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml
    ```
 
    This command downloads and applies the Flannel configuration from its official GitHub repository. It sets up Flannel to manage the pod network across your cluster.
