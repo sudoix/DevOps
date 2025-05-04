@@ -543,3 +543,136 @@ As we said  **getent** is a Linux command that helps the user to get the entries
 root@ubuntu16-1:~# getent hosts thisismyexample
 172.217.164.238 thisismyexample
 ```
+
+########## Ubuntu
+
+######### vim /etc/netplan/file
+```bash
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens3:
+      dhcp4: no
+      addresses:
+        - 192.168.121.221/24
+      gateway4: 192.168.121.1
+      nameservers:
+          addresses: [8.8.8.8, 1.1.1.1]
+```	  
+
+netplan try
+netplan apply
+
+####### Debian
+vim /etc/network/interfaces
+
+```bash
+# The loopback network interface
+auto lo
+iface lo inet loopback
+ 
+# The primary network interface
+auto ens36
+iface ens36  inet static
+ address 192.168.2.236
+ netmask 255.255.255.0
+ gateway 192.168.2.254
+ dns-nameservers 192.168.2.254
+```
+sudo systemctl restart networking.service
+
+####### centos
+
+cd /etc/sysconfig/network-scripts/
+vim ifcfg-ens36
+
+```bash
+# static IP address on CentOS 7 or RHEL 7#
+TYPE=Ethernet
+BOOTPROTO=none
+IPADDR=192.168.2.203
+PREFIX=24
+GATEWAY=192.168.2.254
+DNS1=192.168.2.254
+DNS2=8.8.8.8
+DNS3=8.8.4.4
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=no
+NAME=eth0
+DEVICE=eth0
+ONBOOT=yes
+```
+######## systemctl restart network
+
+
+
+ 
+
+
+netstat  -  Print network connections, routing tables, interface statistics,
+
+```bash
+netstat
+netstat -a
+netstat -at --> all tcp
+netstat -au --> all udp
+netstat -lt --> Active Internet connections (only servers) TCP
+netstat -lu --> Active Internet connections (only servers) UDP
+netstat -tulpn
+```
+
+##########
+
+ss  -  another utility to investigate sockets
+```bash
+ss -a --> all
+ss -l --> list 
+ss -t --> list tcp connections
+ss -at --> list all tcp connections
+ss -lt --> listening tcp connections
+ss -u --> list UDP connections
+ss -au --> all UDP
+ss -lu -- listening UDP
+ss -ntlp
+ss -nulp
+```
+##########
+
+lsof - list open files
+```
+lsof
+lsof -u USERNAME 
+lsof -i TCP:22
+lsof -i TCP:1-1024
+lsof -i --> all network connections
+```
+##########
+
+fuser - identify processes using files or sockets
+
+fuser 80/tcp
+
+########
+
+nmap - Network exploration tool and security / port scanner
+ 
+ ```bash
+nmap -v IP/DOMAIN
+nmap  -v 192.168.80.139  192.168.80.140 ....
+nmap 192.168.80.*
+nmap 192.168.80.139,140,223
+nmap 192.168.80.139-250
+nmap 192.168.80.* --exclude 192.168.80.139
+nmap -iL ip.txt --> scan list of host from file 
+nmap -A 192.168.80.139 --> information OS and traceroute 
+nmap -O 192.168.80.139 --> information OS
+nmap -sA 192.168.80.139 --> scan IP for detect firewall 
+nmap -PN 192.168.80.139 --> check IP for protected with firewall
+nmap -F 192.168.80.139 --> fast scan 
+nmap --iflist --> interface and route 
+nmap -p T:80 192.168.80.139 --> scan tcp port
+nmap -sU 53 192.168.80.139 --> scan UDP port 
+```
+
