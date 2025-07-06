@@ -411,6 +411,48 @@ lpi.org.		599	IN	A	65.39.134.165
 ;; MSG SIZE  rcvd: 52
 ```
 
+mx record
+```bash
+dig google.com MX
+```
+NS record
+```
+dig google.com NS
+```
+
+TXT record
+```
+dig google.com TXT
+```
+
+Query a specific DNS server
+```
+dig @8.8.8.8 google.com
+```
+
+Short answer only
+```
+dig +short google.com
+```
+Reverse DNS lookup
+```
+dig -x 8.8.8.8
+```
+SOA record (Start of Authority)
+```
+dig google.com SOA
+```
+
+Trace DNS resolution path
+```
+dig +trace google.com
+```
+
+Show only the answer section
+```
+dig +noall +answer google.com
+```
+
 > don't forget, by default, dig sends the DNS query to name servers listed in the resolver(/etc/resolv.conf), how ever, we can query different DNS server usnig @.
 
 ### host
