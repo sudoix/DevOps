@@ -483,6 +483,77 @@ Like other command ssh has also some options.Lets take a look at most usefull sw
 | ssh user1@server1.example.com \<command> | Running \<command> on the remote host over ssh                                                                   |
 | ssh -X user@server1.example.com          | Enable Xforwarding on the clients side,  X11Forwarding should be enabled on the server side in sshd_config file. |
 
+## SCP 
+
+scp (Secure Copy) is a command-line tool used to securely transfer files and directories between local and remote systems over SSH. It encrypts both the file data and credentials during transmission, ensuring secure file copying across networks.
+
+### scp syntax
+
+```bash
+# Copy a File from Local to Remote
+scp /path/to/local/file.txt user@remote_host:/path/to/remote/
+scp file.txt root@192.168.1.100:/root/
+
+# Copy a File from Remote to Local
+scp user@remote_host:/path/to/remote/file.txt /path/to/local/
+scp root@192.168.1.100:/etc/nginx/nginx.conf .
+
+# Copy a Directory Recursively
+scp -r /path/to/local/dir user@remote_host:/path/to/remote/
+scp -r myproject/ user@192.168.1.50:/home/user/
+
+# Use a Custom SSH Port
+scp -P 2222 file.txt user@remote_host:/path/
+
+# Copy Between Two Remote Hosts (via local machine)
+scp user1@host1:/path/file user2@host2:/path/
+
+# Limit Bandwidth Usage (in Kbit/s)
+scp -l 500 file.txt user@remote:/path/
+
+# Copy Multiple Files
+scp file1.txt file2.txt user@remote:/path/
+```
+# RSYNC
+
+rsync is a powerful file synchronization and transfer tool that efficiently copies and synchronizes files and directories between local and remote systems. It uses a delta-transfer algorithm to minimize data transfer by only copying the differences between source and destination files, making it ideal for backups and incremental updates.
+
+## rsync syntax
+
+```bash
+# 1. Copy a File from Local to Remote
+rsync file.txt user@remote:/path/to/destination/
+
+# 2. Copy a File from Remote to Local
+rsync user@remote:/path/to/file.txt /local/destination/
+
+# 3. Copy a Directory Recursively (with progress and compression)
+rsync -avz mydir/ user@remote:/path/to/destination/
+
+# 4. Copy from Remote to Local with Progress
+rsync -avh --progress user@remote:/path/to/dir/ /local/destination/
+
+# 5. Delete Extra Files at Destination (Mirror Mode)
+rsync -av --delete /source/ user@remote:/destination/
+
+# 6. Use a Custom SSH Port
+rsync -e "ssh -p 2222" file.txt user@remote:/path/
+
+# 7. Exclude Specific Files or Directories
+rsync -av --exclude 'node_modules' --exclude '*.log' /src/ user@remote:/dst/
+
+# 8. Dry Run (see what will be transferred without actually copying)
+rsync -av --dry-run /src/ user@remote:/dst/
+
+# 9. Synchronize Only Newer Files
+rsync -au /src/ user@remote:/dst/
+
+# 10. Compress Data During Transfer
+rsync -az /src/ user@remote:/dst/
+```
+
+
+
 ## data encryption
 
  Encryption **is important** because it allows you to securely protect data that you don't want anyone else to have access to. 
