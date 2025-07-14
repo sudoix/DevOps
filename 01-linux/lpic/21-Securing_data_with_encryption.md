@@ -560,12 +560,14 @@ rsync -av --bwlimit=100 /data/source/ /data/destination/
 # Limit to 2 MB/s (2048 KB/s) while syncing from remote to local
 rsync -avz --bwlimit=2048 user@remote:/mnt/storage/ /home/user/backup/
 
-# Limit to 300 KB/s while syncing with progress and compression
-rsync -avz --bwlimit=300 --progress /home/user/files/ user@remote:/data/files/
+# Remove files from source after copying to destination
+rsync -av --remove-source-files /path/to/source/ user@remote:/path/to/destination/
 
-# Limit to 50 KB/s and exclude some files
-rsync -av --bwlimit=50 --exclude '*.iso' /downloads/ /mnt/backup/
+# skip files that files exist in the destination
+rsync -av --ignore-existing /path/to/source/ user@remote:/path/to/destination/
 
+# copy files only if they are newer on the source
+rsync -av --update /path/to/source/ user@remote:/path/to/destination/S
 ```
 
 
