@@ -550,6 +550,22 @@ rsync -au /src/ user@remote:/dst/
 
 # 10. Compress Data During Transfer
 rsync -az /src/ user@remote:/dst/
+
+# Limit to 500 KB/s while copying a directory to a remote server
+rsync -avz --bwlimit=500 /var/www/ user@remote:/var/backups/www/
+
+# Limit to 100 KB/s for a local sync
+rsync -av --bwlimit=100 /data/source/ /data/destination/
+
+# Limit to 2 MB/s (2048 KB/s) while syncing from remote to local
+rsync -avz --bwlimit=2048 user@remote:/mnt/storage/ /home/user/backup/
+
+# Limit to 300 KB/s while syncing with progress and compression
+rsync -avz --bwlimit=300 --progress /home/user/files/ user@remote:/data/files/
+
+# Limit to 50 KB/s and exclude some files
+rsync -av --bwlimit=50 --exclude '*.iso' /downloads/ /mnt/backup/
+
 ```
 
 
