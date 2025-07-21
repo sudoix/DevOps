@@ -18,13 +18,14 @@ Within tables there are chains.chains are used to define what kind of packet fol
 
 How tables and chain are related so ? All three tree tables (FILTER, NAT, MANGLE) can be present in chains(filter points) but not every chain has all three table represented:
 
-<figure><img src="./pic/route-iptables-tchains.jpg" alt=""><figcaption></figcaption></figure>
 
 * **PREROUTING ( **_**NAT**_** ,** MANGLE**)**
 * INPUT (**FILTER** , MANGLE )
 * FORWARD (**FILTER** , MANGLE )
 * OUTPUT (_**NAT**_ , **FILETR** ,MANGLE)
 * **POSTROUTING (**_**NAT**_** ,**MANGLE**)**
+
+![iptables](../../.gitbook/assets/iptables.png)
 
 How rules are broken down within the firewall system? chains are filtering points that we can create rules, and rules are applied to the packet passing trough. The rules define what exactly should happen to a packet.
 
