@@ -121,10 +121,23 @@ Chain OUTPUT (policy ACCEPT)
 target     prot opt source               destination
 ```
 
+now lets list all of the rules in the nat table:
+
+```bash
+iptables -nL -t nat
+```
+
+lets see all roules in all tables:
+
+```
+iptables-save | less
+```
+
+
 we flush iptables rule : set the default chains policy to DROP for more security and see the results:
 
 ```
-[root@centos7-1 ~]# iptables -F -v
+[root@centos7-1 ~]# iptables -F -v -t filter
 Flushing chain `INPUT'
 Flushing chain `FORWARD'
 Flushing chain `OUTPUT'
