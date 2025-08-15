@@ -124,7 +124,7 @@ target     prot opt source               destination
 now lets list all of the rules in the nat table:
 
 ```bash
-iptables -nL -t nat
+iptables -nL -t nat --line-numbers
 ```
 
 lets see all roules in all tables:
@@ -356,12 +356,21 @@ target     prot opt source               destination
 ACCEPT     all  --  anywhere             anywhere
 ```
 
+**DON'T change the default policy to DROP because if you flush the rules you will not be able to connect to your server anymore.** 
+
+
 #### Now more iptables examples:
 
 Block TCP traffic from Specific IP Address:
 
 ```
 iptables -A INPUT -p tcp -s xxx.xxx.xxx.xxx -j DROP
+```
+
+Insert in the specific line of the chain:
+
+```
+iptables -I INPUT 4 -p tcp -s xxx.xxx.xxx.xxx -j DROP # 4 is the line number
 ```
 
 Allow All tcp xxx incoming port:
@@ -415,6 +424,7 @@ but we want to do something whith iptables which redirect requests from port 808
 ```
 [root@centos7-1 ~]# iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 [root@centos7-1 ~]# iptables -t nat -A PREROUTING -i ens33 -p tcp --dport 8080 -j REDIRECT --to-port 80
+[root@centos7-1 ~]# iptables -t nat -A PREROUTING -i ens33 -p tcp --dport 9090 -j REDIRECT --to-port 22 # for ssh
 ```
 
 and check the result from CentOS7-2:
@@ -423,7 +433,73 @@ and check the result from CentOS7-2:
 [root@centos7-2 ~]# elinks http://192.168.10.133:8080
 ```
 
+### Packet state
+
+We have some state for packets: New, Established, Related, Invalid.
+
+**New**: The packet is a new connection request.
+**Established**: The packet is part of an existing connection.
+**Related**: The packet is related to an existing connection, such as an FTP data transfer.
+**Invalid**: The packet is not part of a valid connection.
+
+let's test the related and established rules:
+
+```
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+```
+
+### Allow apt install command and drop all other traffic in INPUT chain
+
+```
+iptables -F
+iptables -P INPUT DROP
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD DROP
+
+# Allow loopback
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Allow SSH
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# Allow DNS replies
+iptables -A INPUT -p udp --sport 53 -j ACCEPT
+iptables -A INPUT -p tcp --sport 53 -j ACCEPT
+
+# Allow HTTP/HTTPS replies
+iptables -A INPUT -p tcp --sport 80 -j ACCEPT
+iptables -A INPUT -p tcp --sport 443 -j ACCEPT
+
+# MOST IMPORTANT: Allow return traffic for all established connections
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+```
+
 ![](./pic/route-ipfw2.jpg)
+
+### Create new chain
+
+For example we want to create a new chain in filter table called "SSH-ONLY" and add rules to it:
+
+```
+iptables -N SSH-IN
+iptables -N SSH-OUT
+```
+
+When we create a new chain, the rules in that chain are not applied to any packet until we call it in another rule.
+To use the new chain, we can add a rule to the INPUT chain that calls our new chain:
+
+```
+iptables -t filter -I INPUT -j SSH-IN
+iptables -t filter -I OUTPUT -j SSH-OUT
+iptables -nvL -t filter
+
+iptables -A SSH-IN -p tcp --dport 22 -j ACCEPT
+iptables -A SSH-OUT -p tcp --sport 22 -j ACCEPT
+
+```
+
 
 ### ip6tables
 
@@ -434,6 +510,46 @@ Linux supports IPv6 firewall rules using the Netfilter 6 subsystem and the`ip6ta
 ```
 ip6tables -A INPUT -i eth0 -p tcp -s 3ffe:ffff:100::1/128 --dport 22 -j ACCEPT
 ```
+
+### Packet Forwarding and NAT
+
+Packet forwarding is the process of receiving a packet on one interface and sending it out another interface.
+
+For example, we want to forward packets from server A to server B. Server A receives a packet on port 80 and forwards it to server B on port 80.
+
+Packet forwarding is enabled by default in Linux, but it can be disabled by setting the following kernel parameter to 0:
+
+**We should enable packet forwarding in both servers.**
+
+```
+cat /proc/sys/net/ipv4/ip_forward
+0
+```
+To enable packet forwarding, set the parameter to 1:
+
+```
+echo 1 > /proc/sys/net/ipv4/ip_forward
+```
+
+for permanent change, edit the `/etc/sysctl.conf` file and add or modify the following line:
+
+```
+# Enable IPv4 packet forwarding
+vim /etc/sysctl.conf
+net.ipv4.ip_forward = 1
+sysctl -p
+```
+
+```
+iptables -t nat -A PREROUTING -p tcp --dport 80 -d 192.168.10.133 -j DNAT --to-destination 192.168.10.134:80
+
+# ssh port forwarding
+iptables -t nat -A PREROUTING -p tcp --dport 2222 -d 192.168.10.133 -j DNAT --to-destination 192.168.10.134:22
+
+
+iptables -t nat -A POSTROUTING  -j MASQUERADE # it's better to use SNAT instead of MASQUERADE
+```
+
 
 ### NAT IP Forwarding
 
