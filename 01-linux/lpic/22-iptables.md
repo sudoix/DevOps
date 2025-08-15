@@ -451,29 +451,25 @@ iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 ### Allow apt install command and drop all other traffic in INPUT chain
 
-```
+```bash
 iptables -F
-
 
 # Allow loopback
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
-# Allow SSH
+# Allow SSH incoming
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 
-# Allow DNS replies
-iptables -A INPUT -p udp --sport 53 -j ACCEPT
-iptables -A INPUT -p tcp --sport 53 -j ACCEPT
+# Allow outgoing DNS + HTTP/HTTPS
+iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p tcp -m multiport --dports 53,80,443 -j ACCEPT
 
-# Allow HTTP/HTTPS replies
-iptables -A INPUT -p tcp --sport 80 -j ACCEPT
-iptables -A INPUT -p tcp --sport 443 -j ACCEPT
+# Allow both traffic for established connections
+iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-# MOST IMPORTANT: Allow return traffic for all established connections
-iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-
-# Drop all other traffic
+# Drop everything else
 iptables -A INPUT -j DROP
 iptables -A OUTPUT -j DROP
 iptables -A FORWARD -j DROP
