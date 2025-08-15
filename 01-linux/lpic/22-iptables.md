@@ -446,16 +446,14 @@ let's test the related and established rules:
 
 ```
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-sudo iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 ```
 
 ### Allow apt install command and drop all other traffic in INPUT chain
 
 ```
 iptables -F
-iptables -P INPUT DROP
-iptables -P OUTPUT ACCEPT
-iptables -P FORWARD DROP
+
 
 # Allow loopback
 iptables -A INPUT -i lo -j ACCEPT
@@ -474,6 +472,11 @@ iptables -A INPUT -p tcp --sport 443 -j ACCEPT
 
 # MOST IMPORTANT: Allow return traffic for all established connections
 iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# Drop all other traffic
+iptables -A INPUT -j DROP
+iptables -A OUTPUT -j DROP
+iptables -A FORWARD -j DROP
 ```
 
 ![](./pic/route-ipfw2.jpg)
