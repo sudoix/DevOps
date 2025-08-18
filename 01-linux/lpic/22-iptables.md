@@ -610,6 +610,14 @@ root@server1:~# cat /proc/sys/net/ipv4/ip_forward
 
 now lets MASQUERADE:
 
+
+Next, use iptables to set up NAT. You must specify the network interfaces correctly. Let's assume `eth0` is the interface connected to the internet and `eth1` is connected to the internal network.
+Run the following command to set up masquerading on the outbound interface (connected to the internet):
+
+```bash
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+```
+
 ```
 root@server1:~# iptables --table nat --append POSTROUTING --out-interface ens33 -j MASQUERADE
 root@server1:~# iptables --append FORWARD --in-interface ens38 -j ACCEPT
