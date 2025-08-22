@@ -649,4 +649,149 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 rtt min/avg/max/mdev = 161.904/170.784/179.664/8.880 ms
 ```
 
+### Saving iptables rules
+
+To make sure that your iptables rules persist after a reboot, you can save them to a file and restore them on boot. On Ubuntu, you can use the `iptables-persistent` package:
+
+```bash
+sudo apt install iptables-persistent
+```
+During the installation, you will be prompted to save the current iptables rules. Choose "Yes" to save them.
+
+Now, when the system is rebooted, the iptables rules will be restored from the saved file.
+
+### ipset
+
+`ipset` is a tool that allows you to create and manage sets of IP addresses, networks, or ports. It is often used in conjunction with `iptables` to efficiently manage large numbers of IP addresses or networks.
+
+To install `ipset`, you can use the package manager of your Linux distribution. For example, on Ubuntu or Debian:
+
+```bash
+sudo apt install ipset
+```
+
+1. **Create a new set**: First, you'll create a new IP set. In this example, we'll create a list to block certain IP addresses.
+
+   ```shell
+   sudo ipset create blocked_ips hash:ip
+   ```
+
+   This command creates a set named `blocked_ips` using a hash method for IP addresses.
+
+2. **Add IP addresses to the set**: Once your set is created, you can add IP addresses to it.
+
+   ```shell
+   sudo ipset add blocked_ips 192.168.1.100
+   sudo ipset add blocked_ips 203.0.113.10
+   ```
+
+   These commands add the IP addresses `192.168.1.100` and `203.0.113.10` to the `blocked_ips` set.
+
+3. **Apply the set with iptables**: Now, you'll reference this set in an iptables rule to block traffic coming from these IP addresses.
+
+   ```shell
+   sudo iptables -I INPUT -m set --match-set blocked_ips src -j DROP
+   ```
+
+   This command inserts a rule at the top of the INPUT chain to drop any incoming packets originating from the IP addresses in the `blocked_ips` set.
+
+4. **Save your configuration**: If you want these changes to persist across reboots, you'll need to save your `ipset` configuration and your `iptables` configuration.
+
+   ```shell
+   sudo ipset save > /etc/ipset.conf
+   sudo iptables-save > /etc/iptables/rules.v4
+   ```
+
+5. **Restore configuration on boot**: Ensure that these configurations are restored on boot by adding appropriate entries in system startup scripts or services, depending on your Linux distribution.
+
+
+### More examples
+
+### 1. Block an Entire Subnet
+
+You can block an entire subnet by adding a CIDR range to an IP set.
+
+```bash
+sudo ipset create blocked_subnets hash:net
+sudo ipset add blocked_subnets 192.168.1.0/24
+sudo iptables -I INPUT -m set --match-set blocked_subnets src -j DROP
+```
+
+### 2. Allow Specific IP Addresses
+
+Create an IP set to allow specific IPs while blocking others.
+
+```bash
+sudo ipset create allowed_ips hash:ip
+sudo ipset add allowed_ips 10.0.0.1
+sudo ipset add allowed_ips 10.0.0.2
+sudo iptables -I INPUT -m set --match-set allowed_ips src -j ACCEPT
+```
+
+### 3. Port-based Rules with ipset
+
+You can also manage sets of ports to be used in conjunction with IPs. For example, to block certain ports from specific IPs:
+
+```bash
+sudo ipset create blocked_ports_portsip hash:ip,port
+sudo ipset add blocked_ports_portsip 203.0.113.10,80
+sudo ipset add blocked_ports_portsip 203.0.113.10,443
+sudo iptables -I INPUT -m set --match-set blocked_ports_portsip src,dst -j DROP
+```
+
+### 4. Dynamically Update Sets
+
+You can dynamically update sets without rewriting iptables rules.
+
+```bash
+sudo ipset add blocked_ips 192.0.2.123
+```
+
+When needing to remove an IP from the set:
+
+```bash
+sudo ipset del blocked_ips 192.0.2.123
+```
+
+### 5. Using Lists with IP Ranges
+
+Create a bitmap type IP set for efficiently handling a range of IPs.
+
+```bash
+sudo ipset create ip_range bitmap:ip range 192.168.1.0-192.168.1.255
+sudo iptables -I INPUT -m set --match-set ip_range src -j DROP
+```
+
+### 6. Limit Connections from IPs
+
+Define a max number of connections from a single IP address:
+
+```bash
+sudo ipset create limit_conns hash:ip maxelem 100
+sudo iptables -I INPUT -m conntrack --ctstate NEW -m set --match-set limit_conns src -j ACCEPT
+```
+
+This example would help limit new connections to a specific threshold by changing the parameters accordingly.
+
+### 7. HTTP Flood Protection
+
+To protect a web server from HTTP floods, you can create and use an ipset to track source IPs and block those that make excessive requests.
+
+```bash
+sudo ipset create flood_protect hash:ip
+# Example integration with an external monitoring script could be added here
+sudo iptables -I INPUT -m set --match-set flood_protect src -j DROP
+```
+
+### 8. Store Set Configurations
+
+Save your sets configuration and reload if the system restarts.
+
+```bash
+sudo ipset save > /etc/ipset.conf
+sudo ipset restore < /etc/ipset.conf
+```
+
+These examples illustrate the flexibility and power of `ipset` combined with `iptables` to manage network policies. Remember to ensure that your configuration is persistent across reboots. For detailed configuration, consult the documentation for your particular Linux distribution.
+
 That is all.
