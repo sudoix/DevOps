@@ -105,3 +105,161 @@ table inet filter {
 root@gw:~# 
 ```
 
+let's create a table:
+
+```bash
+root@gw:~# nft flush ruleset
+root@gw:~# nft add table inet filter
+root@gw:~# nft list ruleset
+table inet filter {
+}
+root@gw:~# 
+```
+
+let's create a chain in the table:
+
+```bash
+root@gw:~# nft add chain inet filter input
+root@gw:~# nft list ruleset
+table inet filter {
+    chain input {
+    }
+}
+root@gw:~#
+```
+
+funny thing is that if you run `iptables` command it work with nftables in background :)
+
+```bash
+root@gw:~# nft flush ruleset
+root@gw:~# nft list ruleset
+
+root@gw:~# iptables -t filter -N test
+root@gw:~# nft list ruleset
+table ip filter {
+	chain ssh {
+	}
+}
+
+root@gw:~#
+root@gw:~# iptables -t filter -A INPUT -p tcp --dport 22 -j ACCEPT
+root@gw:~# nft -y list ruleset
+table ip filter {
+	chain ssh {
+	}
+
+	chain INPUT {
+		type filter hook input priority 0; policy accept;
+		tcp dport 22 counter packets 217 bytes 18952 accept
+	}
+}
+```
+
+let's create a chain with hook and priority:
+
+```bash
+root@gw:~# nft flush ruleset
+root@gw:~# nft add table inet filter
+root@gw:~# nft add chain inet filter input { type filter hook input priority 0 \; }
+root@gw:~# nft list ruleset
+table inet filter {
+    chain input {
+        type filter hook input priority 0; policy accept;
+    }
+}
+root@gw:~#
+```
+
+let's open ssh port for [rfc1918](https://datatracker.ietf.org/doc/html/rfc1918)
+
+```bash
+root@gw:~# nft -f /etc/nftables.conf
+root@gw:~# nft list ruleset
+root@gw:~# nft add rule inet filter input ip saddr { 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8 } tcp dport 22 counter accept
+```
+
+Add a rule and delete it:
+
+```bash
+root@gw:~# nft add rule inet filter input tcp dport 22 log prefix \"SSH connection: \" counter accept
+```
+
+For delete a rule you have to know its handle:
+
+```bash
+root@gw:~# nft -a list ruleset
+table inet filter { # handle 6
+	chain input { # handle 1
+		type filter hook input priority filter; policy accept;
+		ip saddr { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } tcp dport 22 counter packets 4485 bytes 393836 accept # handle 3
+		tcp dport 22 log prefix "SSH connection: " counter packets 0 bytes 0 accept # handle 7
+	}
+}
+```
+
+we can delete the rule with its handle
+**handle is allways is fixed even if you delete a rule**
+
+```bash
+root@gw:~# nft delete rule inet filter input handle 7
+root@gw:~# nft -a list ruleset
+```
+
+### Inserting rules
+You can insert rules at the top of the chain with `insert` command and you can insert rules in specific position with `position <num>` command.
+
+```bash
+root@gw:~# nft insert rule inet filter input tcp dport 80 counter accept
+root@gw:~# nft -ay list ruleset
+root@gw:~# nft insert rule inet filter input position 5 tcp dport 443 counter accept # before position 5
+root@gw:~# nft -ay list ruleset
+root@gw:~# nft add rule inet filter input position 5 tcp dport 443 counter accept # after position 5
+root@gw:~# nft -ay list ruleset
+```
+
+### add rule for log ssh connection attempts
+
+```bash
+root@gw:~# nft insert rule inet filter input tcp dport 22 log prefix \"SSH connection: \" counter accept
+root@gw:~# nft -ay list ruleset
+```
+
+### Stateful firewall
+
+To create a stateful firewall we have to use `ct` (connection tracking) module of nftables.
+
+The posible states defined for a connection are:
+
+* `NEW`: the packet is starting a new connection
+* `ESTABLISHED`: the packet is part of an existing connection (two way communication)
+* `RELATED`: This is expected connection, it's related to an established connection, like an ftp data connection(ftp control command on port 20, 21 and ftp data connection)
+* `INVALID`: the packet is not associated with any known connection, or the state could not be determined.
+
+#### Example: let's log ssh new connection attempts
+
+```bash
+root@gw:~# nft flush ruleset
+root@gw:~# nft -f /etc/nftables.conf
+root@gw:~# nft insert rule inet filter input ct state established accept # accept established connections
+root@gw:~# nft insert rule inet filter input tcp dport 22 ct state new log prefix \"New SSH connection: \" counter accept
+root@gw:~# nft -ay list ruleset
+```
+
+#### Example: let's allow http and https connections and set comment.
+
+```bash
+root@gw:~# nft insert rule inet filter input tcp dport { 80, 443 } comment \"Allow http and https connections\" accept
+root@gw:~# nft -ay list ruleset
+```
+
+#### Replace a rule
+
+For replace a rule you have to know the handle of the rule:
+
+```bash
+root@gw:~# nft -ay list ruleset
+root@gw:~# nft replace rule inet filter input handle 3 tcp dport { 80, 443 } comment \"Allow http and https connections\" counter accept
+root@gw:~# nft -ay list ruleset
+```
+
+
