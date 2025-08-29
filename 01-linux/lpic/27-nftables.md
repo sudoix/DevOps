@@ -262,4 +262,12 @@ root@gw:~# nft replace rule inet filter input handle 3 tcp dport { 80, 443 } com
 root@gw:~# nft -ay list ruleset
 ```
 
+# ICMP allow
+
+```bash
+root@gw:~# nft insert rule inet filter input ip protocol icmp accept
+root@gw:~# nft -ay list ruleset
+```
+
+
 
